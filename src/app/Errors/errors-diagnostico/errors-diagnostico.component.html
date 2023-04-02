@@ -1,0 +1,36 @@
+<div mat-dialog-title style="width: 500px;">
+
+    <div fxLayout="row" fxLayoutAlign="start center">
+        <h2 class="w-13" fxFlex="auto">
+            Favor de verificar los siguientes datos
+        </h2>
+    </div>
+    
+</div>
+
+<div mat-dialog-content>
+    <!-- <p class="mt-2 mb-8 text-xs">Para completar la declaración se debe ingresar el número de lote generado por el
+        aplicativo de escritorio TEDEF</p> -->
+            <div class="mt-3">
+                <img width="250px" src="https://cdn-icons-png.flaticon.com/512/1453/1453592.png" alt="images" style="float: right;">
+            
+                <!-- <h4 class="text-accent text-sm mb-1">Monitoreo</h4> -->
+                <div class="flex mb-1">
+                    <div  class="w-13">Diagnostico:</div>
+                    <div class="w-23 font-bold">{{data.message.diagnostico}}</div>
+                </div>
+              
+                <div class="flex mb-1">
+                    <br>
+                    <div class="w-13">Receta Medica:</div>
+                    <div class="w-23 font-bold">{{data.message.medicamentos}}</div>
+                </div>
+</div>
+</div>
+
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close type="button">REGRESAR</button>
+</mat-dialog-actions>
+
+

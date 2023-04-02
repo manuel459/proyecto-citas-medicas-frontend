@@ -1,0 +1,130 @@
+<h3>Registro de Personal</h3>
+<h4>Datos Personales :</h4>
+<div modal-content >
+    <br>
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Nombre</mat-label>
+        <input required matInput [(ngModel)]="Nombre" >   
+    </mat-form-field>
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Dni</mat-label>
+             <input required type="number" matInput [(ngModel)]="Dni">
+        </mat-form-field>
+        <br>
+        <mat-form-field type="text" *ngIf="Idtip=='U003'" class="example-full-width" appearance="fill">
+            <mat-label>Numero</mat-label>
+                 <input matInput [(ngModel)]="Numero">
+            </mat-form-field>
+    <!-- <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Sexo</mat-label>
+          <input  matInput [(ngModel)]="Sexo">
+    </mat-form-field> -->
+
+    <section *ngIf="Idtip=='U001'" class="example-section">
+        <label class="example-margin">Sexo:</label>
+        <mat-radio-group [(ngModel)]="Sexo">
+          <mat-radio-button class="example-margin" value="M">Masculino</mat-radio-button>
+          <mat-radio-button class="example-margin" value="F">Femenino</mat-radio-button>
+        </mat-radio-group>
+      </section>
+      <section *ngIf="Idtip=='U002'" class="example-section">
+        <label class="example-margin">Sexo:</label>
+        <mat-radio-group [(ngModel)]="Sexo">
+          <mat-radio-button class="example-margin" value="M">Masculino</mat-radio-button>
+          <mat-radio-button class="example-margin" value="F">Femenino</mat-radio-button>
+        </mat-radio-group>
+      </section>
+    <br>
+   
+    <!-- <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>FechaNac</mat-label>
+        <input matInput [(ngModel)]="Nac">
+    </mat-form-field> -->
+    
+    <mat-form-field *ngIf="Idtip=='U001'" appearance="fill">
+        <mat-label>FechaNac</mat-label>
+        <input required matInput [matDatepicker]="picker" [(ngModel)]="Nac">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field *ngIf="Idtip=='U002'" appearance="fill">
+        <mat-label>FechaNac</mat-label>
+        <input required matInput [matDatepicker]="picker" [(ngModel)]="Nac">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <br>
+    <h4>Cuenta :</h4>
+    <mat-form-field *ngIf="Idtip=='U001'" class="example-full-width" appearance="fill">
+    <mat-label>Email</mat-label>
+      <input required matInput [(ngModel)]="Correo">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="Idtip=='U002'" class="example-full-width" appearance="fill">
+        <mat-label>Email</mat-label>
+          <input required matInput [(ngModel)]="Correo">
+        </mat-form-field>
+
+    <mat-form-field *ngIf="Idtip=='U001'" class="example-full-width" appearance="fill">
+        <mat-label>Password</mat-label>
+          <input required matInput [(ngModel)]="Pswd">
+        </mat-form-field>
+
+    <mat-form-field *ngIf="Idtip=='U002'" class="example-full-width" appearance="fill">
+            <mat-label>Password</mat-label>
+              <input required matInput [(ngModel)]="Pswd">
+            </mat-form-field>
+    
+        <br>
+        
+    <!-- <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Especialidad</mat-label>
+            <input matInput [(ngModel)]="Codes">
+          </mat-form-field>
+          <br> -->
+
+    <mat-form-field *ngIf="Idtip=='U002'" appearance="fill">
+        <mat-label>Especialidad</mat-label>
+        <select [(ngModel)]="Codes" matNativeControl required>
+          <option value="E01">Medicina General</option>
+          <option value="E02">Obstetricia</option>
+          <option value="E03">Otorrinolaringologia</option>
+          <option value="E04">Pediatria</option>
+          <option value="E05">Psicologia</option>
+          <option value="E06">Radiologia</option>
+          <option value="E07">Traumatologia</option>
+        </select>
+      </mat-form-field>      
+        
+     
+    <!-- <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>TipoUsuario</mat-label>
+               <input matInput [(ngModel)]="Idtip">
+         </mat-form-field> -->
+         <!-- <mat-form-field appearance="fill">
+            <mat-label>TipoUsuario</mat-label>
+            <select [(ngModel)]="Idtip" matNativeControl required>
+              <option value="E01">Administrador</option>
+              <option value="E02">Medico</option>
+              <option value="E03">Paciente</option>
+            </select>
+          </mat-form-field>  -->
+
+
+<mat-form-field appearance="fill">
+  <mat-label>TipoUsuario</mat-label>
+  <mat-select (click)="Tipo(Idtip)" [(ngModel)]="Idtip">
+    <mat-option *ngFor="let tipos of tipoUsuarios" [value]="tipos.value">
+      {{tipos.viewValue}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+          
+          
+</div>
+
+<div mat-dialog-actions>
+    <button mat-raised-button (click)="close()">Cancelar</button>
+   
+    <button mat-raised-button color="primary" (click)="save()" >Guardar</button>
+  </div>

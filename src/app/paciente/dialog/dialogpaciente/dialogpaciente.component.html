@@ -1,0 +1,44 @@
+<h2 class="w-13" mat-dialog-tittle>{{paciente!=null ? 'Editar Paciente' : 'Nuevo Paciente'}}</h2>
+<h4 class="w-13">Datos Personales :</h4>
+<img width="200px" src="https://i.pinimg.com/736x/5f/40/6a/5f406ab25e8942cbe0da6485afd26b71.jpg" alt="images" style="float: right;">
+<!-- <button mat-raised-button color="primary" (click)="medico!=null ? editCliente() :addCliente()">Guardar</button> -->
+<div modal-content >
+    
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Nombre</mat-label>
+        <input  valid="error" matInput [(ngModel)]="nomp" >   
+    </mat-form-field>
+<br>
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Dni</mat-label>
+        <input pattern="^[0-9]+" min="10000000" max="99999999" maxlength="8" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"  type="number" webkit-appearance: none required matInput [(ngModel)]="dnip" >   
+    </mat-form-field>
+<br>
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Numero</mat-label>
+        <input pattern="^[0-9]+" min="100000000" max="999999999" maxlength="9" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"  type="number" required matInput [(ngModel)]="numero" >   
+    </mat-form-field>
+<br>
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Edad</mat-label>
+        <input type="number" maxlength="3" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" required matInput [(ngModel)]="edad" >   
+    </mat-form-field>
+<br>
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>CorreoElectronico</mat-label>
+        <input required matInput [(ngModel)]="correoElectronico" >   
+    </mat-form-field>
+
+      
+    
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button (click)="close()">Cancelar</button>
+ 
+  <button mat-raised-button color="primary" [disabled]="numero==null || nomp==null || dnip==null || edad==null || correoElectronico==null" (click)="paciente!=null ? editCliente() :addCliente()">Guardar</button>
+</div>
+
+
+
+

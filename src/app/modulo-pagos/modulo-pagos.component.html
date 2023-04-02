@@ -1,0 +1,137 @@
+<mat-stepper linear #stepper>
+    <mat-step [stepControl]="firstFormGroup">  <!--[stepControl]="firstFormGroup" -->
+      <form [formGroup]="firstFormGroup">
+        <ng-template matStepLabel>Ingresa el código de cita</ng-template>
+
+        <mat-card class="example-card">
+          <div style="float: right;">
+            <button color="primary" mat-raised-button matStepperNext>
+              <mat-icon>navigate_next</mat-icon>
+            </button>
+          </div>
+            <img mat-card-image  src="https://static.vecteezy.com/system/resources/previews/004/556/313/non_2x/doctor-consultation-concept-icon-doctor-appointment-idea-thin-line-illustration-medicine-and-healthcare-medical-examination-isolated-outline-drawing-editable-stroke-vector.jpg" >
+            <mat-form-field style="margin: 10px;" appearance="fill">
+                <mat-label>Code</mat-label>
+                <input matInput formControlName="firstCtrl" [(ngModel)]="idCita" placeholder="Code" required>
+                </mat-form-field>
+    
+                    <button mat-button  (click)="add()" >
+                        <mat-icon>search</mat-icon>
+                    </button> 
+    
+                <div modal-content >
+                    <mat-form-field style="margin: 10px;" appearance="fill">
+                        <mat-label>Dni del paciente</mat-label>
+                        <input type="number" required matInput disabled>{{nDnip}}
+                    </mat-form-field>
+          
+                    <mat-form-field style="margin: 10px;"  appearance="fill">
+                        <mat-label>Nombre del paciente</mat-label>
+                        <input required matInput disabled >{{sNombre_Paciente}}
+                    </mat-form-field>
+                <br>
+                    <mat-form-field style="margin: 10px;"  appearance="fill">
+                        <mat-label>Especialidad</mat-label>
+                        <input required matInput disabled > {{sEspecialidad}}  
+                    </mat-form-field>
+                    
+                    <mat-form-field style="margin: 10px;"  appearance="fill">
+                        <mat-label>Nombre del medico</mat-label>
+                        <input required matInput disabled >{{sNombre_Medico}}
+                    </mat-form-field>
+                
+                    <mat-form-field style="margin: 10px;"  appearance="fill">
+                        <mat-label>Fecha de cita</mat-label>
+                        <input required matInput disabled > {{dFecha_Cita|date :'yyyy-MM-dd'}}  
+                    </mat-form-field>
+
+                    <mat-form-field style="margin: 10px;" appearance="fill">
+                      <mat-label>Importe Total</mat-label>
+                      <input type="number" required matInput disabled>{{dImporte_Total}}
+                  </mat-form-field>
+                </div>   
+        </mat-card>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup" >
+      <form [formGroup]="secondFormGroup" >
+        <ng-template matStepLabel>Seleccione método de pago</ng-template>
+
+        <mat-tab-group dynamicHeight animationDuration="0ms">
+            <mat-tab  label="Debito">
+
+                <mat-card class="example-card-2">
+                  <div modal-content >
+                   <img mat-card-image style="float: right;" src="https://americancarpetandfloorcare.com/wp-content/uploads/2019/05/visa-mastercard-amex.png" >
+                   <p class="p">Tarjeta de Credito o Debito</p>
+                   <mat-form-field class="example-i-width">
+                      <mat-label>Numero de Tarjeta</mat-label>
+                      <input type="text" maxlength="16" matInput formControlName="secondCtrl"  [(ngModel)]="nNumero_Tarjeta" placeholder="Numero de Tarjeta" required>
+                   </mat-form-field> 
+
+                     <br>
+                     <mat-form-field class="example-small-width" style="margin: 10px;" >
+                       <mat-label>Mes</mat-label>
+                         <mat-select formControlName="secondCtrl" [(ngModel)]="nMes">
+                           <mat-option *ngFor="let mes of Meses" [value]="mes.value">
+                             {{mes.viewValue}}
+                           </mat-option>
+                         </mat-select>
+                     </mat-form-field>
+
+                     <mat-form-field class="example-small-width" style="margin: 10px;">
+                      <mat-label>Año</mat-label>
+                        <mat-select formControlName="secondCtrl" [(ngModel)]="nAnio">
+                          <mat-option *ngFor="let anio of Anios" [value]="anio.value">
+                            {{anio.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                     <mat-form-field class="example-small-width" style="margin: 10px;" >
+                       <mat-label>CVV</mat-label>
+                       <input formControlName="secondCtrl" type="text" maxlength="3" pattern="[0-9]+" required matInput>
+                     </mat-form-field>
+                    <br>
+                     <mat-form-field style="margin: 10px;">
+                       <mat-label>Tipo Documento</mat-label>
+                       <mat-select matNativeControl required>
+                         <mat-option value="DNI">DNI</mat-option>
+                         <mat-option value="PASAPORTE">Pasaporte</mat-option>
+                       </mat-select>
+                     </mat-form-field>
+ 
+                     <mat-form-field class="example-i-width">
+                      <mat-label>Numero de Dni</mat-label>
+                      <input formControlName="secondCtrl" type="number" required matInput [(ngModel)]="nDni" >   
+                  </mat-form-field>
+                   </div> 
+              </mat-card>
+              <br>
+              <div mat-dialog-actions>
+                <button mat-raised-button color="primary" (click)="insertPago()">Realizar Pago</button>
+              </div>
+              
+            </mat-tab>
+          </mat-tab-group>
+
+        <!-- <mat-form-field appearance="fill">
+          <mat-label>Address</mat-label>
+          <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY"
+                 required>
+        </mat-form-field> -->
+        <!-- <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div> -->
+      </form>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Resultado de la transacción</ng-template>
+      <p>You are now done.</p>
+      <div>
+        <!-- <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)="stepper.reset()">Reset</button> -->
+      </div>
+    </mat-step>
+  </mat-stepper>

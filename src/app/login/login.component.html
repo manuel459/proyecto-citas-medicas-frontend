@@ -1,0 +1,32 @@
+
+
+<div fxLayoutAlign="center center" fxFlexFill>
+    <mat-card fxFlex="30">
+        
+        <mat-toolbar class="container">Login</mat-toolbar>
+        <br>
+        
+            <img style="float: left;" width="580px" src="https://img.freepik.com/vector-gratis/prescripcion-medica-linea-rx-chequeo-medico-telefono-inteligente-ilustracion-medico-que-muestra-aplicacion-telefono-recetas-examenes-medicos-diagnostico-paciente-concepto-medicina-linea_165217-210.jpg" alt="unnamed"  > 
+       
+        
+            <br><br><br><br><br><br>
+            <form fxLayoutAlign="stretch" fxLayout="column"  [formGroup]="loginForm" (ngSubmit)="login()">
+                
+                <mat-form-field style="margin: 10px;" class="example-full-width" appearance="fill">
+                    <mat-label>Email</mat-label>
+                    <input type="text"  class="example-full-width" formControlName="CorreoElectronico" matInput >   
+                </mat-form-field>
+                <br> 
+                <mat-form-field style="margin: 10px;" class="example-full-width" appearance="fill">
+                    <mat-label>Contraseña</mat-label>
+                    <input [type]="hide ? 'password' : 'text'" formControlName="Contraseña" matInput >   
+                </mat-form-field>
+                    <button style="margin: 10px;" mat-icon-button (click)="myFunction()">
+                        <mat-icon>visibility</mat-icon>
+                    </button>
+                <br>
+                <button style="margin: 10px;" color="primary" type="submit" [disabled]="!loginForm.valid" mat-raised-button>Iniciar Sesion</button>
+            </form>
+              
+    </mat-card>
+    </div>

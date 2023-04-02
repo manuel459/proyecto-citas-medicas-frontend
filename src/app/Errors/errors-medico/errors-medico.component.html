@@ -1,0 +1,74 @@
+<div mat-dialog-title style="width: 500px;">
+
+    <div fxLayout="row" fxLayoutAlign="start center">
+        <h2 class="w-13" fxFlex="auto">
+            Favor de verificar los siguientes datos
+        </h2>
+    </div>
+    
+</div>
+
+<div mat-dialog-content>
+    <!-- <p class="mt-2 mb-8 text-xs">Para completar la declaración se debe ingresar el número de lote generado por el
+        aplicativo de escritorio TEDEF</p> -->
+            <div class="mt-3">
+                <img width="300px" src="https://thumbs.dreamstime.com/b/avatar-del-terapeuta-icono-web-doctor-103706622.jpg" alt="images" style="float: right;">
+            
+                <!-- <h4 class="text-accent text-sm mb-1">Monitoreo</h4> -->
+                <div *ngIf="data.message.Nombre != null" class="flex mb-1">
+                    <div  class="w-13">Nombre:</div>
+                    <div class="w-23 font-bold">{{data.message.Nombre}}</div>
+                </div>
+              
+                <div *ngIf="data.message.Dni != null"  class="flex mb-1">
+                    <br>
+                    <div class="w-13">Dni:</div>
+                    <div class="w-23 font-bold">{{data.message.Dni}}</div>
+                </div>
+           
+                <div *ngIf="data.message.Sexo != null"  class="flex mb-1">
+                    <br>
+                    <div class="w-13">Sexo:</div>
+                    <div class="w-23 font-bold">{{data.message.Sexo}}</div>
+                </div>
+               
+                <div *ngIf="data.message.Nac != null"  class="flex mb-1">
+                    <br>
+                    <div class="w-13">Fecha de Nacimiento:</div>
+                    <div class="w-23 font-bold">{{data.message.Nac}}</div>
+                </div>
+              
+                <div *ngIf="data.message.Codes != null"  class="flex mb-1">
+                    <br>
+                    <div class="w-13">Especialidad:</div>
+                    <div class="w-23 font-bold">{{data.message.Codes}}</div>
+                </div>
+            </div>
+        
+       
+            <div *ngIf="data.message.Correo != null"  class="flex mb-1">
+                <br>
+                <div class="w-13">Correo:</div>
+                <div class="w-23 font-bold">{{data.message.Correo}}</div>
+            </div>
+       
+            <!-- <h4 class="text-accent text-sm mb-1">Detalles</h4> -->
+            <div *ngIf="data.message.Pswd != null"  class="flex mb-1">
+                <br>
+                <div class="w-13">Contraseña:</div>
+                <div class="w-23 font-bold">{{data.message.Pswd }}
+                </div>
+            </div>
+        
+            <div *ngIf="data.message.Idhor != null"  class="flex mb-1">
+                <br>
+                <div class="w-13">Horario:</div>
+                <div class="w-23 font-bold">{{data.message.Idhor }}
+                </div>
+            </div>
+</div>
+
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close type="button">REGRESAR</button>
+</mat-dialog-actions>

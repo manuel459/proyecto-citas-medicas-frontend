@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>
+    <span> Advertencia</span>
+    <mat-icon style="margin: 10px;" color="warn">warning</mat-icon>
+   </h1>
+ <div mat-dialog-content>
+    <h3>¿Estas seguro de eliminar?</h3>
+ </div>
+ <div mat-dialog-action>
+   <button color="warn" style="margin: 5px;" mat-raised-button [mat-dialog-close]="true">Eliminar</button>
+   <button  mat-raised-button cdkFocusInitial [mat-dialog-close]="false">Cancelar</button>
+ </div>

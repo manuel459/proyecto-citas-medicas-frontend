@@ -1,0 +1,68 @@
+
+<!-- <ng-container>
+    <div *ngFor="let datos in lst"> 
+        <td>
+            {{datos.id}}
+        </td>
+</div>
+<button (click)="getCiclista()">Realizar Auditoria</button>
+</ng-container> -->
+
+    <div>
+        
+        <button (click)="getCiclista()" mat-raised-button color="primary">Realizar Auditoria</button>
+        <br>
+        <br>
+        <table mat-table [dataSource]="lst" class="mat-elevation-z8">
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef> #</th>
+                <td mat-cell *matCellDef="let element">{{element.id}}</td>
+            </ng-container>
+            <ng-container matColumnDef="cliente">
+                <th mat-header-cell *matHeaderCellDef> cliente</th>
+                <td mat-cell *matCellDef="let element">{{element.cliente}}</td>
+            </ng-container>
+            <ng-container matColumnDef="ruc">
+                <th mat-header-cell *matHeaderCellDef> ruc</th>
+                <td mat-cell *matCellDef="let element">{{element.ruc}}</td>
+            </ng-container>
+            <ng-container matColumnDef="direccion">
+                <th mat-header-cell *matHeaderCellDef> direccion</th>
+                <td mat-cell *matCellDef="let element">{{element.direccion}}</td>
+            </ng-container>
+            <ng-container matColumnDef="vendedor">
+                <th mat-header-cell *matHeaderCellDef> vendedor</th>
+                <td mat-cell *matCellDef="let element">{{element.vendedor}}</td>
+            </ng-container>
+            <ng-container matColumnDef="metodoPago">
+                <th mat-header-cell *matHeaderCellDef> metodoPago</th>
+                <td mat-cell *matCellDef="let element">{{element.metodoPago}}</td>
+            </ng-container>
+            <ng-container matColumnDef="descripcion">
+                <th mat-header-cell *matHeaderCellDef> descripcion</th>
+                <td mat-cell *matCellDef="let element">{{element.descripcion}}</td>
+            </ng-container>
+            <ng-container matColumnDef="opGravadas">
+                <th mat-header-cell *matHeaderCellDef> opGravadas</th>
+                <td mat-cell *matCellDef="let element">{{element.opGravadas}}</td>
+            </ng-container>
+            <ng-container matColumnDef="igv">
+                <th mat-header-cell *matHeaderCellDef> IGV</th>
+                <td mat-cell *matCellDef="let element">{{element.igv}}</td>
+            </ng-container>
+            <ng-container matColumnDef="montoTotal">
+                <th mat-header-cell *matHeaderCellDef> montoTotal</th>
+                <td mat-cell *matCellDef="let element">{{element.montoTotal}}</td>
+            </ng-container>
+            <ng-container matColumnDef="estado">
+                <th mat-header-cell *matHeaderCellDef> estado</th>
+                <td mat-cell *matCellDef="let element">{{element.estadoDesc}}</td>
+            </ng-container>
+    
+    
+            <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+        </table>
+    
+    </div>
+    

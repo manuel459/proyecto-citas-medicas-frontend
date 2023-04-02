@@ -1,0 +1,12 @@
+.container{
+    background-color: #9696ea;
+    color: white
+  }
+
+  .example-full-width {
+    min-width: 100px;
+    max-width: 380px;
+    width: 100%;
+  }
+  
+ 

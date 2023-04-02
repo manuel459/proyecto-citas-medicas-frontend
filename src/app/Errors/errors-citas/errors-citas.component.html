@@ -1,0 +1,60 @@
+<div mat-dialog-title style="width: 500px;">
+
+    <div fxLayout="row" fxLayoutAlign="start center">
+        <h2 class="w-13" fxFlex="auto">
+            Favor de verificar los siguientes datos 
+        </h2>
+    </div>
+    
+</div>
+
+<div  mat-dialog-content>
+    <!-- <p class="mt-2 mb-8 text-xs">Para completar la declaración se debe ingresar el número de lote generado por el
+        aplicativo de escritorio TEDEF</p> -->
+            <div class="mt-3">
+                <img width="300px" src="https://static.vecteezy.com/system/resources/previews/002/990/983/non_2x/personal-doctor-appointment-2d-isolated-illustration-vector.jpg" alt="images" style="float: right;">
+            
+                <!-- <h4 class="text-accent text-sm mb-1">Monitoreo</h4> -->
+                <div *ngIf="data.message.Codmed != null" class="flex mb-1">
+                    <div class="w-13">Nombre del Medico:</div>
+                    <div class="w-23 font-bold">{{data.message.Codmed}}</div>
+                    <br>
+                </div>
+               
+                <div *ngIf="data.message.Dnip != null" class="flex mb-1">
+                    <div class="w-13">Dni:</div>
+                    <div class="w-23 font-bold">{{data.message.Dnip}}</div>
+                    <br>
+                </div>
+                <br>
+                <div *ngIf="data.message.Codes != null" class="flex mb-1">
+                    <div class="w-13">Especialidad:</div>
+                    <div class="w-23 font-bold">{{data.message.Codes}}</div>
+                    <br>
+                </div>
+                <br>
+                <div *ngIf="data.message.Estado != null" class="flex mb-1">
+                    <div class="w-13">Estado:</div>
+                    <div class="w-23 font-bold">{{data.message.Estado}}</div>
+                    <br>
+                </div>
+                <br>
+                <div *ngIf="data.message.Hora != null" class="flex mb-1">
+                    <div class="w-13">Hora:</div>
+                    <div class="w-23 font-bold">{{data.message.Hora}}</div>
+                    <br>
+                </div>
+                <br>
+                <div *ngIf="data.message.feccit != null" class="flex mb-1">
+                    <div class="w-13">Fecha:</div>
+                    <div class="w-23 font-bold">{{data.message.feccit}}</div>
+                    <br>
+                </div>
+                <br>
+            </div>
+</div>
+
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close type="button">REGRESAR</button>
+</mat-dialog-actions>

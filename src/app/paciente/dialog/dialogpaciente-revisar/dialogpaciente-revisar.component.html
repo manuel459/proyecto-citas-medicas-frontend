@@ -1,0 +1,48 @@
+<div mat-dialog-title style="width: 500px;">
+
+    <div fxLayout="row" fxLayoutAlign="start center">
+        <h2 class="w-13" fxFlex="auto">
+            Detalle de Paciente 
+        </h2>
+    </div>
+    
+</div>
+
+<div  mat-dialog-content>
+    <!-- <p class="mt-2 mb-8 text-xs">Para completar la declaración se debe ingresar el número de lote generado por el
+        aplicativo de escritorio TEDEF</p> -->
+            <div class="mt-3">
+                <img width="300px" src="https://i.pinimg.com/736x/5f/40/6a/5f406ab25e8942cbe0da6485afd26b71.jpg" alt="images" style="float: right;">
+            
+                <!-- <h4 class="text-accent text-sm mb-1">Monitoreo</h4> -->
+                <div class="flex mb-1">
+                    <div class="w-13">Nombre:</div>
+                    <div class="w-23 font-bold">{{nomp}}</div>
+                </div>
+                <br>
+                <div class="flex mb-1">
+                    <div class="w-13">Dni:</div>
+                    <div class="w-2/3 font-bold">{{dnip}}</div>
+                </div>
+                <br>
+                <div class="flex mb-1">
+                    <div class="w-13">Tipo de Usuario</div>
+                    <div class="w-2/3 font-bold">Paciente</div>
+                </div>
+                <br>
+                <div class="flex mb-1">
+                    <div class="w-13">Edad</div>
+                    <div class="w-2/3 font-bold">{{edad}}</div>
+                </div>
+                <br>
+                <div class="flex mb-1">
+                    <div class="w-13">Email</div>
+                    <div class="w-2/3 font-bold">{{correoElectronico}}</div>
+                </div>
+            </div>
+</div>
+
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close type="button">REGRESAR</button>
+</mat-dialog-actions>

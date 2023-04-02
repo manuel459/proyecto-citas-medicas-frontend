@@ -1,0 +1,71 @@
+<p>NUEVA CITA</p>
+<h4>Datos Personales</h4>
+<mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Dni</mat-label>
+    <input matInput type="number" [(ngModel)]="dnip" >   
+</mat-form-field>
+<button mat-raised-button color="primary" (click)="getDni()">Buscar</button>
+<br>
+<mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Nombre</mat-label>
+    <input matInput ngModel disabled>
+    {{lst}}
+</mat-form-field>
+<br>
+<mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Numero</mat-label>
+    <input ngModel disabled matInput>
+    {{lst1}}
+</mat-form-field>
+
+<h4>Datos del Doctor</h4>
+
+<mat-form-field appearance="fill">
+  <mat-label>Especialidad</mat-label>
+  <select (click)="getEspecialidad()" [(ngModel)]="codes" matNativeControl required>
+    <option value="E01">Medicina General</option>
+    <option value="E02">Obstetricia</option>
+    <option value="E03">Otorrinolaringologia</option> 
+    <option value="E04">Pediatria</option>
+    <option value="E05">Psicologia</option>
+    <option value="E06">Radiologia</option>
+    <option value="E07">Traumatologia</option>
+  </select>
+</mat-form-field> 
+
+<mat-form-field appearance="fill">
+    <mat-label>Doctor</mat-label>
+    <mat-select >
+      <mat-option *ngFor="let element of array" [value]="element">
+        {{element}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <h4>Datos de la Cita</h4>
+  <mat-form-field  appearance="fill">
+    <mat-label>Fecha de Cita</mat-label>
+    <input matInput [matDatepicker]="picker" >
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>Horario</mat-label>
+  <mat-select>
+    <mat-option  value="arrayhora">
+      {{arrayhora | date: 'HH:mm'}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field class="example-full-width" appearance="fill">
+  <mat-label>Costo</mat-label>
+  <input matInput [(ngModel)]="costo"  disabled>
+  
+</mat-form-field>
+
+    <div mat-dialog-actions>
+        <button mat-raised-button (click)="close()">Cancelar</button>
+    
+      </div>
