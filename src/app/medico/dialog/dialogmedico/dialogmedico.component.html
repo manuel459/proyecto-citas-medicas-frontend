@@ -1,0 +1,83 @@
+<h2 class="w-13" mat-dialog-tittle>{{medico!=null ? 'Editar Medico' : 'Nuevo Medico'}}</h2>
+<h4 class="w-13">Datos Personales :</h4>
+<img width="350px" *ngIf="sexo == 'F'" src="https://st.depositphotos.com/11953928/57569/v/600/depositphotos_575698592-stock-illustration-doctor-woman-profession-icon-isolated.jpg" alt="images" style="float: right;">
+<img width="350px" *ngIf="sexo == 'M'" src="https://thumbs.dreamstime.com/b/avatar-del-terapeuta-icono-web-doctor-103706622.jpg" alt="images" style="float: right;">
+<!-- <button mat-raised-button color="primary" (click)="medico!=null ? editCliente() :addCliente()">Guardar</button> -->
+<div modal-content >
+    
+    <mat-form-field style="margin: 10px;" class="example-full-width" appearance="fill">
+        <mat-label>Nombre</mat-label>
+        <input  required matInput [(ngModel)]="nombre" >   
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Dni</mat-label>
+        <input type="number" required matInput [(ngModel)]="dni" >   
+    </mat-form-field>
+
+    <section  class="example-section">
+        <label class="example-margin">Sexo:</label>
+        <mat-radio-group [(ngModel)]="sexo">
+          <mat-radio-button color="primary" class="example-margin" value="M">Masculino</mat-radio-button>
+          <mat-radio-button color="primary" class="example-margin" value="F">Femenino</mat-radio-button>
+        </mat-radio-group>
+      </section>
+
+      <mat-form-field  style="margin: 10px;" appearance="fill">
+        <mat-label>FechaNac</mat-label>
+        <input matInput [matDatepicker]="picker" [(ngModel)]="nac">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    
+    <br>
+    <h4 class="w-13">Cuenta :</h4>
+    <mat-form-field style="margin: 10px;" class="example-full-width" appearance="fill">
+        <mat-label>Correo</mat-label>
+        <input required matInput [(ngModel)]="correo" >   
+    </mat-form-field>
+ 
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>password</mat-label>
+        <input required [type]="hide ? 'password' : 'text'" matInput [(ngModel)]="pswd"> 
+    </mat-form-field>
+    <button  mat-icon-button (click)="myFunction()">
+      <mat-icon>visibility</mat-icon>
+    </button>
+    
+    <!-- <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Idhor</mat-label>
+        <input required matInput [(ngModel)]="idhor" >   
+    </mat-form-field> -->
+   <br>
+   
+   <mat-form-field appearance="fill">
+    <mat-label>Especialidad</mat-label>
+    <mat-select [(ngModel)]="codes" matNativeControl required>
+      <mat-option (click)="getHorarios()" *ngFor="let especialidad of especialidades" [value]="especialidad.sId">
+        {{especialidad.sDescripcion}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>  
+
+    <mat-form-field style="margin: 10px;" appearance="fill">
+      <mat-label>Horario</mat-label>
+      <mat-select [(ngModel)]="idhor" matNativeControl required>
+        <mat-option *ngFor="let horario of horarios" [value]="horario.sId">
+          {{horario.sDescripcion}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>   
+    
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button (click)="close()">Cancelar</button>
+ 
+  <button mat-raised-button color="primary" (click)="medico!=null ? editCliente() :addCliente()">Guardar</button>
+</div>
+
+
+
+
