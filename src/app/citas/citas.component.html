@@ -3,7 +3,7 @@
     <span>Nuevo Cita</span>
 </button>
 
-<button style="float:right" mat-button color="primary" (click)='fileExcel()'>
+<button style="float:right" mat-button color="primary" (click)="exportExcel(this.dataSource.data, 'reporte_citas')">
     <mat-icon>get_app</mat-icon>
 </button>
 
@@ -39,7 +39,7 @@
                     </span>
                   </section> -->
 
-                <button style="float: right;" (click)="generarPdf()"  mat-icon-button mat-button color="white" >
+                <button style="float: right;" (click)="exportToPdf()"  mat-icon-button mat-button color="white" >
                     <mat-icon>backup</mat-icon>
                 </button>
                 <div class="search-container"  style="float:right">

@@ -139,41 +139,6 @@ export class MedicoComponent implements OnInit {
       data: medico,
       
     });
-
-
-    switch(medico.sexo)
-    {
-      case "M":
-        medico.sexo = "Masculino"
-        break;
-      case "F":
-        medico.sexo = "Femenino"
-    }
-    switch(medico.codes){
-      case "E01":
-         medico.codes = "Medicina General"
-      break;
-      case "E02":
-         medico.codes = "Obstetricia"
-      break;
-      case "E03":
-         medico.codes = "Otorrinolaringologia"
-      break;
-      case "E04":
-         medico.codes = "Pediatria"
-      break;
-      case "E05":
-         medico.codes = "Psicologia"
-      break;
-      case "E06":
-         medico.codes = "Radiologia"
-      break;
-      case "E07":
-         medico.codes = "Traumatologia"
-      break;
-    }
-    
-    console.log(medico.codes)
 //Refrescar el table cuando ejecute la accion del guardar
     dialogRef.afterClosed().subscribe(result =>{
       this.getMedicos();

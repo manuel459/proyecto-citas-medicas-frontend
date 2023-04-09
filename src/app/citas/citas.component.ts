@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DOCUMENT, DatePipe } from '@angular/common';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
@@ -18,6 +18,12 @@ import { Citas } from '../models/citas';
 import { CitasService } from '../service/citas.service';
 import { DialogcitasRevisarComponent } from './dialog/dialogcitas-revisar/dialogcitas-revisar.component';
 import { DialogcitasComponent } from './dialog/dialogcitas/dialogcitas.component';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable, { UserOptions } from 'jspdf-autotable';
+import 'jspdf-autotable';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
 
 export interface Task {
   name: string;
@@ -217,45 +223,55 @@ export class CitasComponent implements OnInit {
     })
   }
 
-  // filters()
-  // {
-  //   const citas: FilterGeneric =
-  //   {
-  //     texto : this.texto,
-  //     status: this.status,
-  //     startdate: this.startDate,
-  //     enddate : this.endDate
+  exportExcel(data: any[], fileName: string): void {
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    this.saveExcelFile(excelBuffer, fileName);
+  }
+  
+  private saveExcelFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], { type: 'application/octet-stream' });
+    const url: string = window.URL.createObjectURL(data);
+    const link: HTMLAnchorElement = document.createElement('a');
+    link.href = url;
+    link.download = fileName + '.xlsx';
+    link.click();
+  }
 
-  //   }
-  //   this.citasService.filters(citas).subscribe(response => {
-  //     if (response.exito === 0)
-  //     {
-  //       this.error = response.exito; 
-  //     }
-  //     response.data.forEach((element: { hora: any; }) => 
-  //     {
-  //       var horaJson = JSON.stringify(element.hora);
-  //       //convertir el json a objeto
-  //       this.resultado = JSON.parse(horaJson);
-  //       var min = this.resultado.minutes < 10 ? "0" + this.resultado.minutes : this.resultado.minutes;
-  //       var sec = this.resultado.seconds < 10 ? "0" + this.resultado.seconds : this.resultado.seconds;
-  //       var hour = this.resultado.hours < 10 ? "0" + this.resultado.hours : this.resultado.hours;
-  //       element.hora = hour + ':' + min + ':' + sec + ' pm';
-  //       if(hour<12)
-  //       {
-  //         element.hora = hour + ':' + min + ':' + sec + ' am' ;
-  //         return element.hora
-  //       }
-  //       else
-  //       {
-  //         element.hora = hour + ':' + min + ':' + sec + ' pm';
-  //         return element.hora
-  //       }
-  //      });
-  //       this.error = response.exito;
-  //       this.dataSource.data = response.data; 
-  //   });
-  // }
+  exportToPdf(): void {
+    const doc =  Object.assign(new jsPDF());
+    const datas =  this.dataSource.data.map((row: any) => {
+      return [row.id, row.dnip, row.sNombre_Paciente, row.sNombre_Medico, row.sNombre_Especialidad, (moment(row.feccit).format('YYYY-MM-DD')+' '+row.hora), row.sEstado, row.sEstado_Pago, row.costo];
+    });
+
+    try {
+      const headerss = ['ID', 'DNI', 'Nombre_del_Paciente', 'Nombre_Medico', 'Nombre_Especialidad', 'Fecha_Cita','Estado_de_Cita', 'Estado_de_Pago', 'Costo_de_cita'];
+      doc.text('Reporte de Citas', 20, 20);
+      doc.autoTable({
+        startY:40,
+        styles: {
+          fontSize: 6,
+          cellPadding: 2,
+          fillColor: [200, 200, 200],
+          textColor: [0, 0, 0],
+          border: {
+            top: 1,
+            left: 1,
+            right: 1,
+            bottom: 1
+          }
+        },
+        head: [headerss],
+        body: datas
+      });
+      doc.save('reporte_citas.pdf');
+      
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
 
 }
 
