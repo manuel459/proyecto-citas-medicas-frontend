@@ -7,4 +7,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     background: rgb(8, 235, 159);
     border-radius: 100%;
   }
+
+  @import "~bootstrap/dist/css/bootstrap.css";
   

@@ -13,6 +13,7 @@ import { PacienteService } from '../service/paciente.service';
 import { DialogpacienteRevisarComponent } from './dialog/dialogpaciente-revisar/dialogpaciente-revisar.component';
 import { DialogpacienteComponent } from './dialog/dialogpaciente/dialogpaciente.component';
 import * as signalR from '@aspnet/signalr';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-paciente',
@@ -172,6 +173,22 @@ export class PacienteComponent implements OnInit {
         this.error = response.exito;
         this.dataSource.data = response.data; 
     });
+  }
+
+  exportExcel(data: any[], fileName: string): void {
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    this.saveExcelFile(excelBuffer, fileName);
+  }
+  
+  private saveExcelFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], { type: 'application/octet-stream' });
+    const url: string = window.URL.createObjectURL(data);
+    const link: HTMLAnchorElement = document.createElement('a');
+    link.href = url;
+    link.download = fileName + '.xlsx';
+    link.click();
   }
 
 

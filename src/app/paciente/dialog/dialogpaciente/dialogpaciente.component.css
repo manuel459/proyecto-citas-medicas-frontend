@@ -9,3 +9,9 @@ input[type=number]::-webkit-outer-spin-button {
 -webkit-appearance: none;
 margin: 0;
 }
+
+.text-danger
+{
+  font-size: 11px;
+  color: red;
+}

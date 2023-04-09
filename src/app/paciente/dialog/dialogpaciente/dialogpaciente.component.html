@@ -2,42 +2,132 @@
 <h4 class="w-13">Datos Personales :</h4>
 <img width="200px" src="https://i.pinimg.com/736x/5f/40/6a/5f406ab25e8942cbe0da6485afd26b71.jpg" alt="images" style="float: right;">
 <!-- <button mat-raised-button color="primary" (click)="medico!=null ? editCliente() :addCliente()">Guardar</button> -->
-<div modal-content >
-    
-    <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Nombre</mat-label>
-        <input  valid="error" matInput [(ngModel)]="nomp" >   
-    </mat-form-field>
-<br>
-    <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Dni</mat-label>
-        <input pattern="^[0-9]+" min="10000000" max="99999999" maxlength="8" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"  type="number" webkit-appearance: none required matInput [(ngModel)]="dnip" >   
-    </mat-form-field>
-<br>
-    <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Numero</mat-label>
-        <input pattern="^[0-9]+" min="100000000" max="999999999" maxlength="9" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"  type="number" required matInput [(ngModel)]="numero" >   
-    </mat-form-field>
-<br>
-    <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Edad</mat-label>
-        <input type="number" maxlength="3" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" required matInput [(ngModel)]="edad" >   
-    </mat-form-field>
-<br>
-    <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>CorreoElectronico</mat-label>
-        <input required matInput [(ngModel)]="correoElectronico" >   
-    </mat-form-field>
 
-      
-    
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <form class="form" [formGroup]="registerForm">
+                        <div>
+                            <mat-form-field class="example-full-width" appearance="fill">
+                                <mat-label>DNI</mat-label>
+                                <input class="form-control" required  matInput formControlName ="dnip" >
+                            </mat-form-field>
+                        <br>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.dnip.touched && registerFormControl.dnip.errors?.required">
+                            Se requiere el DNI
+                            </span>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.dnip.touched && registerFormControl.dnip.errors?.minLength">
+                            Como minimo 8 caracteres
+                            </span>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.dnip.touched && registerFormControl.dnip.errors?.maxLength">
+                            Como maximo 8 caracteres
+                            </span>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.dnip.touched && registerFormControl.dnip.errors?.pattern">
+                            Solo valores numericos
+                            </span>
+                        </div>
+                    
+                       <div>
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Nombre</mat-label>
+                            <input class="form-control" required matInput formControlName="nomp">   
+                          </mat-form-field>
+                        <br>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.nomp.touched && registerFormControl.nomp.errors?.required">
+                            Se requiere el Nombre
+                            </span>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.nomp.touched && registerFormControl.nomp.errors?.minLength">
+                            Como minimo 8 caracteres
+                            </span>
+                        </div>
+                    
+                        <div>
+                            <mat-form-field class="example-full-width" appearance="fill">
+                                <mat-label>Teléfono</mat-label>
+                                <input class="form-control" required  matInput formControlName ="numero" >
+                            </mat-form-field>
+                        <br>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.numero.touched && registerFormControl.numero.errors?.required">
+                            Se requiere el numero de Teléfono
+                            </span>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.numero.touched && registerFormControl.numero.errors?.minLength">
+                            Como minimo 9 caracteres
+                            </span>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.numero.touched && registerFormControl.numero.errors?.maxLength">
+                            Como maximo 9 caracteres
+                            </span>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.numero.touched && registerFormControl.numero.errors?.pattern">
+                            Solo valores númericos
+                            </span>
+                        </div>
+                    
+                        <div>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Edad</mat-label>
+                                <input class="form-control" required  matInput formControlName ="edad" >
+                            </mat-form-field>
+                        <br>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.edad.touched && registerFormControl.edad.errors?.required">
+                            Se requiere la Edad
+                            </span>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.edad.touched && registerFormControl.edad.errors?.minLength">
+                            Como mínimo 1 caracteres
+                            </span>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.edad.touched && registerFormControl.edad.errors?.maxLength">
+                            Como máximo 3 caracteres
+                            </span>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.edad.touched && registerFormControl.edad.errors?.pattern">
+                            Solo valores númericos
+                            </span>
+                        </div>
+                    
+                        <div>
+                            <mat-form-field class="example-full-width" appearance="fill">
+                                <mat-label>CorreoElectronico</mat-label>
+                                <input class="form-control" required  matInput formControlName ="correoElectronico" >
+                            </mat-form-field>
+                        <br>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.correoElectronico.touched && registerFormControl.correoElectronico.errors?.required">
+                            Se requiere el Correo Electronico
+                            </span>
+                            <span class="text-danger" 
+                            *ngIf="(registerFormControl.correoElectronico.touched || submitted) && registerFormControl.correoElectronico.errors?.email">
+                            Email invalido
+                            </span>
+                        </div> 
+                            
+                        </form>
+
+                        <div mat-dialog-actions>
+                            <button mat-raised-button (click)="close()">Cancelar</button>
+                           
+                            <button mat-raised-button color="primary" [disabled]="this.registerForm.invalid" (click)="paciente!=null ? editCliente() :addCliente()">Guardar</button>
+                          </div>
+                          
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div mat-dialog-actions>
-  <button mat-raised-button (click)="close()">Cancelar</button>
- 
-  <button mat-raised-button color="primary" [disabled]="numero==null || nomp==null || dnip==null || edad==null || correoElectronico==null" (click)="paciente!=null ? editCliente() :addCliente()">Guardar</button>
-</div>
+
 
 
 

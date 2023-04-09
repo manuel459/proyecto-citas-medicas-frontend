@@ -11,6 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DialogmedicoRevisarComponent } from './dialog/dialogmedico-revisar/dialogmedico-revisar.component';
 import { LoaderService } from '../loader.service';
 import { FilterGeneric } from '../Interfaces/FilterGeneric';
+import * as XLSX from 'xlsx';
 
 
 @Component({
@@ -21,7 +22,7 @@ import { FilterGeneric } from '../Interfaces/FilterGeneric';
 export class MedicoComponent implements OnInit {
   public lst:any[] | undefined; 
   public columnas: string[] =['codmed','codes','idtip','nombre','sexo','nac','correo','dni','actions'];
-  readonly width: string ='860px';
+  readonly width: string ='800px';
   searchKey!: string;
   dataSource  = new MatTableDataSource<Response>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
@@ -195,6 +196,22 @@ export class MedicoComponent implements OnInit {
         this.error = response.exito;
         this.dataSource.data = response.data; 
     });
+  }
+
+  exportExcel(data: any[], fileName: string): void {
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    this.saveExcelFile(excelBuffer, fileName);
+  }
+  
+  private saveExcelFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], { type: 'application/octet-stream' });
+    const url: string = window.URL.createObjectURL(data);
+    const link: HTMLAnchorElement = document.createElement('a');
+    link.href = url;
+    link.download = fileName + '.xlsx';
+    link.click();
   }
 
 

@@ -1,13 +1,13 @@
-<h2 class="w-13" mat-dialog-tittle>{{medico!=null ? 'Editar Medico' : 'Nuevo Medico'}}</h2>
+<!-- <h2 class="w-13" mat-dialog-tittle>{{medico!=null ? 'Editar Medico' : 'Nuevo Medico'}}</h2>
 <h4 class="w-13">Datos Personales :</h4>
 <img width="350px" *ngIf="sexo == 'F'" src="https://st.depositphotos.com/11953928/57569/v/600/depositphotos_575698592-stock-illustration-doctor-woman-profession-icon-isolated.jpg" alt="images" style="float: right;">
 <img width="350px" *ngIf="sexo == 'M'" src="https://thumbs.dreamstime.com/b/avatar-del-terapeuta-icono-web-doctor-103706622.jpg" alt="images" style="float: right;">
-<!-- <button mat-raised-button color="primary" (click)="medico!=null ? editCliente() :addCliente()">Guardar</button> -->
+ <button mat-raised-button color="primary" (click)="medico!=null ? editCliente() :addCliente()">Guardar</button> 
 <div modal-content >
     
     <mat-form-field style="margin: 10px;" class="example-full-width" appearance="fill">
         <mat-label>Nombre</mat-label>
-        <input  required matInput [(ngModel)]="nombre" >   
+        <input formControlName="name" required matInput [(ngModel)]="nombre" >
     </mat-form-field>
 
     <mat-form-field class="example-full-width" appearance="fill">
@@ -46,10 +46,10 @@
       <mat-icon>visibility</mat-icon>
     </button>
     
-    <!-- <mat-form-field class="example-full-width" appearance="fill">
+    <mat-form-field class="example-full-width" appearance="fill">
         <mat-label>Idhor</mat-label>
         <input required matInput [(ngModel)]="idhor" >   
-    </mat-form-field> -->
+    </mat-form-field>
    <br>
    
    <mat-form-field appearance="fill">
@@ -76,6 +76,171 @@
   <button mat-raised-button (click)="close()">Cancelar</button>
  
   <button mat-raised-button color="primary" (click)="medico!=null ? editCliente() :addCliente()">Guardar</button>
+</div> -->
+
+
+
+<h2 class="w-13" mat-dialog-tittle>{{medico!=null ? 'Editar Medico' : 'Nuevo Medico'}}</h2>
+<div class="container">
+  <div class="row">
+      <div class="col-md-8 mx-auto">
+          <div class="card">
+              <div class="card-body">
+                  <form class="form" [formGroup]="registerForm">
+                    <h4 class="w-13">Datos Personales :</h4>
+                    <img width="350px" src="https://thumbs.dreamstime.com/b/avatar-del-terapeuta-icono-web-doctor-103706622.jpg" alt="images" style="float: right;">
+                      <div>
+                        <mat-form-field class="example-full-width" appearance="fill">
+                          <mat-label>Dni</mat-label>
+                          <input class="form-control" required matInput formControlName="dni" >   
+                        </mat-form-field>
+                          <br>
+                          <span class="text-danger" 
+                          *ngIf="(registerFormControl.dni.touched || submitted) && registerFormControl.dni.errors?.required">
+                          Se requiere el DNI
+                          </span>
+                          <span class="text-danger" 
+                          *ngIf="(registerFormControl.dni.touched || submitted) && registerFormControl.dni.errors?.minLength">
+                          Como minimo 8 caracteres
+                          </span>
+                          <span class="text-danger" 
+                          *ngIf="(registerFormControl.dni.touched || submitted) && registerFormControl.dni.errors?.maxLength">
+                          Como maximo 8 caracteres
+                          </span>
+                          <span class="text-danger" 
+                          *ngIf="(registerFormControl.dni.touched || submitted) && registerFormControl.dni.errors?.pattern">
+                          Solo valores numericos
+                          </span>
+                      </div>
+                      <div class="example-full-width" class="form-group">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                          <mat-label>Nombres</mat-label>
+                          <input class="form-control" required matInput formControlName="nombre">   
+                        </mat-form-field>
+                        <br>
+                        <span class="text-danger"
+                            *ngIf="(registerFormControl.nombre.touched || submitted) && registerFormControl.nombre.errors?.required">
+                            Se requiere el nombre
+                        </span>
+                        <span class="text-danger"
+                            *ngIf="(registerFormControl.nombre.touched || submitted) && registerFormControl.nombre.errors?.minLength">
+                            Requiere como minimo 30
+                        </span>
+                      </div>
+                      <div>
+                        <section class="example-section">
+                          <label class="example-margin">Sexo:</label>
+                          <mat-radio-group formControlName="sexo">
+                            <mat-radio-button color="primary" class="example-margin" value="M">Masculino</mat-radio-button>
+                            <mat-radio-button color="primary" class="example-margin" value="F">Femenino</mat-radio-button>
+                          </mat-radio-group>
+                        </section>
+                        <br>
+                        <span class="text-danger"
+                            *ngIf="(registerFormControl.sexo.touched || submitted) && registerFormControl.sexo.errors?.required">
+                            Selecciona un sexo
+                            </span>
+                      </div>
+                      <div>
+                        <mat-form-field appearance="fill">
+                          <mat-label>FechaNac</mat-label>
+                          <input class="form-control" matInput [matDatepicker]="picker" formControlName="nac">
+                          <mat-hint>MM/DD/YYYY</mat-hint>
+                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                          <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                        <br>
+                        <span class="text-danger"
+                        *ngIf="(registerFormControl.nac.touched || submitted) && registerFormControl.nac.errors?.required">
+                          Fecha es requerida
+                        </span>
+                      </div>
+                
+                      <br>
+                      <h4 class="w-13">Cuenta :</h4>
+                      <div class="example-full-width" class="form-group">
+                          <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Email</mat-label>
+                            <input class="form-control" required matInput formControlName="correo" >   
+                          </mat-form-field>
+                          <br>
+                          <span class="text-danger"
+                              *ngIf="(registerFormControl.correo.touched || submitted) && registerFormControl.correo.errors?.required">
+                              Correo electronico es requerido
+                          </span>
+                          <span class="text-danger"
+                              *ngIf="(registerFormControl.correo.touched || submitted) && registerFormControl.correo.errors?.email">
+                              Email invalido
+                          </span>
+                      </div>
+
+                      <div class="form-group">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Password</mat-label>
+                            <input [type]="hide ? 'password' : 'text'" type="password" class="form-control" required matInput formControlName="pswd" >   
+                          </mat-form-field>
+                          <button  mat-icon-button formnovalidate (click)="myFunction()">
+                            <mat-icon>visibility</mat-icon>
+                          </button>
+                          <br>
+                        <span class="text-danger"
+                            *ngIf="(registerFormControl.pswd.touched || submitted) && registerFormControl.pswd.errors?.required">
+                            Se requiere una contraseña
+                        </span>
+                        <span class="text-danger"
+                            *ngIf="(registerFormControl.pswd.touched || submitted) && registerFormControl.pswd.errors?.invalidPassword">
+                            La contraseña debe tener un mínimo de 8 caracteres, al menos 1 letra mayúscula, 1 letra minúscula
+                            , 1 número , 1 caracter especial y no debe contener Emoji ni espacios en blanco
+                        </span>
+                    </div>
+                    
+                    <div>
+                      <mat-form-field appearance="fill">
+                        <mat-label>Especialidad</mat-label>
+                        <mat-select class="form-control" formControlName="codes" matNativeControl required>
+                          <mat-option (click)="getHorarios()" *ngFor="let especialidad of especialidades" [value]="especialidad.sId">
+                            {{especialidad.sDescripcion}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <br>  
+                      <span class="text-danger"
+                        *ngIf="(registerFormControl.codes.touched || submitted) && registerFormControl.codes.errors?.required">
+                          Selecciona una especialidad
+                        </span>
+                    </div>
+                    <div>
+                      <mat-form-field  appearance="fill">
+                        <mat-label>Horario</mat-label>
+                        <mat-select class="form-control" formControlName="idhor" matNativeControl required>
+                          <mat-option *ngFor="let horario of horarios" [value]="horario.sId">
+                            {{horario.sDescripcion}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <br>   
+                      <span class="text-danger"
+                          *ngIf="(registerFormControl.idhor.touched || submitted) && registerFormControl.idhor.errors?.required">
+                            Seleccione un Horario
+                      </span>
+  
+                    </div> 
+                    
+                      <!-- <div class="form-group">
+                        <button type="submit" class="btn btn-success">Register</button>
+                    </div> -->
+
+
+                  </form>
+                  <div mat-dialog-actions>
+                    <button mat-raised-button (click)="close()">Cancelar</button>
+                   
+                    <button [disabled]="this.registerForm.invalid" mat-raised-button color="primary" (click)="medico!=null ? editCliente() :addCliente()">Guardar</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
 </div>
 
 

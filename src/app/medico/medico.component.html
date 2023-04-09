@@ -3,6 +3,9 @@
     <mat-icon>add</mat-icon>
     <span>Nuevo Medico</span>
 </button>
+<button style="float:right" mat-button color="primary" (click)="exportExcel(this.dataSource.data, 'reporte_medicos')">
+    <mat-icon>get_app</mat-icon>
+</button>
     <div class="main">
         <br>
         <br>
@@ -11,9 +14,9 @@
             <br>
             <br>
             <div class="container">
-                <button style="float: right;" mat-icon-button mat-button color="white" >
+                <!-- <button style="float: right;" mat-icon-button mat-button color="white" (click)="exportExcel(this.dataSource.data, 'reporte_medicos')" >
                     <mat-icon>backup</mat-icon>
-                </button>
+                </button> -->
                 
                 <div class="search-container"  style="float:right">
                     <button style="width:max-content;" mat-button >
