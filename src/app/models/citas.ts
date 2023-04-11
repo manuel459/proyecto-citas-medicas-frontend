@@ -17,3 +17,16 @@ export interface Citas
     //Envio de notificación 
     bActiveNotificaciones: Boolean
 }
+
+export interface CitasDetail
+{
+    id: string;
+    dnip: number;
+    feccit: string;
+    hora: string;
+    sEstado: string;
+    sEstado_Pago: string;
+    sNombre_Especialidad: string;
+    sNombre_Medico: string;
+    sNombre_Paciente: string;
+}

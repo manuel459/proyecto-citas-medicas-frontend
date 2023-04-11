@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Usuario } from './models/usuario';
 import { AuthService } from './service/auth.service';
+import { ConfiguracionesService } from './service/configuraciones.service';
 
 @Component({
   selector: 'app-root',
@@ -11,12 +12,17 @@ import { AuthService } from './service/auth.service';
 export class AppComponent {
   title = 'AprendiendoAngular';
   usuario!: Usuario ;
+  permisos: string[]|any;
+  MODULE_DIAGNOSTICO: boolean = false;
+  LIST_MODULE_MEDICOS: boolean = false;
   
-  constructor(public authService: AuthService ,
+  constructor(public configuracionesService:ConfiguracionesService,public authService: AuthService ,
     private router: Router){
       this.authService.usuario.subscribe(res =>{
         this.usuario = res;
         console.log('cambio el objeto :'+res);
+        this.getPermiso();
+        console.log('Hola')
       });
     }
 
@@ -24,4 +30,16 @@ export class AppComponent {
       this.authService.logout();
       this.router.navigate(['/login']);
    }
+
+   getPermiso()
+   {
+    var correo = JSON.parse(localStorage.getItem("usuario")!);
+    this.configuracionesService.getConfiguraciones('Permisos', correo.correoElectronico).subscribe( response => 
+      {
+        this.permisos = response.data
+        this.MODULE_DIAGNOSTICO = this.permisos.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion.includes('MODULE-DIAGNOSTICO')).length > 0;
+        this.LIST_MODULE_MEDICOS = this.permisos.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion.includes('LIST-MODULE-MEDICOS')).length > 0
+      })
+   }
+  
 }

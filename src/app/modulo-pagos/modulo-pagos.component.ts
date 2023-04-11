@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 import { ConsultarPagoCita } from '../Interfaces/ConsultarPagoCita';
@@ -13,7 +13,8 @@ import { ModuloPagosService } from '../service/modulo-pagos.service';
   styleUrls: ['./modulo-pagos.component.css']
 })
 export class ModuloPagosComponent implements OnInit {
-
+  registerForm: FormGroup | any;
+  registerFormPagos: FormGroup | any;
 //CONSULTA DE CITA
  idCita : string = "";
  nDnip: number = 0;
@@ -69,16 +70,35 @@ export class ModuloPagosComponent implements OnInit {
   });
   isEditable = false;
 
-  constructor(private _formBuilder: FormBuilder, public pagosService: ModuloPagosService, public snackBar: MatSnackBar) 
+  constructor(private fb: FormBuilder, private _formBuilder: FormBuilder, public pagosService: ModuloPagosService, public snackBar: MatSnackBar) 
   {
+    this.registerForm = this.fb.group({
+      idCita: ['',[Validators.required, Validators.pattern(/^[1-9]\d{0,10}$/)]],
+    });
+
+    this.registerFormPagos = this.fb.group({
+      nNumero_Tarjeta: ['',[Validators.required, Validators.maxLength(16), Validators.minLength(16),Validators.pattern(/^[1-9]\d{0,20}$/)]],
+      nMes: ['',[Validators.required]],
+      nAnio: ['',[Validators.required]],
+      cvv: ['',[Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+      nDni: ['',[Validators.required, Validators.maxLength(8), Validators.minLength(8),Validators.pattern(/^[1-9]\d{0,10}$/)]]
+    })
   }
 
   ngOnInit(): void {
   }
 
+  get registerFormControlPagos() {
+    return this.registerFormPagos.controls;
+  }
+
+  get registerFormControl() {
+    return this.registerForm.controls;
+  }
+
   add()
   {
-    const consultarPagoCita: ConsultarPagoCita = {idCita: this.idCita}
+    const consultarPagoCita: ConsultarPagoCita = {idCita: this.registerForm.value.idCita}
     this.pagosService.getCita(consultarPagoCita).subscribe(response =>
       {
         if (response.exito === 1)
@@ -89,7 +109,7 @@ export class ModuloPagosComponent implements OnInit {
           this.sNombre_Medico = response.data.sNombre_Medico,
           this.dFecha_Cita = response.data.dFecha_Cita,
           this.dImporte_Total = response.data.dImporte_Total,
-          this.firstFormGroup = response.data.exito
+          this.firstFormGroup = response.data.exito;
           Swal.fire(
             'Consulta exitosa',
             '',
@@ -120,7 +140,7 @@ export class ModuloPagosComponent implements OnInit {
       .then((result) => {
           if (result.isConfirmed) {
             const pago: insertPago ={
-              sCod_Cita: this.idCita, nNumero_Tarjeta: this.nNumero_Tarjeta, nMes: this.nMes, nAnio: this.nAnio, nDni: this.nDni, dImporte_Total: this.dImporte_Total
+              sCod_Cita: this.registerForm.value.idCita, nNumero_Tarjeta: this.registerFormPagos.value.nNumero_Tarjeta, nMes: this.registerFormPagos.value.nMes, nAnio: this.registerFormPagos.value.nAnio, nDni: this.registerFormPagos.value.nDni, dImporte_Total: this.dImporte_Total
             }
             console.log(pago)
             this.pagosService.insertPago(pago).subscribe(response =>{

@@ -1,7 +1,7 @@
 export interface diagnosticoReporte
 {
      id: number; 
-     idCita:string;
+     idCita:number;
      nombre :  string;
      especialidad :  string;
      nomp :  string;

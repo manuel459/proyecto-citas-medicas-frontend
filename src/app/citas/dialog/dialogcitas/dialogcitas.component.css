@@ -38,11 +38,18 @@ span.grey {
 }
 
 .example-form {
-  width: 300px;
+  width: 500px;
 }
 
 .example-full-width
 {
   width: 250px;  
 }
+
+.text-danger
+{
+  font-size: 11px;
+  color: red;
+}
+
   

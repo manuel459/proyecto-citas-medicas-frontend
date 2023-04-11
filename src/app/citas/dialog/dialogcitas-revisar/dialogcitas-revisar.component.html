@@ -16,50 +16,52 @@
             
                 <!-- <h4 class="text-accent text-sm mb-1">Monitoreo</h4> -->
                 <div class="flex mb-1">
-                    <div class="w-13">Id:</div>
-                    <div class="w-23 font-bold">{{id}}</div>
+                    <div class="w-13">Codigo de Cita:</div>
+                    <div class="w-23 font-bold">{{citas.id}}</div>
                 </div>
                 <br>
                 <div class="flex mb-1">
-                    <div class="w-13">Dni del Paciente:</div>
-                    <div class="w-2/3 font-bold">{{dnip}}</div>
+                    <div class="w-13">DNI del Paciente:</div>
+                    <div class="w-2/3 font-bold">{{citas.dnip}}</div>
                 </div>
                 <br>
-        
-                <!-- <div class="flex mb-1">
-                    <div class="w-1/3">F.Request</div>
-                    <div class="w-2/3 font-bold">{{data.contentFileBotPayment.voucherMedicalAuditLogRequest}}</div>
-                </div> -->
-                <!-- <div class="flex mb-1">
-                    <div class="w-1/3">F.Response</div>
-                    <div class="w-2/3 font-bold">{{data.contentFileBotPayment.voucherMedicalAuditLogResponse}}</div>
-                </div> -->
                 <div class="flex mb-1">
-                    <div class="w-13">Fecha de Cita:</div>
-                    <div class="w-2/3 font-bold">{{feccit| date:'yyyy-MM-dd'}}</div>
+                    <div class="w-13">Nombre del Paciente:</div>
+                    <div class="w-2/3 font-bold">{{citas.sNombre_Paciente}}</div>
                 </div>
                 <br>
+
                 <div class="flex mb-1">
                     <div class="w-13">Especialidad:</div>
-                    <div class="w-2/3 font-bold">{{codes}}</div>
+                    <div class="w-2/3 font-bold">{{citas.sNombre_Especialidad}}</div>
                 </div>
                 <br>
                 <div class="flex mb-1">
                     <div class="w-13">Nombre del Medico:</div>
-                    <div class="w-2/3 font-bold">{{nombre}}</div>
+                    <div class="w-2/3 font-bold">{{citas.sNombre_Medico}}</div>
                 </div>
                 
             </div>
         
             <br>
             <div class="flex mb-1">
-                <div class="w-13">Estado:</div>
-                <div class="w-2/3 font-bold">{{estado}}</div>
+                <div class="w-13">Estado de Cita:</div>
+                <div class="w-2/3 font-bold">{{citas.sEstado}}</div>
+            </div>
+            <br>
+            <div class="flex mb-1">
+                <div class="w-13">Estado de Pago:</div>
+                <div class="w-2/3 font-bold">{{citas.sEstado_Pago}}</div>
+            </div>
+            <br>
+            <div class="flex mb-1">
+                <div class="w-13">Fecha de Cita:</div>
+                <div class="w-2/3 font-bold">{{citas.feccit| date:'yyyy-MM-dd'}}</div>
             </div>
             <br>
             <div class="flex mb-1">
                 <div class="w-13">Hora:</div>
-                <div class="w-2/3 font-bold">{{hora}}</div>
+                <div class="w-2/3 font-bold">{{citas.hora}}</div>
             </div>
 
 

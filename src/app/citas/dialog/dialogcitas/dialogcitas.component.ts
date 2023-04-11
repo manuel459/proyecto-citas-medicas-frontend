@@ -8,6 +8,7 @@ import {ConsultaDni} from 'src/app/Interfaces/ConsultaDni'
 import { Horario } from 'src/app/models/horarios';
 import {MatCalendarCellClassFunction} from '@angular/material/datepicker';
 import { ConfiguracionesService } from 'src/app/service/configuraciones.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-dialogcitas',
@@ -17,12 +18,7 @@ import { ConfiguracionesService } from 'src/app/service/configuraciones.service'
 })
 export class DialogcitasComponent implements OnInit {
       date : any;
-      codes: string;
-      dnip: number;
-      codmed: string;
-      feccit: string;
-      estado: number;
-      hora: string;
+      costo: any;
       //Datos del paciente
       nombrePaciente: string|any;
       numeroPaciente: number|any;
@@ -32,15 +28,17 @@ export class DialogcitasComponent implements OnInit {
       array : any[];
       arrayHoras : any[];
       arrayStatus: any[];
-      costo: any;
-      nombre:string;
+
+      // nombre:string;
       todayDate:Date = new Date();
       public listaFechas: any[] ;
       public especialidades: [] | any;
       public medicos: [] | any;
       //Switch de envio de notificaciones
       bActiveNotificaciones = true;
+      registerForm: FormGroup | any;
   constructor(
+    private fb: FormBuilder,
     public dialogRef: MatDialogRef<DialogcitasComponent>,
     public citasService: CitasService,
     public snackBar: MatSnackBar, @Inject(MAT_DIALOG_DATA) public citas :Citas,public configuracionesService: ConfiguracionesService
@@ -49,24 +47,33 @@ export class DialogcitasComponent implements OnInit {
     this.arrayHoras = [];
     this.arrayStatus = [];
     this.listaFechas = [];
-    if(this.citas !== null){
-      this.dnip = citas.dnip,
-      this.codmed = citas.codmed,
-      this.feccit = citas.feccit,
-      this.estado = citas.estado,
-      this.nombre = citas.nombre,
-      this.hora = citas.hora,
-      this.codes = citas.codes}
-    else{
-    this.dnip = 0,
-    this.codmed = "",
-    this.feccit = ""
-    this.estado = 0,
-    this.hora = "",
-    this.codes = "";
-    this.nombre ="";
-    this.nombrePaciente="";
-    }  
+
+    if(this.citas == null){
+      this.registerForm = this.fb.group({
+        dnip : ['',[Validators.required, Validators.minLength(8), Validators.maxLength(8), Validators.pattern(/^[1-9]\d{6,10}$/)]],
+        codmed: ['', Validators.required],
+        feccit:['', [Validators.required]],
+        estado: [1],
+        nombre: [''],
+        hora: ['', Validators.required],
+        codes: ['', Validators.required],
+        // costo:['']
+      }
+      );}
+      else
+      {
+        this.registerForm = this.fb.group({
+          dnip : [this.citas.dnip,[Validators.required, Validators.minLength(8), Validators.maxLength(8), Validators.pattern(/^[1-9]\d{6,10}$/)]],
+          codmed: [this.citas.codmed, Validators.required],
+          feccit:[this.citas.feccit, [Validators.required]],
+          estado: [this.citas.estado],
+          nombre: [this.citas.nombre],
+          hora: [this.citas.hora, Validators.required],
+          codes: [this.citas.codes, Validators.required],
+          // costo: [this.citas.costo]
+        }
+        );
+      }
   }
 
 
@@ -75,6 +82,7 @@ export class DialogcitasComponent implements OnInit {
     this.getMedicos();
     this.getDiasLaborables();
     this.getHorario();
+    this.getCosto();
     if(this.citas!=null){this.getDni()};
 
   }
@@ -96,7 +104,7 @@ export class DialogcitasComponent implements OnInit {
   })
       .then((result) => {
           if (result.isConfirmed) {
-            const citas: Citas ={dnip: this.dnip, nombre:this.nombre, codmed:this.codmed, feccit:this.feccit,estado: this.estado, hora:this.hora,codes:this.codes,CorreoElectronico:this.CorreoPaciente, nombrePaciente:this.nombrePaciente,id:'0', bActiveNotificaciones: this.bActiveNotificaciones}
+            const citas: Citas ={dnip: this.registerForm.value.dnip, nombre:this.registerForm.value.nombre, codmed:this.registerForm.value.codmed, feccit:this.registerForm.value.feccit,estado: this.registerForm.value.estado, hora:this.registerForm.value.hora,codes:this.registerForm.value.codes, CorreoElectronico:this.CorreoPaciente, nombrePaciente:this.nombrePaciente, id:'0', bActiveNotificaciones: this.bActiveNotificaciones}
             this.citasService.add(citas).subscribe(response =>{
                 if (response.exito === 1){
                     this.dialogRef.close();
@@ -129,11 +137,17 @@ editCliente(){
 })
     .then((result) => {
         if (result.isConfirmed) {
-          const citas: Citas ={dnip: this.dnip, nombre: this.nombre,codmed:this.codmed, feccit:this.feccit,estado: this.estado, hora:this.hora,codes:this.codes,CorreoElectronico:this.CorreoPaciente,nombrePaciente:this.nombrePaciente,id:this.citas.id, bActiveNotificaciones: this.bActiveNotificaciones}
+          const citas: Citas ={dnip: this.registerForm.value.dnip, nombre: this.registerForm.value.nombre,codmed:this.registerForm.value.codmed, feccit:this.registerForm.value.feccit,estado: this.registerForm.value.estado, hora:this.registerForm.value.hora,codes:this.registerForm.value.codes,CorreoElectronico:this.CorreoPaciente,nombrePaciente:this.nombrePaciente ,id:this.citas.id, bActiveNotificaciones: this.bActiveNotificaciones}
           this.citasService.edit(citas).subscribe(response =>{
               if (response.exito===1){
                   this.dialogRef.close();
                   this.snackBar.open('Cita editado con exito','',{
+                      duration:2000
+                  });
+              }
+              else 
+              {
+                  this.snackBar.open('Ocurrio un error al momento de editar la cita','',{
                       duration:2000
                   });
               }
@@ -143,11 +157,15 @@ editCliente(){
   
 }
 
+get registerFormControl() {
+  return this.registerForm.controls;
+}
+
 getDni()
   {
     const ConsultaDni: ConsultaDni ={
-      dnip: this.dnip,
-      codes: this.codes
+      dnip: this.registerForm.value.dnip,
+      codes: this.registerForm.value.codes
     }
     this.citasService.getDni(ConsultaDni).subscribe(response =>
       {
@@ -170,10 +188,11 @@ getDni()
 
   getEspecialidad(){this.configuracionesService.getConfiguraciones('Especialidad', '').subscribe(response =>{this.especialidades = response.data})}
 
-  getMedicos(){this.configuracionesService.getConfiguraciones('Medico',this.codes).subscribe(response => {this.medicos = response.data})}
+  getMedicos(){this.configuracionesService.getConfiguraciones('Medico',this.registerForm.value.codes).subscribe(response => {this.medicos = response.data})}
 
-  getDiasLaborables(){this.configuracionesService.getConfiguraciones('DiasLaborables',this.codmed).subscribe(response => {this.listaFechas = Array.from(response.data.find((item: { sDescripcion: string; }) => (item.sDescripcion )).sDescripcion.split(',').map(Number))})}
+  getDiasLaborables(){this.configuracionesService.getConfiguraciones('DiasLaborables',this.registerForm.value.codmed).subscribe(response => {this.listaFechas = Array.from(response.data.find((item: { sDescripcion: string; }) => (item.sDescripcion )).sDescripcion.split(',').map(Number))})}
 
+  getCosto(){this.configuracionesService.getConfiguraciones('Costo', this.registerForm.value.codes).subscribe(response => {this.costo = response.data.find((item: { sDescripcion: string; }) => (item.sDescripcion )).sDescripcion})}
 //FUNCION PARA CONVERTIR A FORMATO DE HORA
 timeFunction(timeObj: { minutes: number | number; seconds: number | number; hours: number | number; }) {
   var min = timeObj.minutes < 10 ? "0" + timeObj.minutes : timeObj.minutes;
@@ -194,8 +213,8 @@ timeFunction(timeObj: { minutes: number | number; seconds: number | number; hour
 getHorario()
 { 
   const ConsultaHorario: Horario ={
-    codmed : this.codmed,
-    feccit: this.feccit
+    codmed : this.registerForm.value.codmed,
+    feccit: this.registerForm.value.feccit
   } 
   this.citasService.getHorario(ConsultaHorario).subscribe(response => 
     {

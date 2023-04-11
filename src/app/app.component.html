@@ -15,7 +15,7 @@
             <span class="name" font-style>Pacientes</span>
            </button>
 
-           <button mat-button class="menu-button" [routerLink]="['/medico']">
+           <button *ngIf="LIST_MODULE_MEDICOS"  mat-button class="menu-button" [routerLink]="['/medico']">
               <mat-icon class="icono">group_add</mat-icon>
               <span class="name">Medicos</span>
              </button>
@@ -25,10 +25,9 @@
             <span class="name">Nueva Cita</span>
            </button>
   
-           <button mat-button class="menu-button" [routerLink] = "['/diagnostico']">
+           <button *ngIf="MODULE_DIAGNOSTICO" mat-button class="menu-button" [routerLink] = "['/diagnostico']">
             <mat-icon class="icono">local_hospital</mat-icon>
-            <span class="name">Diagnostico</span>
-          
+            <span class="name">Diágnostico</span>
           </button>
 
           <button mat-button class="menu-button" [routerLink] = "['/pagos']">

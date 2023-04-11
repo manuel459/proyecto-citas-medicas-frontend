@@ -1,121 +1,132 @@
-<h2 class="w-13" mat-dialog-tittle>{{citas!=null ? 'Editar Cita' : 'Nuevo Cita'}}</h2>
+<h2 class="w-13" mat-dialog-tittle>{{citas!=null ? 'Editar Cita' : 'Nueva Cita'}}</h2>
 <h4 class="w-13">Activar envio de Notificación :</h4>
-<mat-slide-toggle style="margin: 10px;" color="primary" [(ngModel)]="bActiveNotificaciones">{{bActiveNotificaciones?"Activado":"Desactivado"}}</mat-slide-toggle>
+<mat-slide-toggle  color="primary" [(ngModel)]="bActiveNotificaciones">{{bActiveNotificaciones?"Activado":"Desactivado"}}</mat-slide-toggle>
 <h4 class="w-13">Datos Personales :</h4>
-<!-- <img width="350px" src="https://us.123rf.com/450wm/yulyashka/yulyashka1706/yulyashka170600062/80871922-solicitud-de-cita-y-el-icono-de-servicios-m%C3%A9dicos-.jpg" alt="images" style="float: right;"> -->
-<!-- <button mat-raised-button color="primary" (click)="medico!=null ? editCliente() :addCliente()">Guardar</button> -->
 <div modal-content >
   <img width="400px" src="https://static.vecteezy.com/system/resources/previews/002/990/983/non_2x/personal-doctor-appointment-2d-isolated-illustration-vector.jpg" alt="images" style="float: right;">
-
-    <mat-form-field style="margin: 10px;" class="example-full-width" appearance="fill">
+  <form class="form" [formGroup]="registerForm">
+    <div>
+      <mat-form-field class="example-form" appearance="fill">
         <mat-label>Dni</mat-label>
-        <input type="number" required matInput [(ngModel)]="dnip" >   
-    </mat-form-field>
-   
-    <button mat-button color="primary" (click)="getDni()"><mat-icon>search</mat-icon></button>
-    <mat-form-field class="example-full-width" appearance="fill">
-    <mat-label >Nombre</mat-label>
-    <input matInput ngModel disabled>
-    {{nombrePaciente}}
-    </mat-form-field>
-    <mat-form-field style="margin: 10px;" class="example-full-width" appearance="fill">
-    <mat-label>Edad</mat-label>
-    <input ngModel disabled matInput>
-    {{EdadPaciente}}
-    </mat-form-field>
-    <mat-form-field class="example-full-width" style="margin: 10px;"  appearance="fill">
-    <mat-label>CorreoEletronico</mat-label>
-    <input ngModel disabled matInput>
-    {{CorreoPaciente}}
-    </mat-form-field>
-    <mat-form-field style="margin: 10px;" class="example-full-width" appearance="fill">
-    <mat-label>Numero</mat-label>
-    <input ngModel disabled matInput>
-    {{numeroPaciente}}
-    </mat-form-field>
+        <input class="form-control" required matInput formControlName ="dnip" >   
+      </mat-form-field>
+      <button mat-button color="primary" (click)="getDni()"><mat-icon>search</mat-icon></button>
+      <br>
+      <span class="text-danger" 
+      *ngIf="registerFormControl.dnip.touched && registerFormControl.dnip.errors?.required">
+      Se requiere el DNI
+      </span>
+      <span class="text-danger" 
+      *ngIf="registerFormControl.dnip.touched && registerFormControl.dnip.errors?.pattern">
+      Solo valores numericos
+      </span>
+    </div>
+  
+  
+  <mat-form-field class="example-full-width" appearance="fill">
+  <mat-label >Nombre</mat-label>
+  <input disabled matInput>
+  {{nombrePaciente}}
+  </mat-form-field>
+  <mat-form-field style="margin: 10px;" class="example-full-width" appearance="fill">
+  <mat-label>Edad</mat-label>
+  <input disabled matInput>
+  {{EdadPaciente}}
+  </mat-form-field>
 
-    <h4 class="w-13">Dato Medico :</h4>
+  <mat-form-field class="example-full-width"   appearance="fill">
+  <mat-label>CorreoEletronico</mat-label>
+  <input disabled matInput>
+  {{CorreoPaciente}}
+  </mat-form-field>
 
-    <mat-form-field style="margin: 10px;" class="example-full-width" appearance="fill">
-      <mat-label>Especialidad</mat-label>
-      <mat-select [(ngModel)]="codes" matNativeControl required>
-        <mat-option (click)="getMedicos()" *ngFor="let especialidad of especialidades" [value]="especialidad.sId">
-          {{especialidad.sDescripcion}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field> 
+  <mat-form-field class="example-full-width" appearance="fill">
+  <mat-label>Télefono</mat-label> 
+  <input disabled matInput>
+   {{numeroPaciente}}
+ </mat-form-field> 
 
-    <!-- <mat-form-field style="margin: 10px;" class="example-full-width" appearance="fill">
+  <h4 class="w-13">Especialidad y Fecha de la Cita :</h4>
+  <div class="form-row">
+    <div>
+      <mat-form-field class="example-form" appearance="fill">
         <mat-label>Especialidad</mat-label>
-        <mat-select  [(ngModel)]="codes" matNativeControl required>
-          <mat-option (click)="getEspecialidad()" value="E01">Medicina General</mat-option>
-          <mat-option (click)="getEspecialidad()" value="E02">Obstetricia</mat-option>
-          <mat-option (click)="getEspecialidad()" value="E03">Otorrinolaringologia</mat-option> 
-          <mat-option (click)="getEspecialidad()" value="E04">Pediatria</mat-option>
-          <mat-option (click)="getEspecialidad()" value="E05">Psicologia</mat-option>
-          <mat-option (click)="getEspecialidad()" value="E06">Radiologia</mat-option>
-          <mat-option (click)="getEspecialidad()" value="E07">Traumatologia</mat-option>
-        </mat-select>
-      </mat-form-field>  -->
-
-      <!-- <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Doctor</mat-label>
-        <mat-select [(ngModel)]="nombre" matNativeControl required>
-          <mat-option  (click)="getHorarioLaboral()" *ngFor="let elemento of array" [value]="elemento" >
-            {{elemento}}
+        <mat-select class="form-control" required matInput formControlName="codes" matNativeControl required>
+          <mat-option (click)="getMedicos();getCosto()" *ngFor="let especialidad of especialidades" [value]="especialidad.sId">
+            {{especialidad.sDescripcion}}
           </mat-option>
         </mat-select>
-      </mat-form-field> -->
-
-      <mat-form-field class="example-full-width" appearance="fill">
+      </mat-form-field>
+      <br>
+        <span class="text-danger" 
+        *ngIf="registerFormControl.codes.touched && registerFormControl.codes.errors?.required">
+        Selecciona una especialidad
+        </span> 
+     </div>
+      
+     <div>
+      <mat-form-field class="example-form" appearance="fill">
         <mat-label>Doctor</mat-label>
-        <mat-select [(ngModel)]="codmed" matNativeControl required>
+        <mat-select class="form-control" required matInput formControlName ="codmed" matNativeControl required>
           <mat-option (click)="getDiasLaborables()" *ngFor="let elemento of medicos" [value]="elemento.sId" >
             {{elemento.sDescripcion}}
           </mat-option>
         </mat-select>
       </mat-form-field>
+      <br>
+        <span class="text-danger" 
+        *ngIf="registerFormControl.codmed.touched && registerFormControl.codmed.errors?.required">
+        Selecciona un Medico
+        </span> 
+     </div>
+  </div>
 
-    <h4 class="w-13">Fecha :</h4>
 
-    <mat-form-field class="example-full-width" style="margin: 10px;" appearance="fill">
+ <mat-form-field class="example-form" appearance="fill">
+  <mat-label>Costo</mat-label>
+  <span matPrefix>S/&nbsp;</span> 
+  <input disabled matInput placeholder="$">
+   {{costo}}
+ </mat-form-field> 
+  <div>
+    <mat-form-field class="example-form" appearance="fill">
         <mat-label >Fecha Cita</mat-label>
-        <input (dateChange)="getHorario()" matInput [min]="todayDate" [matDatepicker]="datepicker" [matDatepickerFilter]="dateFilter"  [(ngModel)]="feccit">
+        <input (dateChange)="getHorario()" matInput [min]="todayDate" [matDatepicker]="datepicker" [matDatepickerFilter]="dateFilter"  class="form-control" required matInput formControlName="feccit">
         <mat-hint>DD/MM/YYYY</mat-hint>
         <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
         <mat-datepicker class="highlight-dates" #datepicker [dateClass]="dateClass">
-        <!-- <mat-datepicker-actions>
-
-          <button mat-button matDatepickerCancel>Cancelar</button>
-          <button (click)="getHorario()" mat-raised-button color="primary" matDatepickerApply>Aplicar</button>
-        </mat-datepicker-actions> -->
         <h1 style="font-size: 10px;margin:10px">disponible<span style="font-size: 10px" class="grey">1</span></h1>
       </mat-datepicker>
     </mat-form-field>
+    <br>
+    <span class="text-danger" 
+    *ngIf="registerFormControl.feccit.touched && registerFormControl.feccit.errors?.required">
+    Selecciona una Fecha
+    </span> 
+  </div>
 
-   <!-- <mat-form-field style="margin: 10px;" class="example-full-width" appearance="fill">
-        <mat-label>Estado</mat-label>
-        <mat-select [(ngModel)]="estado"  matNativeControl required>
-          <mat-option value="PENDIENTE">Pendiente</mat-option>
-          <mat-option value="ATENDIDO">Atendido</mat-option>
-        </mat-select>
-      </mat-form-field>  -->
-
-
-    <mat-form-field class="example-full-width" appearance="fill">
+  <div>
+    <mat-form-field class="example-form" appearance="fill">
       <mat-label>Hora</mat-label>
-      <mat-select [(ngModel)]="hora"> 
+      <mat-select class="form-control" required matInput formControlName="hora"> 
         <mat-option [disabled]="elemento.status === false || timeFunction(elemento.contentCitas) === 'REFRIGERIO'" [ngStyle]="{'background-color':elemento.status === true? 'white' : '#ED2939' }" *ngFor="let elemento of arrayHoras" [value]="timeFunction(elemento.contentCitas)" >
           {{timeFunction(elemento.contentCitas)}}
         </mat-option>
       </mat-select>
     </mat-form-field>
+    <br>
+    <span class="text-danger" 
+    *ngIf="registerFormControl.hora.touched && registerFormControl.hora.errors?.required">
+    Selecciona una Hora
+    </span> 
+  </div>
+  </form>
 </div>
 
 <div mat-dialog-actions>
   <button mat-raised-button (click)="close()">Cancelar</button>
  
-  <button mat-raised-button color="primary" [disabled] = "!nombrePaciente" (click)="citas!=null ? editCliente() :addCliente()">Guardar</button>
+  <button mat-raised-button color="primary" [disabled]="this.registerForm.invalid || !nombrePaciente" (click)="citas!=null ? editCliente() :addCliente()">Guardar</button>
 </div>
 
 

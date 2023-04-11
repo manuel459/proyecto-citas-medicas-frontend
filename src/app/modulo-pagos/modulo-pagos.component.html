@@ -10,14 +10,27 @@
             </button>
           </div>
             <img mat-card-image  src="https://static.vecteezy.com/system/resources/previews/004/556/313/non_2x/doctor-consultation-concept-icon-doctor-appointment-idea-thin-line-illustration-medicine-and-healthcare-medical-examination-isolated-outline-drawing-editable-stroke-vector.jpg" >
-            <mat-form-field style="margin: 10px;" appearance="fill">
-                <mat-label>Code</mat-label>
-                <input matInput formControlName="firstCtrl" [(ngModel)]="idCita" placeholder="Code" required>
-                </mat-form-field>
-    
-                    <button mat-button  (click)="add()" >
-                        <mat-icon>search</mat-icon>
-                    </button> 
+            <form class="form" [formGroup]="registerForm">
+              <div>
+                <mat-form-field appearance="fill">
+                  <mat-label>Code</mat-label>
+                  <input matInput class="form-control" required matInput formControlName="idCita" placeholder="Code">
+                  </mat-form-field>
+      
+                      <button mat-button [disabled]="registerFormControl.idCita.invalid" (click)="add()" >
+                          <mat-icon>search</mat-icon>
+                      </button> 
+                    <br>
+                    <span class="text-danger" 
+                    *ngIf="registerFormControl.idCita.touched && registerFormControl.idCita.errors?.required">
+                    Se requiere el código de cita
+                    </span>
+                    <span class="text-danger" 
+                    *ngIf="registerFormControl.idCita.touched && registerFormControl.idCita.errors?.pattern">
+                    Solo valores numericos
+                    </span>
+              </div>
+            </form>
     
                 <div modal-content >
                     <mat-form-field style="margin: 10px;" appearance="fill">
@@ -64,35 +77,57 @@
                   <div modal-content >
                    <img mat-card-image style="float: right;" src="https://americancarpetandfloorcare.com/wp-content/uploads/2019/05/visa-mastercard-amex.png" >
                    <p class="p">Tarjeta de Credito o Debito</p>
-                   <mat-form-field class="example-i-width">
-                      <mat-label>Numero de Tarjeta</mat-label>
-                      <input type="text" maxlength="16" matInput formControlName="secondCtrl"  [(ngModel)]="nNumero_Tarjeta" placeholder="Numero de Tarjeta" required>
-                   </mat-form-field> 
 
+                   <form class="form" [formGroup]="registerFormPagos">
+                    <div>
+                      <mat-form-field class="example-i-width">
+                        <mat-label>Numero de Tarjeta</mat-label>
+                        <input type="text" class="form-control" matInput formControlName="nNumero_Tarjeta" placeholder="Numero de Tarjeta" required>
+                     </mat-form-field> 
                      <br>
-                     <mat-form-field class="example-small-width" style="margin: 10px;" >
-                       <mat-label>Mes</mat-label>
-                         <mat-select formControlName="secondCtrl" [(ngModel)]="nMes">
-                           <mat-option *ngFor="let mes of Meses" [value]="mes.value">
-                             {{mes.viewValue}}
-                           </mat-option>
-                         </mat-select>
-                     </mat-form-field>
+                     <span class="text-danger" 
+                      *ngIf="registerFormControlPagos.nNumero_Tarjeta.touched && registerFormControlPagos.nNumero_Tarjeta.errors?.required">
+                      Se requiere el Numero de Tarjeta
+                      </span>
+                      <span class="text-danger" 
+                      *ngIf="registerFormControlPagos.nNumero_Tarjeta.touched && registerFormControlPagos.nNumero_Tarjeta.errors?.minlength">
+                      Se requiere como mínimo 16 campos
+                      </span>
+                      <span class="text-danger" 
+                      *ngIf="registerFormControlPagos.nNumero_Tarjeta.touched && registerFormControlPagos.nNumero_Tarjeta.errors?.maxlength">
+                      Se requiere como máximo 16 campos
+                      </span>
+                      <span class="text-danger" 
+                      *ngIf="registerFormControlPagos.nNumero_Tarjeta.touched && registerFormControlPagos.nNumero_Tarjeta.errors?.pattern">
+                      Solo valores numericos
+                      </span>
+                    </div>
 
+                      <mat-form-field class="example-small-width" style="margin: 10px;" >
+                        <mat-label>Mes</mat-label>
+                          <mat-select class="form-control" formControlName="nMes">
+                            <mat-option *ngFor="let mes of Meses" [value]="mes.value">
+                              {{mes.viewValue}}
+                            </mat-option>
+                          </mat-select>
+                      </mat-form-field>
+           
                      <mat-form-field class="example-small-width" style="margin: 10px;">
                       <mat-label>Año</mat-label>
-                        <mat-select formControlName="secondCtrl" [(ngModel)]="nAnio">
+                        <mat-select class="form-control" formControlName="nAnio">
                           <mat-option *ngFor="let anio of Anios" [value]="anio.value">
                             {{anio.viewValue}}
                           </mat-option>
                         </mat-select>
                     </mat-form-field>
+                    
 
-                     <mat-form-field class="example-small-width" style="margin: 10px;" >
-                       <mat-label>CVV</mat-label>
-                       <input formControlName="secondCtrl" type="text" maxlength="3" pattern="[0-9]+" required matInput>
-                     </mat-form-field>
-                    <br>
+                    <mat-form-field class="example-small-width">
+                      <mat-label>cvv</mat-label>
+                      <input required matInput class="form-control" formControlName="cvv" >   
+                  </mat-form-field> 
+                  <br>
+
                      <mat-form-field style="margin: 10px;">
                        <mat-label>Tipo Documento</mat-label>
                        <mat-select matNativeControl required>
@@ -103,13 +138,15 @@
  
                      <mat-form-field class="example-i-width">
                       <mat-label>Numero de Dni</mat-label>
-                      <input formControlName="secondCtrl" type="number" required matInput [(ngModel)]="nDni" >   
-                  </mat-form-field>
+                      <input required matInput class="form-control" formControlName="nDni" >   
+                  </mat-form-field> 
+                   </form>
+                  
                    </div> 
               </mat-card>
               <br>
               <div mat-dialog-actions>
-                <button mat-raised-button color="primary" (click)="insertPago()">Realizar Pago</button>
+                <button mat-raised-button color="primary" [disabled]="this.registerForm.invalid || this.registerFormPagos.invalid" (click)="insertPago()">Realizar Pago</button>
               </div>
               
             </mat-tab>

@@ -14,7 +14,7 @@ import { DeletecitasComponent } from '../dialogdelete/deletecitas/deletecitas.co
 import { FilterGeneric } from '../Interfaces/FilterGeneric';
 import { RequestGenericFilter } from '../Interfaces/RequestGenericFilter';
 import { LoaderService } from '../loader.service';
-import { Citas } from '../models/citas';
+import { Citas, CitasDetail } from '../models/citas';
 import { CitasService } from '../service/citas.service';
 import { DialogcitasRevisarComponent } from './dialog/dialogcitas-revisar/dialogcitas-revisar.component';
 import { DialogcitasComponent } from './dialog/dialogcitas/dialogcitas.component';
@@ -49,7 +49,7 @@ export class CitasComponent implements OnInit {
 
   public lst:any[] | undefined; 
   public columnas: string[] =['Id','Dni_Paciente','Nombre_Paciente','Nombre_Medico','Nombre_Especialidad','Fecha_Cita','Estado_Cita','hora','Estado_Pago','Costo','actions'];
-  readonly width: string ='1100px';
+  readonly width: string ='1050px';
   searchKey!: string;
   dataSource  = new table.MatTableDataSource<Response>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
@@ -187,10 +187,10 @@ export class CitasComponent implements OnInit {
     });
   }
 
-  revisar(citas : Citas)
+  revisar(citas : CitasDetail)
   {
     const dialogRef= this.dialog.open(DialogcitasRevisarComponent,{
-      width: '540px',
+      width: '500px',
       data: citas,  
     });
   }
