@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { Usuario } from './models/usuario';
 import { AuthService } from './service/auth.service';
@@ -15,20 +15,21 @@ export class AppComponent {
   permisos: string[]|any;
   MODULE_DIAGNOSTICO: boolean = false;
   LIST_MODULE_MEDICOS: boolean = false;
+  sesionActive: boolean = false;
   
   constructor(public configuracionesService:ConfiguracionesService,public authService: AuthService ,
     private router: Router){
       this.authService.usuario.subscribe(res =>{
         this.usuario = res;
-        console.log('cambio el objeto :'+res);
+        this.sesionActive = true;
         this.getPermiso();
-        console.log('Hola')
       });
     }
 
     logout(){
       this.authService.logout();
       this.router.navigate(['/login']);
+      this.sesionActive = false;
    }
 
    getPermiso()

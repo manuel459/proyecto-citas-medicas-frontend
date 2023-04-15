@@ -14,6 +14,7 @@ import { DialogpacienteRevisarComponent } from './dialog/dialogpaciente-revisar/
 import { DialogpacienteComponent } from './dialog/dialogpaciente/dialogpaciente.component';
 import * as signalR from '@aspnet/signalr';
 import * as XLSX from 'xlsx';
+import { RequestGenericFilter } from '../Interfaces/RequestGenericFilter';
 
 @Component({
   selector: 'app-paciente',
@@ -33,7 +34,7 @@ export class PacienteComponent implements OnInit {
   dataSource  = new MatTableDataSource<Response>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   public load: Boolean =false
-  status: string;
+  status: number;
   texto: string;
   error: number;
   startDate: Date;
@@ -51,32 +52,45 @@ export class PacienteComponent implements OnInit {
     public spinner:MatProgressSpinnerModule,
     public loaderService: LoaderService
 
-  ) { this.status = "", this.texto = "",this.error = 1,this.startDate = this.currentDate,this.endDate = this.currentDate}
+  ) { this.status = 0, this.texto = "",this.error = 1,this.startDate = this.currentDate,this.endDate = this.currentDate}
 
   ngOnInit(): void {
       this.ConnectionHub();
       this.getPacientes();
   }
 
-  refresh(){
-    this.texto = "";
-    this.applyFilter(); 
-  }
-
-  applyFilter(){
-    this.dataSource.filter= this.searchKey.trim().toLowerCase();
-  }
-
   //METODO PARA LISTAR
   getPacientes(){
+    const requestGenericFilter: RequestGenericFilter = {
+      numFilter: this.status, textFilter: this.texto, sFilterOne: '', sFilterTwo: '',
+      dFechaInicio: '',
+      dFechaFin: ''
+    }
     setTimeout(() => {
-    this.pacienteService.getPacientes().subscribe(response =>{
+    this.pacienteService.getPacientes(requestGenericFilter).subscribe(response =>{
      this.lst = response.data;
      if(response.exito === 1){
       this.error = response.exito;
-      this.dataSource.data = response.data;  
-      console.log(this.dataSource.data)
-      this.refresh();
+      this.dataSource.data = response.data;
+     } 
+    });
+   },1000);
+   }
+
+   refresh()
+   {
+    const requestGenericFilter: RequestGenericFilter = {
+      numFilter: 0, textFilter: '', sFilterOne: '', sFilterTwo: '',
+      dFechaInicio: '',
+      dFechaFin: ''
+    }
+    setTimeout(() => {
+    this.pacienteService.getPacientes(requestGenericFilter).subscribe(response =>{
+     this.lst = response.data;
+     if(response.exito === 1){
+      this.error = response.exito;
+      this.dataSource.data = response.data;
+      this.texto = ""
      } 
     });
    },1000);
@@ -155,24 +169,6 @@ export class PacienteComponent implements OnInit {
         )
       }
      });
-  }
-
-  
-  filters(){
-    
-    const paciente: FilterGeneric ={
-      texto : this.texto,
-      status: this.status,
-      startdate: this.startDate,
-      enddate : this.endDate
-    }
-    this.pacienteService.filters(paciente).subscribe(response => {
-      if (response.exito === 0){
-        this.error = response.exito; 
-       }
-        this.error = response.exito;
-        this.dataSource.data = response.data; 
-    });
   }
 
   exportExcel(data: any[], fileName: string): void {

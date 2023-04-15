@@ -23,18 +23,18 @@
                     <button style="width:max-content;" mat-button >
                     
                         <mat-select placeholder="Filtro" [(ngModel)]="status" matNativeControl required>
-                          <mat-option value = "0">Dni</mat-option>
-                          <mat-option value = "1">Nombre</mat-option>
-                          <mat-option value = "2">Numero</mat-option>
+                          <mat-option value = 0>Dni</mat-option>
+                          <mat-option value = 1>Nombre</mat-option>
+                          <mat-option value = 2>Numero</mat-option>
                         </mat-select>
                        
                     </button>
-                    <button [disabled]="!status || !texto"  (click)="filters()" mat-button matSuffix mat-icon-button aria-label="Clear">
+                    <button [disabled]="!status || !texto"  (click)="getPacientes()" mat-button matSuffix mat-icon-button aria-label="Clear">
                         <mat-icon>search</mat-icon>
                     </button>
                     
                     <input style="width: 135px;" placeholder="Buscar Paciente" matInput class="form-control" [(ngModel)]="texto" >    
-                    <button mat-button matSuffix mat-icon-button aria-label="Clear" [disabled]="!texto" (click)="getPacientes()" style="float: right;">
+                    <button mat-button matSuffix mat-icon-button aria-label="Clear" [disabled]="!texto" (click)="refresh()" style="float: right;">
                     <mat-icon>close</mat-icon>
                     </button>
                 </div>

@@ -5,32 +5,32 @@
   <mat-drawer #drawer mode="side" opened>
     <img  width="260px" height="75px"  src="https://www.clinicainternacional.com.pe/static/img/header-logo-blanco.png">
      <mat-divider></mat-divider>
-           <button mat-button class="menu-button" [routerLink]="['/home']">
+           <button *ngIf="sesionActive" mat-button class="menu-button" [routerLink]="['/home']">
             <mat-icon class="icono">home</mat-icon>
             <span class="name">Home</span>
            </button>
            
-           <button mat-button class="menu-button" [routerLink]="['/paciente']" >
+           <button *ngIf="sesionActive" mat-button class="menu-button" [routerLink]="['/paciente']" >
             <mat-icon class="icono">face</mat-icon>
             <span class="name" font-style>Pacientes</span>
            </button>
 
-           <button *ngIf="LIST_MODULE_MEDICOS"  mat-button class="menu-button" [routerLink]="['/medico']">
+           <button *ngIf="LIST_MODULE_MEDICOS && sesionActive"  mat-button class="menu-button" [routerLink]="['/medico']">
               <mat-icon class="icono">group_add</mat-icon>
               <span class="name">Medicos</span>
              </button>
   
-           <button mat-button class="menu-button" [routerLink] = "['/citas']">
+           <button *ngIf="sesionActive" mat-button class="menu-button" [routerLink] = "['/citas']">
             <mat-icon class="icono">accessible</mat-icon>
             <span class="name">Nueva Cita</span>
            </button>
   
-           <button *ngIf="MODULE_DIAGNOSTICO" mat-button class="menu-button" [routerLink] = "['/diagnostico']">
+           <button *ngIf="MODULE_DIAGNOSTICO && sesionActive" mat-button class="menu-button" [routerLink] = "['/diagnostico']">
             <mat-icon class="icono">local_hospital</mat-icon>
             <span class="name">Diágnostico</span>
           </button>
 
-          <button mat-button class="menu-button" [routerLink] = "['/pagos']">
+          <button *ngIf="sesionActive" mat-button class="menu-button" [routerLink] = "['/pagos']">
             <mat-icon class="icono">credit_card</mat-icon>
             <span class="name">Modulo de Pagos</span>
           

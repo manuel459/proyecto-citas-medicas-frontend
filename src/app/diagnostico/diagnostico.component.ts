@@ -30,7 +30,7 @@ export class DiagnosticoComponent implements OnInit {
       // this.medicamentos = "",
       this.idcita = 0
         this.registerForm = this.fb.group({
-          id: ['',[Validators.required, Validators.minLength(8), Validators.maxLength(8), Validators.pattern(/^[1-9]\d{6,10}$/)]],
+          id: ['',[Validators.required, Validators.minLength(8), Validators.maxLength(8), Validators.pattern(/^[1-9]\d{0,10}$/)]],
           // nombre : ['',[Validators.required]],
           // especialidad: ['', Validators.required],
           // nomp:['', [Validators.required]],

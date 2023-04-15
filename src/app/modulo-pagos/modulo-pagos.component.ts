@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
@@ -6,13 +6,17 @@ import { ConsultarPagoCita } from '../Interfaces/ConsultarPagoCita';
 import { insertPago } from '../Interfaces/InsertPago';
 import { Anios, Meses } from '../Interfaces/Meses';
 import { ModuloPagosService } from '../service/modulo-pagos.service';
-
+import *  as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { MatHorizontalStepper } from '@angular/material/stepper';
+import * as moment from 'moment';
 @Component({
   selector: 'app-modulo-pagos',
   templateUrl: './modulo-pagos.component.html',
   styleUrls: ['./modulo-pagos.component.css']
 })
 export class ModuloPagosComponent implements OnInit {
+  @ViewChild('stepper') stepper: MatHorizontalStepper | any;
   registerForm: FormGroup | any;
   registerFormPagos: FormGroup | any;
 //CONSULTA DE CITA
@@ -21,7 +25,7 @@ export class ModuloPagosComponent implements OnInit {
  sNombre_Paciente: string | undefined;
  sEspecialidad: string | undefined;
  sNombre_Medico: string | undefined;
- dFecha_Cita: Date | undefined;
+ dFecha_Cita: string | undefined;
  dImporte_Total: number = 0;
 
  //PAGO DE CITA
@@ -30,6 +34,8 @@ export class ModuloPagosComponent implements OnInit {
  public nAnio: number = 0;
  public nDia: number = 0;
  public nDni: number = 0;
+
+ editable: boolean = false;
 
   Meses: Meses[] = [
     {value: '01', viewValue: '01'},
@@ -65,9 +71,15 @@ export class ModuloPagosComponent implements OnInit {
   firstFormGroup = this._formBuilder.group({
     firstCtrl: ['', Validators.requiredTrue],
   });
+
   secondFormGroup = this._formBuilder.group({
-    secondCtrl: ['', Validators.required],
+    secondCtrl: ['', Validators.requiredTrue],
   });
+
+  threeFormGroup = this._formBuilder.group({
+    secondCtrl: [''],
+  });
+
   isEditable = false;
 
   constructor(private fb: FormBuilder, private _formBuilder: FormBuilder, public pagosService: ModuloPagosService, public snackBar: MatSnackBar) 
@@ -94,6 +106,10 @@ export class ModuloPagosComponent implements OnInit {
 
   get registerFormControl() {
     return this.registerForm.controls;
+  }
+
+  handleSuccessResponse() {
+    this.stepper.next(); // Esta línea hace que el stepper avance al siguiente paso automáticamente
   }
 
   add()
@@ -148,6 +164,8 @@ export class ModuloPagosComponent implements OnInit {
                     this.snackBar.open('Pago realizado con exito','',{
                         duration:2000
                     });
+                    this.stepper.next();
+                    this.generarPDF()
                     this.refreshVariable()
                 }
                 else
@@ -163,18 +181,63 @@ export class ModuloPagosComponent implements OnInit {
 
   refreshVariable()
   {
-    this.idCita = "";
+    this.registerForm.reset();
+    this.registerFormPagos.reset();
     this.nDnip = 0;
-    this.sNombre_Paciente = "";
-    this.sEspecialidad = "";
-    this.sNombre_Medico = "";
-    this.dFecha_Cita;
+    this.sNombre_Paciente = '';
+    this.sEspecialidad = '';
+    this.sNombre_Medico = '';
+    this.dFecha_Cita = '';
     this.dImporte_Total = 0;
-    this.nNumero_Tarjeta = "";
-    this.nMes= 0;
-    this.nAnio = 0;
-    this.nDia = 0;
-    this.nDni = 0;
+  }
+
+  generarPDF() {
+    const mergedVfs = Object.assign({}, pdfMake.vfs, pdfFonts.pdfMake.vfs);
+
+
+    const documentDefinition = {
+      content: [
+        { text: 'Resultado de la transacción', style: 'header' },
+
+        { text: '\nDatos Personales', style: 'subheader'},
+        { text: 'Numero de Tarjeta:' + this.registerFormPagos.value.nNumero_Tarjeta},
+        { text: 'DNI:' + this.registerFormPagos.value.nDni},
+
+        { text: '\nDatos de la cita', style: 'subheader'},
+        { text: 'Código de la cita: '+ this.registerForm.value.idCita },
+        { text: 'Nombre del paciente: ' + this.sNombre_Paciente },
+        { text: 'Monto: ' + this.dImporte_Total.toString() },
+
+        { text: '\nResultado', style: 'subheader'},
+        { text: 'Fecha de la Transacción: ' + moment().format('YYYY-MM-DD')},
+        { text: 'Estado: ' + 'Pagado' },
+        { text: 'Mensaje: ' + 'Transaccion exitosa' }
+      ],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true,
+          margin: [0, 0, 0, 10] as [number, number, number, number]
+        },
+      }
+    };
+    console.log(documentDefinition)
+
+    pdfMake.createPdf(documentDefinition, undefined , undefined, mergedVfs).getDataUrl((dataUrl) => {
+      const iframe = document.createElement('iframe');
+      iframe.src = dataUrl;
+      iframe.width = '100%';
+      iframe.height = '600px';
+      document.getElementById('preview-container')?.appendChild(iframe);
+    });
+
+  }
+
+  volverAlPrimerPaso() {
+      this.stepper.reset();
+      // Seleccionar el primer paso
+      this.stepper.selectedIndex = 0;
   }
 
 }
+

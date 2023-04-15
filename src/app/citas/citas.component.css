@@ -114,3 +114,9 @@ label {
 	margin: 3px;
 }
 
+button .mat-select-trigger {
+  display: -ms-flexbox;
+  align-items: center;
+  padding-top: 13px;
+}
+

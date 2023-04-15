@@ -89,15 +89,21 @@
    {{costo}}
  </mat-form-field> 
   <div>
-    <mat-form-field class="example-form" appearance="fill">
+    <mat-form-field *ngIf ="fechasCargadas" class="example-form" appearance="fill">
         <mat-label >Fecha Cita</mat-label>
-        <input (dateChange)="getHorario()" matInput [min]="todayDate" [matDatepicker]="datepicker" [matDatepickerFilter]="dateFilter"  class="form-control" required matInput formControlName="feccit">
+        <input (dateChange)="getHorario()" [min]="todayDate" [matDatepicker]="datepicker"  [matDatepickerFilter]="dateFilter"  class="form-control" matInput formControlName="feccit">
         <mat-hint>DD/MM/YYYY</mat-hint>
         <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
         <mat-datepicker class="highlight-dates" #datepicker [dateClass]="dateClass">
+          <mat-date-range-picker-actions>
+            <div class="legend">
+              <div class="disponible">Disponible</div>
+            </div>
+          </mat-date-range-picker-actions>
         <h1 style="font-size: 10px;margin:10px">disponible<span style="font-size: 10px" class="grey">1</span></h1>
       </mat-datepicker>
     </mat-form-field>
+
     <br>
     <span class="text-danger" 
     *ngIf="registerFormControl.feccit.touched && registerFormControl.feccit.errors?.required">

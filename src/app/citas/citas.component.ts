@@ -11,7 +11,6 @@ import { Router } from '@angular/router';
 import * as moment from 'moment';
 import Swal from 'sweetalert2';
 import { DeletecitasComponent } from '../dialogdelete/deletecitas/deletecitas.component';
-import { FilterGeneric } from '../Interfaces/FilterGeneric';
 import { RequestGenericFilter } from '../Interfaces/RequestGenericFilter';
 import { LoaderService } from '../loader.service';
 import { Citas, CitasDetail } from '../models/citas';
@@ -20,9 +19,8 @@ import { DialogcitasRevisarComponent } from './dialog/dialogcitas-revisar/dialog
 import { DialogcitasComponent } from './dialog/dialogcitas/dialogcitas.component';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
-import autoTable, { UserOptions } from 'jspdf-autotable';
 import 'jspdf-autotable';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
 
 
 export interface Task {
@@ -55,7 +53,7 @@ export class CitasComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   public load: Boolean =false
   resultado!: { hours: number; minutes: number; seconds: number; }; 
-  status: number;
+  status: number = 0;
   texto: string;
   error: number;
   startDate: Date | any;
@@ -80,65 +78,80 @@ export class CitasComponent implements OnInit {
     this.getCitas();
   }
 
-  refresh(){
-    this.texto = "";
-    this.applyFilter(); 
+  refresh()
+  {
+    this.texto = ''
+    this.range = new FormGroup({
+      start: new FormControl(new Date()), // Inicializa con la fecha actual
+      end: new FormControl(new Date()) // Inicializa con la fecha actual
+    }); 
+    const requestGenericFilter: RequestGenericFilter = {
+      numFilter: 0, textFilter: this.texto, sFilterOne: '', sFilterTwo: '',
+      dFechaInicio: moment().format("YYYY-MM-DD"),
+      dFechaFin: moment().format("YYYY-MM-DD")
+    }
+    this.getListGeneric(requestGenericFilter)
+
   }
 
-  onSearchClear(){
-    this.searchKey="";
-    this.applyFilter();
+  refreshFiltroType()
+  {
+    this.texto = ''  
+    const requestGenericFilter: RequestGenericFilter = {
+      numFilter: 0, textFilter: this.texto, sFilterOne: '', sFilterTwo: '',
+      dFechaInicio: moment(this.range.get('start')?.value).format("YYYY-MM-DD"),
+      dFechaFin: moment(this.range.get('end')?.value).format("YYYY-MM-DD")
+    }
+    this.getListGeneric(requestGenericFilter)
   }
-
-  applyFilter(){
-    this.dataSource.filter= this.searchKey.trim().toLowerCase();
-    console.log(this.dataSource)
-  }
-
   
   
   //METODO PARA LISTAR
   getCitas(){
-    setTimeout(() => {
-      console.log( moment(this.range.get('start')?.value).format("YYYY-MM-DD"))
       const requestGenericFilter: RequestGenericFilter = {
         numFilter: this.status, textFilter: this.texto, sFilterOne: '', sFilterTwo: '',
         dFechaInicio: moment(this.range.get('start')?.value).format("YYYY-MM-DD"),
         dFechaFin: moment(this.range.get('end')?.value).format("YYYY-MM-DD")
       }
-      this.citasService.getCitas(requestGenericFilter).subscribe(response =>{
-        this.lst = response.data;
-        if(response.exito === 1){
-         response.data.forEach((element: { hora: any; nEstado_Pago: any}) => {
-           var horaJson = JSON.stringify(element.hora);
-            //convertir el json a objeto
-           this.resultado = JSON.parse(horaJson);
-           var min = this.resultado.minutes < 10 ? "0" + this.resultado.minutes : this.resultado.minutes;
-           var sec = this.resultado.seconds < 10 ? "0" + this.resultado.seconds : this.resultado.seconds;
-           var hour = this.resultado.hours < 10 ? "0" + this.resultado.hours : this.resultado.hours;
-           element.hora = hour + ':' + min + ':' + sec + ' pm';
-   
-           if(hour<12)
-           {
-             element.hora = hour + ':' + min + ':' + sec + ' am' ;
-             return element.hora
-           }
-           else
-           {
-             element.hora = hour + ':' + min + ':' + sec + ' pm';
-             return element.hora
-           }
-
-  
-         });
-
-         this.dataSource.data = response.data;
-         this.refresh();
-        }
-       });
-    }, 1000);
-    
+      this.getListGeneric(requestGenericFilter)
    }
+
+
+   //Llamado al metodo general
+
+   getListGeneric(requestGenericFilter : RequestGenericFilter)
+   {
+    this.citasService.getCitas(requestGenericFilter).subscribe(response =>{
+      this.lst = response.data;
+      if(response.exito === 1){
+       response.data.forEach((element: { hora: any; nEstado_Pago: any}) => {
+         var horaJson = JSON.stringify(element.hora);
+          //convertir el json a objeto
+         this.resultado = JSON.parse(horaJson);
+         var min = this.resultado.minutes < 10 ? "0" + this.resultado.minutes : this.resultado.minutes;
+         var sec = this.resultado.seconds < 10 ? "0" + this.resultado.seconds : this.resultado.seconds;
+         var hour = this.resultado.hours < 10 ? "0" + this.resultado.hours : this.resultado.hours;
+         element.hora = hour + ':' + min + ':' + sec + ' pm';
+ 
+         if(hour<12)
+         {
+           element.hora = hour + ':' + min + ':' + sec + ' am' ;
+           return element.hora
+         }
+         else
+         {
+           element.hora = hour + ':' + min + ':' + sec + ' pm';
+           return element.hora
+         }
+
+
+       });
+       this.dataSource.data = response.data;
+      }
+     });
+   }
+
+
 
    openAdd(){
     const dialogRef= this.dialog.open(DialogcitasComponent,{
@@ -274,5 +287,6 @@ export class CitasComponent implements OnInit {
   }
 
 }
+
 
 

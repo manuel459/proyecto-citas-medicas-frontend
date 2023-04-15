@@ -6,6 +6,7 @@ import { Response } from 'src/app/models/response';
 import { ErrorsPacienteComponent } from '../Errors/errors-paciente/errors-paciente.component';
 import { FilterGeneric } from '../Interfaces/FilterGeneric';
 import { Paciente } from '../models/paciente';
+import { RequestGenericFilter } from '../Interfaces/RequestGenericFilter';
 
 const httpOption = {
   headers: new HttpHeaders({
@@ -28,9 +29,10 @@ export class PacienteService {
 
 
   //GET
-  getPacientes(): Observable<Response>{
+  getPacientes(request: RequestGenericFilter): Observable<Response>{
     this.usuario = JSON.parse(localStorage.getItem("usuario")!);
-    return this._http.get<Response>(this.url+this.usuario.correoElectronico.toString());
+    return this._http.get<Response>(this.url+this.usuario.correoElectronico.toString()+'?numFilter='+request.numFilter+'&textFilter='+request.textFilter+'&sFilterOne='+request.sFilterOne
+    +'&sFilterTwo='+request.sFilterTwo+'&dFechaInicio='+request.dFechaInicio+'&dFechaFin='+request.dFechaFin);
   }
 
   //POST

@@ -37,6 +37,7 @@ export class DialogcitasComponent implements OnInit {
       //Switch de envio de notificaciones
       bActiveNotificaciones = true;
       registerForm: FormGroup | any;
+      fechasCargadas: boolean = false;
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<DialogcitasComponent>,
@@ -72,6 +73,7 @@ export class DialogcitasComponent implements OnInit {
           codes: [this.citas.codes, Validators.required],
           // costo: [this.citas.costo]
         }
+
         );
       }
   }
@@ -80,11 +82,11 @@ export class DialogcitasComponent implements OnInit {
   ngOnInit(): void {
     this.getEspecialidad();
     this.getMedicos();
+    this.getCosto();
     this.getDiasLaborables();
     this.getHorario();
-    this.getCosto();
     if(this.citas!=null){this.getDni()};
-
+    this.dateFilter(this.registerForm.value.feccit);
   }
 
   close(){
@@ -190,7 +192,7 @@ getDni()
 
   getMedicos(){this.configuracionesService.getConfiguraciones('Medico',this.registerForm.value.codes).subscribe(response => {this.medicos = response.data})}
 
-  getDiasLaborables(){this.configuracionesService.getConfiguraciones('DiasLaborables',this.registerForm.value.codmed).subscribe(response => {this.listaFechas = Array.from(response.data.find((item: { sDescripcion: string; }) => (item.sDescripcion )).sDescripcion.split(',').map(Number))})}
+  getDiasLaborables(){this.configuracionesService.getConfiguraciones('DiasLaborables',this.registerForm.value.codmed).subscribe(response => {this.listaFechas = Array.from(response.data.find((item: { sDescripcion: string; }) => (item.sDescripcion )).sDescripcion.split(',').map(Number)), this.fechasCargadas = true})}
 
   getCosto(){this.configuracionesService.getConfiguraciones('Costo', this.registerForm.value.codes).subscribe(response => {this.costo = response.data.find((item: { sDescripcion: string; }) => (item.sDescripcion )).sDescripcion})}
 //FUNCION PARA CONVERTIR A FORMATO DE HORA
@@ -221,24 +223,21 @@ getHorario()
       this.arrayHoras = [];
       response.data.forEach((element: any , index: any) => {
         this.arrayHoras[index] = element;
-        console.log(element)
         this.arrayStatus[index] = element.status
     });
     })
     
 }
 
-dateFilter: (date: Date | null) => boolean =
-(date: Date | null) => {
+dateFilter: (date: Date | any) => boolean =
+(date: Date | any) => {
   const day = date?.getDay();
-  return this.listaFechas.includes(day);
-  //0 means sunday
-  //6 means saturday
+  console.log(this.listaFechas)
+ return this.listaFechas.includes(day);
 }
 
 dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
   const day = cellDate?.getDay();
-  console.log(day)
   return this.listaFechas.includes(day)?'my-date':'my';
 };
 

@@ -52,4 +52,18 @@ span.grey {
   color: red;
 }
 
+
+.mat-datepicker-content .legend {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 10px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.mat-datepicker-content .legend .disponible {
+  background-color:  rgb(4, 248, 57);
+  color: rgb(20, 19, 19);
+  padding: 2px 5px;
+}
   
