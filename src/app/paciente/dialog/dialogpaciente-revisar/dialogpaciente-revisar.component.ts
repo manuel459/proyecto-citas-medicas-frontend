@@ -14,6 +14,7 @@ export class DialogpacienteRevisarComponent implements OnInit {
         dnip: number;
         idtip : string;
         nomp : string;
+        apellidos: string;
         numero: number;
         edad: number;
         correoElectronico: string;
@@ -23,6 +24,7 @@ export class DialogpacienteRevisarComponent implements OnInit {
       this.dnip = paciente.dnip,
       this.idtip = paciente.idtip,
       this.nomp = paciente.nomp,
+      this.apellidos = paciente.apellidos,
       this.numero = paciente.numero,
       this.edad = paciente.edad,
       this.correoElectronico = paciente.correoElectronico

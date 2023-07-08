@@ -1,6 +1,7 @@
 .global-content{
     height: 100%;
-    
+    position: static;
+    z-index: 999; /* un valor alto para el z-index del mat-drawer-container */
     }
 
     
@@ -62,3 +63,18 @@
         color: #4e647a;
     
     }
+
+  
+      
+      .logo {
+        font-size: 40px;
+        color: #30bece;
+        text-transform: uppercase;
+        font-weight: bold;
+        letter-spacing: 2px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      

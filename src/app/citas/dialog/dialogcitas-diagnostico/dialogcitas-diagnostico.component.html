@@ -1,0 +1,47 @@
+<h2 class="w-13" mat-dialog-tittle>{{ 'Diagnóstico'}}</h2>
+
+<div modal-content >
+  <img width="200px" src="https://static.vecteezy.com/system/resources/previews/002/990/983/non_2x/personal-doctor-appointment-2d-isolated-illustration-vector.jpg" alt="images" style="float: right;">
+  <form class="form" [formGroup]="registerForm">
+    <div class="flex mb-1">
+        <h4 class="w-13">Receta Medica :</h4>
+    </div>
+
+        <div>
+            <mat-form-field class="example-full-width"  class="example-full-width" appearance="fill">
+                <mat-label>Diagnóstico</mat-label>
+                <input style="width: 100%;" formControlName ="diagnostico" required matInput  >   
+            </mat-form-field>
+            <br>
+                <span class="text-danger" 
+                *ngIf="registerFormControl.diagnostico.touched && registerFormControl.diagnostico.errors?.required">
+                Se requiere el Diagnostico
+                </span> 
+        </div>
+
+        <div>
+            <mat-form-field class="example-full-width">
+                <mat-label>Receta Médica</mat-label>
+                <textarea formControlName ="medicamentos" matInput rows="8" placeholder="medicamentos">
+                </textarea>
+                </mat-form-field>
+                <br>
+                    <span class="text-danger" 
+                    *ngIf="registerFormControl.medicamentos.touched && registerFormControl.medicamentos.errors?.required">
+                    Se requiere la receta
+                    </span> 
+        </div>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button (click)="close()">Cancelar</button>
+ 
+  <button mat-raised-button color="primary" [disabled]="this.registerForm.invalid" (click)="saveHistory()">Guardar</button>
+</div>
+
+
+
+
+
+

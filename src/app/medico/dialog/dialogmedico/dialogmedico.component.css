@@ -37,3 +37,15 @@ margin: 0;
   color: red;
 }
 
+.dialog-container {
+  width: 90%;
+  height: 90%;
+  position: absolute;
+  top: 5%;
+  left: 5%;
+}
+
+.scrollable {
+  overflow-y: auto;
+}
+

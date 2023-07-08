@@ -20,8 +20,13 @@ import { DialogcitasComponent } from './dialog/dialogcitas/dialogcitas.component
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-
-
+import { DialogcitasDiagnosticoComponent } from './dialog/dialogcitas-diagnostico/dialogcitas-diagnostico.component';
+import { ConfiguracionesService } from '../service/configuraciones.service';
+import { saveAs } from 'file-saver';
+import { DialogHistoriaMedicaComponent } from './dialog-historia-medica/dialog-historia-medica.component';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import { IconService } from '@visurel/iconify-angular';
+import { IconsService } from '../service/icons.service';
 
 export interface Task {
   name: string;
@@ -60,13 +65,28 @@ export class CitasComponent implements OnInit {
   endDate: Date | any;
   currentDate = new Date();
   range = new FormGroup({ start: new FormControl(new Date()),end: new FormControl(new Date())});
+  //PERMISOS
+  public GENERAR_DIAGNOSTICO : string | any;
+  public VIEW_DETAIL_CITA : string | any;
+  public VIEW_EDIT_CITA : string | any;
+  public VIEW_DELETE_CITA : string | any;
+
+  mostrar: boolean = false;
+  mostrarDia: boolean = false;
+  mostrarCha: boolean = false;
+
+  public listaDes : number[] | any = [];
+  public lista : number[] | any = [];
+  public listaChat : number[] | any = [];
+
   constructor(
+    public configuracionesService: ConfiguracionesService,
     public citasService: CitasService,
     public dialog: MatDialog,
     public snackBar : snackBar.MatSnackBar,
     public spinner:MatProgressSpinnerModule,
     public loaderService: LoaderService,
-    private router: Router
+    private router: Router,
   ) {this.status = 0, this.texto = "",this.error = 1}
 
 
@@ -76,7 +96,64 @@ export class CitasComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCitas();
+    this.getPermisos();
   }
+
+  //VALIDACION DE DESCRIPCION
+
+
+  mostrarDescripcion(row: number) {
+    this.listaDes.push(row);
+  }
+
+  ocultarDescripcion(row: number) {
+    const index = this.listaDes.findIndex((elemento: any) => elemento === row);
+    if (index !== -1) {
+      this.listaDes.splice(index, 1);
+    }
+    this.listaDes = []
+  }
+
+  //VALIDACION DE DIAGNOSTICO
+
+  
+  ocultarDiagnostico(row: number) {
+    const index = this.lista.findIndex((elemento: any) => elemento === row);
+    if (index !== -1) {
+      this.lista.splice(index, 1);
+    }
+  }
+
+  mostrarDiagnostico(row: number) {
+    this.lista.push(row);
+  }
+  //END
+
+  //VALIDACION DE CHAT
+  ocultarChat(row: number) {
+    const index = this.listaChat.findIndex((elemento: any) => elemento === row);
+    if (index !== -1) {
+      this.listaChat.splice(index, 1);
+    }
+  }
+
+  mostrarChat(row: number) {
+    this.listaChat.push(row);
+  }
+  //END
+
+  getPermisos()
+  {
+    var correo = JSON.parse(localStorage.getItem("usuario")!);
+    this.configuracionesService.getConfiguraciones('Permisos', correo.correoElectronico).subscribe(response => 
+      {
+        this.GENERAR_DIAGNOSTICO = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion.includes('GENERAR-DIAGNOSTICO')).length > 0;
+        this.VIEW_DETAIL_CITA = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion.includes('VIEW-DETAIL-CITA')).length > 0;
+        this.VIEW_EDIT_CITA = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion.includes('VIEW-EDIT-CITA')).length > 0;
+        this.VIEW_DELETE_CITA = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion.includes('VIEW-DELETE-CITA')).length > 0;
+      })
+  }
+
 
   refresh()
   {
@@ -114,6 +191,7 @@ export class CitasComponent implements OnInit {
         dFechaFin: moment(this.range.get('end')?.value).format("YYYY-MM-DD")
       }
       this.getListGeneric(requestGenericFilter)
+
    }
 
 
@@ -200,40 +278,41 @@ export class CitasComponent implements OnInit {
     });
   }
 
+  //Insertar Diagnostico Medico
+  diagnosticoAdd(citas: Citas)
+  {
+    console.log(citas)
+    const dialogRef= this.dialog.open(DialogcitasDiagnosticoComponent,{
+      width: '500px',
+      data: citas,  
+    });
+     //Refrescar el table cuando ejecute la accion del guardar
+     dialogRef.afterClosed().subscribe(result => 
+      {
+        console.log(dialogRef)
+          this.getCitas();
+      })
+  }
+
   revisar(citas : CitasDetail)
   {
     const dialogRef= this.dialog.open(DialogcitasRevisarComponent,{
-      width: '500px',
+      width: '550px',
       data: citas,  
     });
   }
 
-  fileExcel(){
-    this.citasService.fileExcel(this.dataSource.data).subscribe(response =>{
-      this.lst = response.data;
-      if(response.exito === 1){
-        Swal.fire(
-          'Excel exportado con exito!',
-          '',
-          'success'
-        )
-      }
-     });
-  }
-
-
-  generarPdf()
+  historiaMedica(row: number)
   {
-    this.citasService.getPdf(this.dataSource.data).subscribe(response => 
-    {
-      if (response.exito == 1){
-        Swal.fire(
-          'Reporte generado con exito!',
-          '',
-          'success'
-        )
-      }
-    })
+    this.citasService.getHistoriaMedica(row).subscribe(response => 
+      {
+        const dialogRef= this.dialog.open(DialogHistoriaMedicaComponent,{
+          width: '1000px',
+          data : response.data  
+        });
+        console.log(response.data)
+      });
+
   }
 
   exportExcel(data: any[], fileName: string): void {
@@ -284,6 +363,51 @@ export class CitasComponent implements OnInit {
       console.log(error)
     }
     
+  }
+
+
+
+  sendWhatsappMessage(sNombre_Paciente:string, sNombre_Medico :string,nNumero_Paciente:string, diagnostico:string, receta:string) {
+    // const whatsappLink = `https://wa.me/${nNumero_Paciente}?text=${encodeURIComponent('Diagnostico:'+diagnostico+' Receta:'+receta)}`;
+  
+    const medicamentos: any[] = [ receta]
+  
+    const docDefinition = {
+      content: [
+        { text: 'RECETA MÉDICA', style: 'header' },
+        { text: `Paciente: ${sNombre_Paciente}`, style: 'subheader' },
+        { text: `Medico: ${sNombre_Medico}`, style: 'subheader' },
+        { text: `Fecha: ${moment().format("YYYY-MM-DD")}`, style: 'subheader' },
+        { text: 'Diagnóstico:', style: 'subheader' },
+        { text: diagnostico },
+        { text: 'Tratamiento:', style: 'subheader' }
+      ],
+      styles: {
+        header: { fontSize: 18, bold: true, alignment: 'center', margin: [0, 0, 0, 20] },
+        subheader: { fontSize: 12, bold: true, margin: [0, 10, 0, 5] }
+      }
+    };
+  
+    medicamentos.forEach((medicamento) => {
+      docDefinition.content.push(
+        { text: medicamento}
+      );
+    });
+  
+    const pdfMake: any = require('pdfmake/build/pdfmake');
+    const pdfFonts: any = require('pdfmake/build/vfs_fonts');
+    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+  
+    const pdfDocGenerator = pdfMake.createPdf(docDefinition);
+    pdfDocGenerator.getBlob((blob: Blob) => {
+      const url = URL.createObjectURL(blob);
+      const message = `Estimado(a) ${sNombre_Paciente} , adjunto el link de su receta en pdf: ${url}`;
+      const whatsappLink = `https://wa.me/${nNumero_Paciente}?text=${encodeURIComponent(message)}`;
+      window.open(whatsappLink);
+    });
+
+
+
   }
 
 }

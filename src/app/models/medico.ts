@@ -2,6 +2,7 @@ export interface Medico{
     codmed : string;
     codes: string;
     nombre:string
+    sApellidos : string;
     sexo:string,
     nac:string,
     correo:string,

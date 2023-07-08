@@ -8,7 +8,7 @@ export interface Citas
     codmed: string;
     feccit: string;
     codes:string;
-    estado: number;
+    nEstado: number;
     hora: string;
     //Datos del paciente
     CorreoElectronico: string;

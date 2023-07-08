@@ -41,25 +41,7 @@ export class DialogmedicoComponent implements OnInit {
     public configuracionesService :ConfiguracionesService,
     public snackBar: MatSnackBar, @Inject(MAT_DIALOG_DATA) public medico :Medico
   ) { 
-    if(this.medico !== null){
-      // this.nombre = medico.nombre
-      // this.sexo =medico.sexo,
-      // this.nac = medico.nac,
-      // this.correo = medico.correo,
-      // this.pswd =medico.pswd,
-      // this.dni =medico.dni,
-      // this.codes = medico.codes,
-      // this.idhor = medico.idhor
-    }
-    else{
-    // this.nombre = "",
-    // this.sexo = "",
-    // this.nac = "",
-    // this.correo = "",
-    // this.pswd = "",
-    // this.codes = "",
-    // this.idhor = ""
-    }  
+  
   }
 
 
@@ -67,7 +49,8 @@ export class DialogmedicoComponent implements OnInit {
     if(this.medico == null){
     this.registerForm = this.fb.group({
       dni : ['',[Validators.required, Validators.minLength(8), Validators.maxLength(8), Validators.pattern(/^[1-9]\d{6,10}$/)]],
-      nombre: ['', [Validators.required, Validators.minLength(1)]],
+      nombre: ['', [Validators.required, Validators.minLength(1), Validators.pattern('^[a-zA-Z ]+$')]],
+      sApellidos:['', [Validators.required, Validators.minLength(1),Validators.pattern('^[a-zA-Z ]+$')]],
       correo:['', [Validators.required, Validators.email]],
       pswd: ['', Validators.compose([Validators.required, this.customValidator.patternValidator()])],
       nac: ['', Validators.required],
@@ -84,7 +67,8 @@ export class DialogmedicoComponent implements OnInit {
     {
       this.registerForm = this.fb.group({
         dni : [this.medico.dni,[Validators.required, Validators.minLength(8), Validators.maxLength(8), Validators.pattern(/^[1-9]\d{6,10}$/)]],
-        nombre: [this.medico.nombre, [Validators.required, Validators.minLength(1)]],
+        nombre: [this.medico.nombre, [Validators.required, Validators.minLength(1), Validators.pattern('^[a-zA-Z ]+$')]],
+        sApellidos: [this.medico.sApellidos, [Validators.required, Validators.minLength(1),Validators.pattern('^[a-zA-Z ]+$')]],
         correo:[this.medico.correo, [Validators.required, Validators.email]],
         pswd: [this.medico.pswd, Validators.compose([Validators.required, this.customValidator.patternValidator()])],
         nac: [this.medico.nac, Validators.required],
@@ -141,7 +125,7 @@ export class DialogmedicoComponent implements OnInit {
   })
       .then((result) => {
           if (result.isConfirmed) {
-            const medico: Medico ={nombre: this.registerForm.value.nombre, sexo:this.registerForm.value.sexo, nac:this.registerForm.value.nac,correo: this.registerForm.value.correo, pswd:this.registerForm.value.pswd, dni:this.registerForm.value.dni, codes:this.registerForm.value.codes,idhor: this.registerForm.value.idhor,codmed:'0'}
+            const medico: Medico ={nombre: this.registerForm.value.nombre, sApellidos:this.registerForm.value.sApellidos,sexo:this.registerForm.value.sexo, nac:this.registerForm.value.nac,correo: this.registerForm.value.correo, pswd:this.registerForm.value.pswd, dni:this.registerForm.value.dni, codes:this.registerForm.value.codes,idhor: this.registerForm.value.idhor,codmed:'0'}
             this.medicoService.add(medico).subscribe(response =>{
                 if (response.exito===1){
                     this.dialogRef.close();
@@ -169,7 +153,7 @@ editCliente(){
 })
     .then((result) => {
         if (result.isConfirmed) {
-          const medico: Medico ={nombre: this.registerForm.value.nombre, sexo:this.registerForm.value.sexo, nac:this.registerForm.value.nac,correo: this.registerForm.value.correo, pswd:this.registerForm.value.pswd, dni:this.registerForm.value.dni, codes:this.registerForm.value.codes,idhor: this.registerForm.value.idhor, codmed:this.medico.codmed}
+          const medico: Medico ={nombre: this.registerForm.value.nombre,sApellidos:this.registerForm.value.sApellidos,  sexo:this.registerForm.value.sexo, nac:this.registerForm.value.nac,correo: this.registerForm.value.correo, pswd:this.registerForm.value.pswd, dni:this.registerForm.value.dni, codes:this.registerForm.value.codes,idhor: this.registerForm.value.idhor, codmed:this.medico.codmed}
           this.medicoService.edit(medico).subscribe(response =>{
               if (response.exito===1){
                   this.dialogRef.close();

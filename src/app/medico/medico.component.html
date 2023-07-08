@@ -22,9 +22,9 @@
                     <button style="width:max-content;" mat-button >
                     
                         <mat-select placeholder="Filtro" [(ngModel)]="status" matNativeControl required>
-                          <mat-option value = "0">Dni</mat-option>
+                          <mat-option value = "0">DNI</mat-option>
                           <mat-option value = "1">Nombre</mat-option>
-                          <mat-option value = "2">Codigo de medico</mat-option>
+                          <mat-option value = "2">Código de médico</mat-option>
                         </mat-select>
                        
                     </button>
@@ -39,7 +39,7 @@
                 </div>
                   
             </div>
-            <h1 style="margin: 10px;"> Lista de Medicos</h1>
+            <h1 style="margin: 10px;"> Lista de Médicos</h1>
             <br>
             <br>
             <br>
@@ -69,6 +69,11 @@
                     <ng-container matColumnDef="nombre">
                         <th mat-header-cell *matHeaderCellDef>Nombre</th>
                         <td mat-cell *matCellDef="let element ">{{ element.nombre }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="sApellidos">
+                        <th mat-header-cell *matHeaderCellDef>Apellidos</th>
+                        <td mat-cell *matCellDef="let element ">{{ element.sApellidos }}</td>
                     </ng-container>
     
                     <ng-container matColumnDef="sexo">

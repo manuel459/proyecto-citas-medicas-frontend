@@ -193,8 +193,6 @@ export class ModuloPagosComponent implements OnInit {
 
   generarPDF() {
     const mergedVfs = Object.assign({}, pdfMake.vfs, pdfFonts.pdfMake.vfs);
-
-
     const documentDefinition = {
       content: [
         { text: 'Resultado de la transacción', style: 'header' },

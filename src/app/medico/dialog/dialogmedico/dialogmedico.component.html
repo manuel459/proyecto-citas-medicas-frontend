@@ -80,7 +80,7 @@
 
 
 
-<h2 class="w-13" mat-dialog-tittle>{{medico!=null ? 'Editar Medico' : 'Nuevo Medico'}}</h2>
+<h2 class="w-13" mat-dialog-tittle>{{medico!=null ? 'Editar Médico' : 'Nuevo Médico'}}</h2>
 <div class="container">
   <div class="row">
       <div class="col-md-8 mx-auto">
@@ -109,7 +109,7 @@
                           </span>
                           <span class="text-danger" 
                           *ngIf="(registerFormControl.dni.touched || submitted) && registerFormControl.dni.errors?.pattern">
-                          Solo valores numericos
+                          Ingresa un DNI válido, solo valores númericos
                           </span>
                       </div>
                       <div class="example-full-width" class="form-group">
@@ -126,6 +126,29 @@
                             *ngIf="(registerFormControl.nombre.touched || submitted) && registerFormControl.nombre.errors?.minLength">
                             Requiere como minimo 30
                         </span>
+                        <span class="text-danger" 
+                          *ngIf="(registerFormControl.nombre.touched || submitted) && registerFormControl.nombre.errors?.pattern">
+                          Ingresa solo letras
+                          </span>
+                      </div>
+                      <div class="example-full-width" class="form-group">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                          <mat-label>Apellidos</mat-label>
+                          <input class="form-control" required matInput formControlName="sApellidos">   
+                        </mat-form-field>
+                        <br>
+                        <span class="text-danger"
+                            *ngIf="(registerFormControl.sApellidos.touched || submitted) && registerFormControl.sApellidos.errors?.required">
+                            Se requieren los Apellidos
+                        </span>
+                        <span class="text-danger"
+                            *ngIf="(registerFormControl.sApellidos.touched || submitted) && registerFormControl.sApellidos.errors?.minLength">
+                            Requiere como minimo 30
+                        </span>
+                        <span class="text-danger" 
+                          *ngIf="(registerFormControl.sApellidos.touched || submitted) && registerFormControl.sApellidos.errors?.pattern">
+                          Ingresa solo letras
+                          </span>
                       </div>
                       <div>
                         <section class="example-section">

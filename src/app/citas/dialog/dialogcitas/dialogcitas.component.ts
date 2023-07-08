@@ -35,7 +35,7 @@ export class DialogcitasComponent implements OnInit {
       public especialidades: [] | any;
       public medicos: [] | any;
       //Switch de envio de notificaciones
-      bActiveNotificaciones = true;
+      bActiveNotificaciones = false;
       registerForm: FormGroup | any;
       fechasCargadas: boolean = false;
   constructor(
@@ -67,7 +67,7 @@ export class DialogcitasComponent implements OnInit {
           dnip : [this.citas.dnip,[Validators.required, Validators.minLength(8), Validators.maxLength(8), Validators.pattern(/^[1-9]\d{6,10}$/)]],
           codmed: [this.citas.codmed, Validators.required],
           feccit:[this.citas.feccit, [Validators.required]],
-          estado: [this.citas.estado],
+          estado: [this.citas.nEstado],
           nombre: [this.citas.nombre],
           hora: [this.citas.hora, Validators.required],
           codes: [this.citas.codes, Validators.required],
@@ -97,16 +97,19 @@ export class DialogcitasComponent implements OnInit {
 
     Swal.fire({
       title: "Confirmación",
-      text: "¿Realmente deseas guardar los cambios?",
+      text: "¿Realmente deseas guardar la cita?",
       icon: "warning",
       showCancelButton: true,
       focusCancel: true,
       confirmButtonText: "Si",
       cancelButtonText: "No, cancelar",
+
   })
       .then((result) => {
           if (result.isConfirmed) {
-            const citas: Citas ={dnip: this.registerForm.value.dnip, nombre:this.registerForm.value.nombre, codmed:this.registerForm.value.codmed, feccit:this.registerForm.value.feccit,estado: this.registerForm.value.estado, hora:this.registerForm.value.hora,codes:this.registerForm.value.codes, CorreoElectronico:this.CorreoPaciente, nombrePaciente:this.nombrePaciente, id:'0', bActiveNotificaciones: this.bActiveNotificaciones}
+            const citas: Citas ={
+              dnip: this.registerForm.value.dnip, nombre: this.registerForm.value.nombre, codmed: this.registerForm.value.codmed, feccit: this.registerForm.value.feccit, nEstado: this.registerForm.value.estado, hora: this.registerForm.value.hora, codes: this.registerForm.value.codes, CorreoElectronico: this.CorreoPaciente, nombrePaciente: this.nombrePaciente, id: '0', bActiveNotificaciones: this.bActiveNotificaciones
+            }
             this.citasService.add(citas).subscribe(response =>{
                 if (response.exito === 1){
                     this.dialogRef.close();
@@ -135,11 +138,15 @@ editCliente(){
     showCancelButton: true,
     focusCancel: true,
     confirmButtonText: "Si",
-    cancelButtonText: "No, cancelar",
+    cancelButtonText: "No, cancelar"
 })
     .then((result) => {
         if (result.isConfirmed) {
-          const citas: Citas ={dnip: this.registerForm.value.dnip, nombre: this.registerForm.value.nombre,codmed:this.registerForm.value.codmed, feccit:this.registerForm.value.feccit,estado: this.registerForm.value.estado, hora:this.registerForm.value.hora,codes:this.registerForm.value.codes,CorreoElectronico:this.CorreoPaciente,nombrePaciente:this.nombrePaciente ,id:this.citas.id, bActiveNotificaciones: this.bActiveNotificaciones}
+          console.log(this.registerForm)
+          const citas: Citas ={
+            dnip: this.registerForm.value.dnip, nombre: this.registerForm.value.nombre, codmed: this.registerForm.value.codmed, feccit: this.registerForm.value.feccit, nEstado: this.registerForm.value.estado, hora: this.registerForm.value.hora, codes: this.registerForm.value.codes, CorreoElectronico: this.CorreoPaciente, nombrePaciente: this.nombrePaciente, id: this.citas.id, bActiveNotificaciones: this.bActiveNotificaciones
+          }
+          console.log(citas)
           this.citasService.edit(citas).subscribe(response =>{
               if (response.exito===1){
                   this.dialogRef.close();
@@ -173,7 +180,7 @@ getDni()
       {
         if (response.data != null)
         {
-           this.nombrePaciente = response.data.nomp,
+           this.nombrePaciente = response.data.nomp +' '+response.data.apellidos,
            this.numeroPaciente=response.data.numero,
            this.EdadPaciente = response.data.edad,
            this.CorreoPaciente = response.data.correoElectronico

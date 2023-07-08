@@ -12,6 +12,7 @@ import { DialogmedicoRevisarComponent } from './dialog/dialogmedico-revisar/dial
 import { LoaderService } from '../loader.service';
 import { FilterGeneric } from '../Interfaces/FilterGeneric';
 import * as XLSX from 'xlsx';
+import { ConfiguracionesService } from '../service/configuraciones.service';
 
 
 @Component({
@@ -21,7 +22,7 @@ import * as XLSX from 'xlsx';
 })
 export class MedicoComponent implements OnInit {
   public lst:any[] | undefined; 
-  public columnas: string[] =['codmed','codes','idtip','nombre','sexo','nac','correo','dni','actions'];
+  public columnas: string[] =['codmed','codes','idtip','nombre','sApellidos','sexo','nac','correo','dni','actions'];
   readonly width: string ='800px';
   searchKey!: string;
   dataSource  = new MatTableDataSource<Response>([]);
@@ -33,6 +34,7 @@ export class MedicoComponent implements OnInit {
   startDate: Date;
   endDate: Date;
   currentDate = new Date();
+  public BUTTON_NEW : boolean = false;
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
@@ -43,10 +45,12 @@ export class MedicoComponent implements OnInit {
     public dialog: MatDialog,
     public snackBar : MatSnackBar,
     public spinner:MatProgressSpinnerModule,
-    public loaderService: LoaderService
+    public loaderService: LoaderService,
+    public conf: ConfiguracionesService
   ) { this.status = '',this.texto = '', this.error = 0,this.startDate = this.currentDate,this.endDate = this.currentDate}
 
   ngOnInit(): void {
+    this.getPermiso();
     this.getMedicos();
   }
 
@@ -179,6 +183,15 @@ export class MedicoComponent implements OnInit {
     link.click();
   }
 
+
+  getPermiso()
+  {
+   var correo = JSON.parse(localStorage.getItem("usuario")!);
+   this.conf.getConfiguraciones('Permisos', correo.correoElectronico).subscribe( response => 
+     {
+       this.BUTTON_NEW = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion.includes('BUTTON-NEW')).length > 0;
+     })
+  }
 
   
 }

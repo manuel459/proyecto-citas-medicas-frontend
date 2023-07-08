@@ -15,6 +15,7 @@ import { DialogpacienteComponent } from './dialog/dialogpaciente/dialogpaciente.
 import * as signalR from '@aspnet/signalr';
 import * as XLSX from 'xlsx';
 import { RequestGenericFilter } from '../Interfaces/RequestGenericFilter';
+import { ConfiguracionesService } from '../service/configuraciones.service';
 
 @Component({
   selector: 'app-paciente',
@@ -28,7 +29,7 @@ export class PacienteComponent implements OnInit {
   zeldaHub = "https://localhost:44301/PacienteHub";
 
   public lst:any[] | undefined; 
-  public columnas: string[] =['Dnip','Idtip','Nomp','Numero','Edad','Email','actions'];
+  public columnas: string[] =['Dnip','Idtip','Nomp','Apellidos','Numero','Edad','Email','actions'];
   readonly width: string ='500px';
   searchKey!: string;
   dataSource  = new MatTableDataSource<Response>([]);
@@ -40,6 +41,7 @@ export class PacienteComponent implements OnInit {
   startDate: Date;
   endDate: Date;
   currentDate = new Date();
+  public BUTTON_NEW : boolean = false;
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
@@ -50,11 +52,13 @@ export class PacienteComponent implements OnInit {
     public dialog: MatDialog,
     public snackBar : MatSnackBar,
     public spinner:MatProgressSpinnerModule,
-    public loaderService: LoaderService
+    public loaderService: LoaderService,
+    public conf: ConfiguracionesService
 
   ) { this.status = 0, this.texto = "",this.error = 1,this.startDate = this.currentDate,this.endDate = this.currentDate}
 
   ngOnInit(): void {
+    this.getPermiso()
       this.ConnectionHub();
       this.getPacientes();
   }
@@ -111,6 +115,7 @@ export class PacienteComponent implements OnInit {
 
 
   openEdit(paciente : Paciente){
+    console.log(paciente)
     const dialogRef= this.dialog.open(DialogpacienteComponent,{
 
       width: this.width,
@@ -210,6 +215,17 @@ export class PacienteComponent implements OnInit {
     .catch(() => console.log("Hub Good "))
 
   }
+
+
+  getPermiso()
+  {
+   var correo = JSON.parse(localStorage.getItem("usuario")!);
+   this.conf.getConfiguraciones('Permisos', correo.correoElectronico).subscribe( response => 
+     {
+       this.BUTTON_NEW = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion.includes('BUTTON-NEW')).length > 0;
+     })
+  }
+
   
 
 }

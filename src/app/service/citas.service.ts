@@ -96,20 +96,9 @@ export class CitasService {
       return this._http.post<Response>(this.url+'NombreMedico',{codmed});
     }
 
-    //FILE EXCEL
-    fileExcel(lista: Array<any>): Observable<Response> {
-       return this._http.post<Response>(this.url+'Excel', lista);
-    }
-
-    //FILE PDF
-    getPdf(lista: Array<any>): Observable<Response>
+    getHistoriaMedica(dnip: number): Observable<Response>
     {
-      return this._http.post<Response>(this.url+'GenerarPdf',lista);
-    }
-
-     //Filters
-    filters(citas:FilterGeneric): Observable<Response>{
-      return this._http.post<Response>(this.url+'Filters', citas);
+      return this._http.get<Response>(this.url+'HistoricMedik/'+dnip);
     }
 }
 

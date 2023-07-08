@@ -1,6 +1,8 @@
 <h2 class="w-13" mat-dialog-tittle>{{citas!=null ? 'Editar Cita' : 'Nueva Cita'}}</h2>
-<h4 class="w-13">Activar envio de Notificación :</h4>
+<div *ngIf="CorreoPaciente!=null">
+  <h4 class="w-13">Activar envio de Notificación :</h4>
 <mat-slide-toggle  color="primary" [(ngModel)]="bActiveNotificaciones">{{bActiveNotificaciones?"Activado":"Desactivado"}}</mat-slide-toggle>
+</div>
 <h4 class="w-13">Datos Personales :</h4>
 <div modal-content >
   <img width="400px" src="https://static.vecteezy.com/system/resources/previews/002/990/983/non_2x/personal-doctor-appointment-2d-isolated-illustration-vector.jpg" alt="images" style="float: right;">
@@ -18,13 +20,13 @@
       </span>
       <span class="text-danger" 
       *ngIf="registerFormControl.dnip.touched && registerFormControl.dnip.errors?.pattern">
-      Solo valores numericos
+      Ingresa un DNI válido, solo valores númericos
       </span>
     </div>
   
   
   <mat-form-field class="example-full-width" appearance="fill">
-  <mat-label >Nombre</mat-label>
+  <mat-label >Nombres y Apellidos</mat-label>
   <input disabled matInput>
   {{nombrePaciente}}
   </mat-form-field>
@@ -63,6 +65,13 @@
         Selecciona una especialidad
         </span> 
      </div>
+
+     <mat-form-field class="example-form" appearance="fill">
+      <mat-label>Costo</mat-label>
+      <span matPrefix>S/&nbsp;</span> 
+      <input disabled matInput placeholder="$">
+       {{costo}}
+     </mat-form-field> 
       
      <div>
       <mat-form-field class="example-form" appearance="fill">
@@ -81,13 +90,6 @@
      </div>
   </div>
 
-
- <mat-form-field class="example-form" appearance="fill">
-  <mat-label>Costo</mat-label>
-  <span matPrefix>S/&nbsp;</span> 
-  <input disabled matInput placeholder="$">
-   {{costo}}
- </mat-form-field> 
   <div>
     <mat-form-field *ngIf ="fechasCargadas" class="example-form" appearance="fill">
         <mat-label >Fecha Cita</mat-label>
@@ -95,11 +97,11 @@
         <mat-hint>DD/MM/YYYY</mat-hint>
         <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
         <mat-datepicker class="highlight-dates" #datepicker [dateClass]="dateClass">
-          <mat-date-range-picker-actions>
+          <!-- <mat-date-range-picker-actions>
             <div class="legend">
               <div class="disponible">Disponible</div>
             </div>
-          </mat-date-range-picker-actions>
+          </mat-date-range-picker-actions> -->
         <h1 style="font-size: 10px;margin:10px">disponible<span style="font-size: 10px" class="grey">1</span></h1>
       </mat-datepicker>
     </mat-form-field>

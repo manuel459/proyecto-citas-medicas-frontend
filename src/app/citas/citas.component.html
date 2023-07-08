@@ -1,150 +1,172 @@
-<button style="float:right" mat-button color="primary" (click)="openAdd()" >
-    <mat-icon>add</mat-icon>
-    <span>Nuevo Cita</span>
-</button>
-
-<button style="float:right" mat-button color="primary" (click)="exportExcel(this.dataSource.data, 'reporte_citas')">
-    <mat-icon>get_app</mat-icon>
-</button>
-
-    <div class="main">
-        <br>
-        <br>
-        <div class="container">  
+<div>
+    <button style="float:right" mat-button color="primary" (click)="openAdd()" >
+        <mat-icon>add</mat-icon>
+        <span>Nuevo Cita</span>
+    </button>
+    
+    <button style="float:right" mat-button color="primary" (click)="exportExcel(this.dataSource.data, 'reporte_citas')">
+        <mat-icon>get_app</mat-icon>
+    </button>
+    
+        <div class="main">
             <br>
             <br>
-            <br>
-            <div class="container">
-                <button style="float: right;" (click)="exportToPdf()"  mat-icon-button mat-button color="white" >
-                    <mat-icon>backup</mat-icon>
+            <div class="container">  
+                <br>
+                <br>
+                <br>
+                <div class="container">
+                    <button style="float: right;" (click)="exportToPdf()"  mat-icon-button mat-button color="white" >
+                        <mat-icon>backup</mat-icon>
+                    </button>
+                    <div class="search-container"  style="float:right">
+                        <button style="width:max-content;" mat-button >
+                            <mat-select class="mat-select-trigger" [(ngModel)]="status" matNativeControl required>
+                                <mat-select-trigger> <mat-icon style="left: 10%;">{{status == 0 ? 'group_add' : status == 1 ? 'face' : 'camera_enhance'}}</mat-icon></mat-select-trigger>
+                              <mat-option value = 0 selected> <mat-icon class="mat-icon mat-icon-no-color">group_add</mat-icon>Nombre del Medico</mat-option>
+                              <mat-option value = 1><mat-icon class="mat-icon-font">face</mat-icon>Nombre del Paciente</mat-option>
+                              <mat-option value = 2><mat-icon class="mat-icon-font">camera_enhance</mat-icon>Nombre de la Especialidad</mat-option>
+                            </mat-select>
+             
+                        </button>
+    
+                        <button [disabled]="!status || !texto"  (click)="getCitas()" mat-button matSuffix mat-icon-button aria-label="Clear">
+                            <mat-icon>search</mat-icon>
+                        </button>
+                        <input style="width: 135px;" placeholder="Buscar Citas" matInput class="form-control" [(ngModel)]="texto" >    
+                        <button mat-button matSuffix mat-icon-button aria-label="Clear" [disabled]="!texto" (click)="refreshFiltroType()" style="float: right;">
+                        <mat-icon>close</mat-icon>
+                        </button>
+                    </div>       
+                </div>
+                <button (click)="refresh()" style="float: right;" mat-icon-button>
+                    <mat-icon>autorenew</mat-icon>
                 </button>
-                <div class="search-container"  style="float:right">
-                    <button style="width:max-content;" mat-button >
-                        <mat-select class="mat-select-trigger" [(ngModel)]="status" matNativeControl required>
-                            <mat-select-trigger> <mat-icon style="left: 10%;">{{status == 0 ? 'group_add' : status == 1 ? 'face' : 'camera_enhance'}}</mat-icon></mat-select-trigger>
-                          <mat-option value = 0 selected> <mat-icon class="mat-icon mat-icon-no-color">group_add</mat-icon>Nombre del Medico</mat-option>
-                          <mat-option value = 1><mat-icon class="mat-icon-font">face</mat-icon>Nombre del Paciente</mat-option>
-                          <mat-option value = 2><mat-icon class="mat-icon-font">camera_enhance</mat-icon>Nombre de la Especialidad</mat-option>
-                        </mat-select>
-         
-                    </button>
-
-                    <button [disabled]="!status || !texto"  (click)="getCitas()" mat-button matSuffix mat-icon-button aria-label="Clear">
-                        <mat-icon>search</mat-icon>
-                    </button>
-                    <input style="width: 135px;" placeholder="Buscar Citas" matInput class="form-control" [(ngModel)]="texto" >    
-                    <button mat-button matSuffix mat-icon-button aria-label="Clear" [disabled]="!texto" (click)="refreshFiltroType()" style="float: right;">
-                    <mat-icon>close</mat-icon>
-                    </button>
-                </div>       
+                <div style="float: right;" class="date-container">
+                    <mat-date-range-input [formGroup]="range" [rangePicker]="rangePicker">
+                        <input matStartDate formControlName="start">
+                        <input matEndDate (dateChange)="getCitas()" formControlName="end">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #rangePicker>
+                      </mat-date-range-picker>
+                </div>
+                <h1 style="margin: 10px;"> Lista de Citas</h1>
+                <br>
+                <br>
+                <br>
             </div>
-            <button (click)="refresh()" style="float: right;" mat-icon-button>
-                <mat-icon>autorenew</mat-icon>
-            </button>
-            <div style="float: right;" class="date-container">
-                <mat-date-range-input [formGroup]="range" [rangePicker]="rangePicker">
-                    <input matStartDate formControlName="start">
-                    <input matEndDate (dateChange)="getCitas()" formControlName="end">
-                </mat-date-range-input>
-                <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
-                <mat-date-range-picker #rangePicker>
-                  </mat-date-range-picker>
+    
+            <div *ngIf="loaderService.isLoading | async" class="loader-container">
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </div>   
+               
+            <div>
+                 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" >
+                    <ng-container matColumnDef="Id">
+                            <th mat-header-cell *matHeaderCellDef>Id</th>
+                            <td mat-cell *matCellDef="let element ">{{ element.id }}</td>
+                        </ng-container>
+        
+                        <ng-container matColumnDef="Dni_Paciente">
+                            <th mat-header-cell *matHeaderCellDef>Dni</th>
+                            <td mat-cell *matCellDef="let element ">{{ element.dnip }}</td>
+                        </ng-container>
+        
+                        <ng-container matColumnDef="Nombre_Paciente">
+                            <th mat-header-cell *matHeaderCellDef>Nombre_Paciente</th>
+                            <td mat-cell *matCellDef="let element ">{{ element.sNombre_Paciente }}</td>
+                        </ng-container>
+        
+                        <ng-container matColumnDef="Nombre_Medico">
+                            <th mat-header-cell *matHeaderCellDef>Nombre_Medico</th>
+                            <td mat-cell *matCellDef="let element ">{{ element.sNombre_Medico }}</td>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="Nombre_Especialidad">
+                            <th mat-header-cell *matHeaderCellDef>Nombre_Especialidad</th>
+                            <td mat-cell *matCellDef="let element ">{{ element.sNombre_Especialidad }}</td>
+                        </ng-container>
+        
+                        <ng-container matColumnDef="Fecha_Cita">
+                            <th mat-header-cell *matHeaderCellDef>Fecha Cita</th>
+                            <td mat-cell *matCellDef="let element ">{{ element.feccit | date :'yyyy-MM-dd'}}</td>
+                        </ng-container>
+        
+                        <ng-container class="label" matColumnDef="Estado_Cita">
+                            <th mat-header-cell *matHeaderCellDef>Estado de Cita</th>
+                            <td class="label"  mat-cell *matCellDef="let element ">
+                                <span class="estado-{{ element.nEstado }}">{{ element.sEstado }}</span>
+                            </td>
+                        </ng-container>
+        
+                        <ng-container type="time" matColumnDef="hora">
+                            <th mat-header-cell *matHeaderCellDef>Hora</th>
+                            <td mat-cell *matCellDef="let element ">{{ element.hora }}</td>
+                        </ng-container>
+    
+                        <ng_container matColumnDef="Estado_Pago">
+                            <th mat-header-cell *matHeaderCellDef>Estado de Pago</th>
+                            <td mat-cell *matCellDef="let element">
+                                <span class="estado-{{ element.nEstado_Pago }}">{{ element.sEstado_Pago }}</span>
+                            </td>
+                        </ng_container>
+    
+                        <ng_container matColumnDef="Costo">
+                            <th mat-header-cell *matHeaderCellDef>Costo de cita</th>
+                            <td mat-cell *matCellDef="let element">{{ element.costo }}</td>
+                        </ng_container>
+        
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div class="example-button-row">
+                                    
+                                <button *ngIf="VIEW_EDIT_CITA" [disabled] = "element.nEstado == 2?true:false" (click)="openEdit(element)" mat-button color="primary">
+                                    <mat-icon>create</mat-icon>
+                                </button>
+                                <button *ngIf="VIEW_DELETE_CITA" [disabled] = "element.nEstado == 2?true:false" (click)="delete(element)" mat-button color="warn">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+    
+                                <button (mouseover)="mostrarDescripcion(element.id)" (mouseout)="ocultarDescripcion(element.id)" *ngIf="VIEW_DETAIL_CITA" (click)="revisar(element)" mat-button color="primary">
+                                    <mat-icon>assignment</mat-icon>
+                                </button>
+                                <span class="descripcion-box" *ngIf="this.listaDes?.includes(element.id)">Descripción</span>
+
+                                <button [disabled]="element.nTotal_Historicos == 0" (click)="historiaMedica(element.dnip)" mat-button color="primary">
+                                    <mat-icon>history</mat-icon>
+                                </button>
+                             
+                                <button (mouseover)="mostrarDiagnostico(element.id)" (mouseout)="ocultarDiagnostico(element.id)" *ngIf="GENERAR_DIAGNOSTICO" [disabled] = "element.nEstado == 2?true:false" (click)="diagnosticoAdd(element)" mat-button color="primary">
+                                    <mat-icon>local_hospital</mat-icon>
+                                </button>
+                              
+                                <span class="descripcion-box" *ngIf="this.lista?.includes(element.id)">Diagnostico</span>
+                                <button (mouseover)="mostrarChat(element.id)" (mouseout)="ocultarChat(element.id)"  *ngIf="element.nId_Historico!=null" mat-button color="primary" (click)="sendWhatsappMessage(element.sNombre_Paciente, element.sNombre_Medico,element.nNumero_Paciente, element.diagnostico, element.receta)">
+                                    <mat-icon>chat</mat-icon>
+                                    <!-- <ic-icon [icon]="bellSlashIcon"></ic-icon> -->
+                                </button>
+                                <span class="descripcion-box" *ngIf="this.listaChat?.includes(element.id)">Enviar Diagnostico</span>
+                                </div>
+                            </td>
+                        </ng-container>
+                      
+                        <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+                    <tr mat-row *matRowDef="let row; columns:columnas"></tr>
+                    
+             
+                </table>
+                <img *ngIf="this.dataSource.filteredData.length == 0" class="img" width="300px" src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png">
+                <mat-paginator [pageSizeOptions]="[10, 20]"
+                showFirstLastButtons 
+                aria-label="Select page of periodic elements">
+                </mat-paginator>
             </div>
-            <h1 style="margin: 10px;"> Lista de Citas</h1>
-            <br>
-            <br>
-            <br>
-        </div>
+            
+            
+            
+            </div>
+    
 
-        <div *ngIf="loaderService.isLoading | async" class="loader-container">
-            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-        </div>   
-           
-        <div>
-             <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" >
-                <ng-container matColumnDef="Id">
-                        <th mat-header-cell *matHeaderCellDef>Id</th>
-                        <td mat-cell *matCellDef="let element ">{{ element.id }}</td>
-                    </ng-container>
-    
-                    <ng-container matColumnDef="Dni_Paciente">
-                        <th mat-header-cell *matHeaderCellDef>Dni</th>
-                        <td mat-cell *matCellDef="let element ">{{ element.dnip }}</td>
-                    </ng-container>
-    
-                    <ng-container matColumnDef="Nombre_Paciente">
-                        <th mat-header-cell *matHeaderCellDef>Nombre_Paciente</th>
-                        <td mat-cell *matCellDef="let element ">{{ element.sNombre_Paciente }}</td>
-                    </ng-container>
-    
-                    <ng-container matColumnDef="Nombre_Medico">
-                        <th mat-header-cell *matHeaderCellDef>Nombre_Medico</th>
-                        <td mat-cell *matCellDef="let element ">{{ element.sNombre_Medico }}</td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="Nombre_Especialidad">
-                        <th mat-header-cell *matHeaderCellDef>Nombre_Especialidad</th>
-                        <td mat-cell *matCellDef="let element ">{{ element.sNombre_Especialidad }}</td>
-                    </ng-container>
-    
-                    <ng-container matColumnDef="Fecha_Cita">
-                        <th mat-header-cell *matHeaderCellDef>Fecha Cita</th>
-                        <td mat-cell *matCellDef="let element ">{{ element.feccit | date :'yyyy-MM-dd'}}</td>
-                    </ng-container>
-    
-                    <ng-container class="label" matColumnDef="Estado_Cita">
-                        <th mat-header-cell *matHeaderCellDef>Estado de Cita</th>
-                        <td class="label"  mat-cell *matCellDef="let element ">{{ element.sEstado}}</td>
-                    </ng-container>
-    
-                    <ng-container type="time" matColumnDef="hora">
-                        <th mat-header-cell *matHeaderCellDef>Hora</th>
-                        <td mat-cell *matCellDef="let element ">{{ element.hora }}</td>
-                    </ng-container>
-
-                    <ng_container matColumnDef="Estado_Pago">
-                        <th mat-header-cell *matHeaderCellDef>Estado de Pago</th>
-                        <td mat-cell *matCellDef="let element">{{ element.sEstado_Pago }}</td>
-                    </ng_container>
-
-                    <ng_container matColumnDef="Costo">
-                        <th mat-header-cell *matHeaderCellDef>Costo de cita</th>
-                        <td mat-cell *matCellDef="let element">{{ element.costo }}</td>
-                    </ng_container>
-    
-                    <ng-container matColumnDef="actions">
-                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
-                        <td mat-cell *matCellDef="let element">
-                            <div class="example-button-row">
-                                
-                            <button *ngIf="element.estado !='ATENDIDO'" (click)="openEdit(element)" mat-button color="primary">
-                                <mat-icon>create</mat-icon>
-                            </button>
-                            <button (click)="delete(element)" mat-button color="warn">
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                            <button  (click)="revisar(element)" mat-button color="primary">
-                                <mat-icon>assignment</mat-icon>
-                            </button>
-                        
-                            </div>
-                        </td>
-                    </ng-container>
-                  
-                    <tr mat-header-row *matHeaderRowDef="columnas"></tr>
-                <tr mat-row *matRowDef="let row; columns:columnas"></tr>
-                
-         
-            </table>
-            <img *ngIf="this.dataSource.filteredData.length == 0" class="img" width="300px" src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png">
-            <mat-paginator [pageSizeOptions]="[10, 20]"
-            showFirstLastButtons 
-            aria-label="Select page of periodic elements">
-            </mat-paginator>
-        </div>
-        
-        
-        
-        </div>
-
-
+</div>

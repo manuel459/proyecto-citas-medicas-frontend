@@ -31,8 +31,9 @@ export class DialogpacienteComponent implements OnInit {
   ) { 
     if(this.paciente == null){
       this.registerForm = this.fb.group({
-        dnip : ['',[Validators.required, Validators.minLength(8), Validators.maxLength(8), Validators.pattern('^[0-9]*$')]],
-        nomp: ['', [Validators.required, Validators.minLength(1)]],
+        dnip : ['',[Validators.required, Validators.minLength(8), Validators.maxLength(8), Validators.pattern(/^[1-9]\d{0,8}$/)]],
+        nomp: ['', [Validators.required, Validators.minLength(1), Validators.pattern('^[a-zA-Z ]+$')]],
+        apellidos: ['',[Validators.required, Validators.minLength(1), Validators.pattern('^[a-zA-Z ]+$')]],
         numero:['', [Validators.required, Validators.maxLength(9), Validators.minLength(9),  Validators.pattern('^[0-9]*$')]],
         edad: ['', [Validators.required, Validators.minLength(1),Validators.maxLength(3),Validators.pattern('^[0-9]*$')]],
         correoElectronico: ['', Validators.email],
@@ -41,8 +42,10 @@ export class DialogpacienteComponent implements OnInit {
   else
   {
       this.registerForm = this.fb.group({
+        id:[paciente.id],
         dnip : [paciente.dnip,[Validators.required, Validators.minLength(8), Validators.maxLength(8), Validators.pattern('^[0-9]*$')]],
-        nomp: [paciente.nomp, [Validators.required, Validators.minLength(1)]],
+        nomp: [paciente.nomp, [Validators.required, Validators.minLength(1), Validators.pattern('^[a-zA-Z ]+$')]],
+        apellidos: [paciente.apellidos,[Validators.required, Validators.minLength(1), Validators.pattern('^[a-zA-Z ]+$')]],
         numero:[paciente.numero, [Validators.required, Validators.maxLength(9), Validators.minLength(9),  Validators.pattern('^[0-9]*$')]],
         edad: [paciente.edad, [Validators.required, Validators.minLength(1),Validators.maxLength(3),Validators.pattern('^[0-9]*$')]],
         correoElectronico: [paciente.correoElectronico, Validators.email],
@@ -100,7 +103,7 @@ onSubmit() {
       .then((result) => {
           if (result.isConfirmed) {
             const paciente: Paciente ={
-              nomp: this.registerForm.value.nomp, dnip: this.registerForm.value.dnip, numero: this.registerForm.value.numero, idtip: '', edad: this.registerForm.value.edad, correoElectronico: this.registerForm.value.correoElectronico  
+              nomp: this.registerForm.value.nomp,apellidos: this.registerForm.value.apellidos, dnip: this.registerForm.value.dnip, numero: this.registerForm.value.numero, idtip: '', edad: this.registerForm.value.edad, correoElectronico: this.registerForm.value.correoElectronico , id: 0
             }
             this.pacienteService.add(paciente).subscribe(response =>{
                 if (response.exito===1){
@@ -137,7 +140,7 @@ editCliente(){
     .then((result) => {
         if (result.isConfirmed) {
           const paciente: Paciente ={
-            nomp: this.registerForm.value.nomp, dnip: this.registerForm.value.dnip, numero: this.registerForm.value.numero, idtip: '', edad: this.registerForm.value.edad, correoElectronico: this.registerForm.value.correoElectronico 
+            nomp: this.registerForm.value.nomp,apellidos: this.registerForm.value.apellidos, dnip: this.registerForm.value.dnip, numero: this.registerForm.value.numero, idtip: '', edad: this.registerForm.value.edad, correoElectronico: this.registerForm.value.correoElectronico , id: this.registerForm.value.id
           }
           this.pacienteService.edit(paciente).subscribe(response =>{
               if (response.exito===1){

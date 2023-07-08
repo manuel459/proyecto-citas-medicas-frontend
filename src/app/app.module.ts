@@ -30,7 +30,6 @@ import { DialogmedicoComponent } from './medico/dialog/dialogmedico/dialogmedico
 import { AppRoutingModule } from './app-routing.module';
 import { DeletemedicoComponent } from './dialogdelete/deletemedico/deletemedico.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import { SpinnerComponent } from './spinner/spinner.component';
 import { DialogmedicoRevisarComponent } from './medico/dialog/dialogmedico-revisar/dialogmedico-revisar.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import { PacienteComponent } from './paciente/paciente.component';
@@ -50,81 +49,90 @@ import { HomeComponent } from './home/home.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar'
 import { InterceptorService } from './interceptor.service';
 import { ErrorsCitasComponent } from './Errors/errors-citas/errors-citas.component';
-import { DiagnosticoComponent } from './diagnostico/diagnostico.component';
 import {TextFieldModule} from '@angular/cdk/text-field';
 import { ForbiddenComponent } from './common-pages/forbidden/forbidden.component';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { ModuloPagosComponent } from './modulo-pagos/modulo-pagos.component';
 import {MatStepperModule} from '@angular/material/stepper';
 import { ErrorsDiagnosticoComponent } from './Errors/errors-diagnostico/errors-diagnostico.component';
+import { DialogcitasDiagnosticoComponent } from './citas/dialog/dialogcitas-diagnostico/dialogcitas-diagnostico.component';
+import { NavigationComponent } from './navigation/navigation.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatMenuModule } from '@angular/material/menu';
+import { LayoutModule } from '@angular/cdk/layout';
+import { DialogHistoriaMedicaComponent } from './citas/dialog-historia-medica/dialog-historia-medica.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    CiclistaComponent,
-    AdministradorRegistroPersonalComponent,
-    MenuAdimistradorComponent,
-    AdministradorRegistrarNuevaCitaComponent,
-    MedicoComponent,
-    DialogmedicoComponent,
-    DeletemedicoComponent,
-    SpinnerComponent,
-    DialogmedicoRevisarComponent,
-    PacienteComponent,
-    DialogpacienteComponent,
-    DeletepacienteComponent,
-    DialogpacienteRevisarComponent,
-    ErrorsPacienteComponent,
-    ErrorsMedicoComponent,
-    CitasComponent,
-    DialogcitasComponent,
-    DeletecitasComponent,
-    DialogcitasRevisarComponent,
-    LoginComponent,
-    HomeComponent,
-    ErrorsCitasComponent,
-    DiagnosticoComponent,
-    ForbiddenComponent,
-    ModuloPagosComponent,
-    ErrorsDiagnosticoComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    MatTableModule,
-    MatInputModule,
-    MatButtonModule,
-    FormsModule ,
-    MatSortModule,
-    BrowserAnimationsModule,
-    MatDialogModule,
-    MatSnackBarModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatCheckboxModule,
-    BrowserAnimationsModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatDividerModule,
-    MatToolbarModule,
-    MatPaginatorModule,
-    MatProgressSpinnerModule,
-    MatTabsModule,
-    MatCardModule,
-    ReactiveFormsModule,
-    MatProgressBarModule,
-    TextFieldModule,
-    MatSlideToggleModule,
-    MatStepperModule
-  ],
-  providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
-    {provide: MAT_DATE_LOCALE, useValue: 'es-ES' },
-    {provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true},
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        CiclistaComponent,
+        AdministradorRegistroPersonalComponent,
+        MenuAdimistradorComponent,
+        AdministradorRegistrarNuevaCitaComponent,
+        MedicoComponent,
+        DialogmedicoComponent,
+        DeletemedicoComponent,
+        DialogmedicoRevisarComponent,
+        PacienteComponent,
+        DialogpacienteComponent,
+        DeletepacienteComponent,
+        DialogpacienteRevisarComponent,
+        ErrorsPacienteComponent,
+        ErrorsMedicoComponent,
+        CitasComponent,
+        DialogcitasComponent,
+        DeletecitasComponent,
+        DialogcitasRevisarComponent,
+        LoginComponent,
+        HomeComponent,
+        ErrorsCitasComponent,
+        ForbiddenComponent,
+        ModuloPagosComponent,
+        ErrorsDiagnosticoComponent,
+        DialogcitasDiagnosticoComponent,
+        NavigationComponent,
+        DialogHistoriaMedicaComponent
+    ],
+    providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+        { provide: MAT_DATE_LOCALE, useValue: 'es-ES' },
+        { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
+    ],
+    bootstrap: [AppComponent],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        MatTableModule,
+        MatInputModule,
+        MatButtonModule,
+        FormsModule,
+        MatSortModule,
+        BrowserAnimationsModule,
+        MatDialogModule,
+        MatSnackBarModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatCheckboxModule,
+        BrowserAnimationsModule,
+        MatRadioModule,
+        MatSelectModule,
+        MatIconModule,
+        MatSidenavModule,
+        MatDividerModule,
+        MatToolbarModule,
+        MatPaginatorModule,
+        MatProgressSpinnerModule,
+        MatTabsModule,
+        MatCardModule,
+        ReactiveFormsModule,
+        MatProgressBarModule,
+        TextFieldModule,
+        MatSlideToggleModule,
+        MatStepperModule,
+        MatGridListModule,
+        MatMenuModule,
+        LayoutModule
+    ]
 })
 export class AppModule { }

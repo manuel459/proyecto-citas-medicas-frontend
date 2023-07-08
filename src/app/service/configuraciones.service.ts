@@ -20,4 +20,15 @@ export class ConfiguracionesService {
   getConfiguraciones(sEntidad :string, sId: string): Observable<Response>{
       return this._http.get<Response>(this.url+"?sEntidad="+sEntidad+"&sId="+sId);
   }
+
+  getGraficaCitas(): Observable<Response>
+  {
+    return this._http.get<Response>(this.url+'/Grafica_Citas'); 
+  }
+
+  getGraficaCitasDisponibles(codmed: string, feccit: string): Observable<Response>
+  {
+    console.log(feccit)
+    return this._http.get<Response>(this.url+'/Grafica_Citas_Disponibles?codmed='+codmed+'&dFecha_Consulta='+feccit); 
+  }
 }

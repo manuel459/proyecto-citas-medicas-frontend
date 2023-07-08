@@ -1,0 +1,138 @@
+<div mat-dialog-title style="width: 500px;">
+
+    <div fxLayout="row" fxLayoutAlign="start center">
+        <h2 class="w-13" fxFlex="auto">
+            Historia Medica de {{lista[0].nomp}}
+        </h2>
+    </div>
+    
+</div>
+<mat-dialog-content>
+    <div class="carousel-container">
+      <button mat-icon-button class="carousel-prev" [disabled]="!(i > 0)" (click)="preview()">
+        <mat-icon>navigate_before</mat-icon>
+    </button>
+      <div class="carousel-slides-container">
+          <div >
+            <div class="flex mb-1">
+                <div class="w-13"><mat-icon>enhanced_encryption</mat-icon> Codigo de Cita:</div>
+                <div class="w-23 font-bold">{{lista[i].idCita}}</div>
+            </div>
+            <br>
+            <div class="flex mb-1">
+                <div class="w-13"><mat-icon>face</mat-icon> DNI del Paciente:</div>
+                <div class="w-2/3 font-bold"> {{lista[i].dnip}}</div>
+            </div>
+            <br>
+
+            <div class="flex mb-1">
+                <div class="w-13"><mat-icon> local_hospital</mat-icon>Especialidad:</div>
+                <div class="w-2/3 font-bold">{{lista[i].sNombre_Especialidad}}</div>
+            </div>
+            <br>
+            <div class="flex mb-1">
+                <div class="w-13"><mat-icon class="icono">group_add</mat-icon> Nombre del Medico:</div>
+                <div class="w-2/3 font-bold">{{lista[i].sNombre_Medico}}</div>
+            </div>
+    
+            <br>
+            <div class="flex items-center mb-1">
+                
+                <div class="w-13"><mat-icon class="mr-1">date_range</mat-icon> Fecha de Cita:</div>
+                <div class="w-2/3 font-bold">{{lista[i].fecct | date:'yyyy-MM-dd'}}</div>
+            </div>
+            <br>
+            <div class="flex mb-1">
+                <div class="w-13">
+                    <mat-icon>camera_enhance</mat-icon>
+                    Diagnostico
+                </div>
+                <div class="w-2/3 font-bold">{{lista[i].diagnostico}}</div>
+            </div>
+            <br>
+            <div class="flex mb-1">
+                <div class="w-13"> <mat-icon>assignment</mat-icon> Receta:</div>
+                <div class="w-2/3 font-bold">{{lista[i].receta}}</div>
+            </div>
+          </div>
+      </div>
+      <img width="500px" lengh="500px" src="https://img.freepik.com/vector-gratis/ilustracion-plana-concepto-servicio-hospital_1150-50287.jpg?w=1380&t=st=1683951767~exp=1683952367~hmac=f140c64d1ad006fd5db3d5908209bb2ae475d24d4bdd3bbdfacef21da178c9bc" alt="images" style="float: right;">
+      <button mat-icon-button class="carousel-next" [disabled]="!(lista.length > i + 1)" mat-icon-button (click)="next()">
+        <mat-icon>navigate_next</mat-icon>
+    </button>
+
+    </div>
+  </mat-dialog-content>
+<!-- 
+<div mat-dialog-title style="width: 500px;">
+
+    <div fxLayout="row" fxLayoutAlign="start center">
+        <h2 class="w-13" fxFlex="auto">
+            Historia Medica
+        </h2>
+    </div>
+    
+</div>
+
+<div  mat-dialog-content>
+          
+
+        <div class="dialog-controls">
+            <button mat-icon-button [disabled]="!(i > 0)" (click)="preview()">
+                <mat-icon>navigate_before</mat-icon>
+            </button>
+            
+
+            <div class="mt-3">
+                <div class="flex mb-1">
+                    <div class="w-13"><mat-icon>enhanced_encryption</mat-icon> Codigo de Cita:</div>
+                    <div class="w-23 font-bold">{{lista[i].idCita}}</div>
+                </div>
+                <br>
+                <div class="flex mb-1">
+                    <div class="w-13"><mat-icon>face</mat-icon> DNI del Paciente:</div>
+                    <div class="w-2/3 font-bold"> {{lista[i].dnip}}</div>
+                </div>
+                <br>
+    
+                <div class="flex mb-1">
+                    <div class="w-13"><mat-icon> local_hospital</mat-icon>Especialidad:</div>
+                    <div class="w-2/3 font-bold">{{lista[i].codes}}</div>
+                </div>
+                <br>
+                <div class="flex mb-1">
+                    <div class="w-13"><mat-icon class="icono">group_add</mat-icon> Nombre del Medico:</div>
+                    <div class="w-2/3 font-bold">{{lista[i].codmed}}</div>
+                </div>
+        
+                <br>
+                <div class="flex items-center mb-1">
+                    
+                    <div class="w-13"><mat-icon class="mr-1">date_range</mat-icon> Fecha de Cita:</div>
+                    <div class="w-2/3 font-bold">{{lista[i].fecct | date:'yyyy-MM-dd'}}</div>
+                </div>
+                <br>
+                <div class="flex mb-1">
+                    <div class="w-13">
+                        <mat-icon>camera_enhance</mat-icon>
+                        Diagnostico
+                    </div>
+                    <div class="w-2/3 font-bold">{{lista[i].diagnostico}}</div>
+                </div>
+                <br>
+                <div class="flex mb-1">
+                    <div class="w-13"> <mat-icon>assignment</mat-icon> Receta:</div>
+                    <div class="w-2/3 font-bold">{{lista[i].receta}}</div>
+                </div>
+    
+            </div>
+           
+
+            <button [disabled]="!(lista.length > i + 1)" mat-icon-button (click)="next()">
+                <mat-icon>navigate_next</mat-icon>
+            </button>
+        </div>
+
+        
+
+</div> -->

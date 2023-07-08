@@ -8,6 +8,7 @@ import { ErrorsMedicoComponent } from '../Errors/errors-medico/errors-medico.com
 import { Diagnostico } from '../models/diagnostico';
 import { diagnosticoReporte } from '../models/diagnosticoReporte';
 import { Response } from '../models/response';
+import { DiagnosticoAdd } from '../Interfaces/DiagnosticoAdd';
 
 const httpOption = {
   headers: new HttpHeaders({
@@ -45,7 +46,7 @@ export class DiagnosticoService {
     return this._http.post<Response>(this.url+("ReporteDiagnostico"), diagnostico, httpOption);
   }
 
-  saveHistory(diagnostico:diagnosticoReporte): Observable<Response> {
+  saveHistory(diagnostico:DiagnosticoAdd): Observable<Response> {
     return this._http.post<Response>(this.url+("SaveHistoryMedic"), diagnostico, httpOption).pipe(
       retry(1),
        catchError((error: HttpErrorResponse) => {

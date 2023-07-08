@@ -1,0 +1,13 @@
+.full-screen-div {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #ccc; /* Color de fondo para ilustrar */
+  }
+
+  .text-4xl
+  {
+    font-size: 3rem; /* Ajusta el tamaño de la fuente según tus necesidades */
+  }

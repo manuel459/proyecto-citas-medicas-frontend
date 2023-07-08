@@ -1,0 +1,45 @@
+<div class="grid-container">
+  <h1 style="margin: 10px; font-size: 2em; font-weight: bold; padding-top: 50px; text-align: left; vertical-align: middle;" class="mat-h1">Dashboard</h1>
+  <mat-grid-list cols="2" rowHeight="600px">
+    <mat-grid-tile *ngFor="let card of cards | async" [colspan]="card.cols" [rowspan]="card.rows">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            {{card.title}}
+            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <!-- <button mat-menu-item>Expand</button>
+              <button mat-menu-item>Remove</button> -->
+            </mat-menu>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <div *ngIf="card.rows == 2">
+            <mat-form-field style="width: 500px;" class="example-form" appearance="fill">
+              <mat-label >Fecha de consulta</mat-label>
+              <input (dateChange)="ngOnInit()" [matDatepicker]="datepicker"  class="form-control" matInput [(ngModel)]="feccit">
+              <mat-hint>DD/MM/YYYY</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+              <mat-datepicker class="highlight-dates" #datepicker>
+            </mat-datepicker>
+          </mat-form-field>
+            <mat-form-field style="width: 500px;"  class="example-form" appearance="fill">
+              <mat-label>Doctor</mat-label>
+              <mat-select class="form-control" required matInput [(ngModel)] ="codmed" matNativeControl required>
+                <mat-option (click)="ngOnInit()" *ngFor="let elemento of medicos" [value]="elemento.sId" >
+                  {{elemento.sDescripcion}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class = "DIV" *ngIf = "success"></div>
+          </div>
+          
+          <div [id]="getLista(card.rows)"></div>
+          
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
