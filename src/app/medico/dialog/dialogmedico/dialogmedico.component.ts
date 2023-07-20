@@ -29,6 +29,8 @@ export class DialogmedicoComponent implements OnInit {
   public horarios: [] | any;
   public especialidades: [] | any;
 
+  bActiveNotificaciones = false;
+
   registerForm: FormGroup | any;
   submitted = false;
 
@@ -125,7 +127,7 @@ export class DialogmedicoComponent implements OnInit {
   })
       .then((result) => {
           if (result.isConfirmed) {
-            const medico: Medico ={nombre: this.registerForm.value.nombre, sApellidos:this.registerForm.value.sApellidos,sexo:this.registerForm.value.sexo, nac:this.registerForm.value.nac,correo: this.registerForm.value.correo, pswd:this.registerForm.value.pswd, dni:this.registerForm.value.dni, codes:this.registerForm.value.codes,idhor: this.registerForm.value.idhor,codmed:'0'}
+            const medico: Medico ={nombre: this.registerForm.value.nombre, sApellidos:this.registerForm.value.sApellidos,sexo:this.registerForm.value.sexo, nac:this.registerForm.value.nac,correo: this.registerForm.value.correo, pswd:this.registerForm.value.pswd, dni:this.registerForm.value.dni, codes:this.registerForm.value.codes,idhor: this.registerForm.value.idhor,bActiveNotificaciones: this.bActiveNotificaciones, codmed:'0'}
             this.medicoService.add(medico).subscribe(response =>{
                 if (response.exito===1){
                     this.dialogRef.close();
@@ -153,7 +155,7 @@ editCliente(){
 })
     .then((result) => {
         if (result.isConfirmed) {
-          const medico: Medico ={nombre: this.registerForm.value.nombre,sApellidos:this.registerForm.value.sApellidos,  sexo:this.registerForm.value.sexo, nac:this.registerForm.value.nac,correo: this.registerForm.value.correo, pswd:this.registerForm.value.pswd, dni:this.registerForm.value.dni, codes:this.registerForm.value.codes,idhor: this.registerForm.value.idhor, codmed:this.medico.codmed}
+          const medico: Medico ={nombre: this.registerForm.value.nombre,sApellidos:this.registerForm.value.sApellidos,  sexo:this.registerForm.value.sexo, nac:this.registerForm.value.nac,correo: this.registerForm.value.correo, pswd:this.registerForm.value.pswd, dni:this.registerForm.value.dni, codes:this.registerForm.value.codes,idhor: this.registerForm.value.idhor, codmed:this.medico.codmed, bActiveNotificaciones: this.bActiveNotificaciones}
           this.medicoService.edit(medico).subscribe(response =>{
               if (response.exito===1){
                   this.dialogRef.close();

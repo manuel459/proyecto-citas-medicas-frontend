@@ -86,6 +86,10 @@
       <div class="col-md-8 mx-auto">
           <div class="card">
               <div class="card-body">
+                <div>
+                  <h4 class="w-13">Activar envío de Notificación :</h4>
+                  <mat-slide-toggle  color="primary" [(ngModel)]="bActiveNotificaciones">{{bActiveNotificaciones?"Activado":"Desactivado"}}</mat-slide-toggle>
+                </div>
                   <form class="form" [formGroup]="registerForm">
                     <h4 class="w-13">Datos Personales :</h4>
                     <img width="350px" src="https://thumbs.dreamstime.com/b/avatar-del-terapeuta-icono-web-doctor-103706622.jpg" alt="images" style="float: right;">
@@ -143,7 +147,7 @@
                         </span>
                         <span class="text-danger"
                             *ngIf="(registerFormControl.sApellidos.touched || submitted) && registerFormControl.sApellidos.errors?.minLength">
-                            Requiere como minimo 30
+                            Requiere como mínimo 30
                         </span>
                         <span class="text-danger" 
                           *ngIf="(registerFormControl.sApellidos.touched || submitted) && registerFormControl.sApellidos.errors?.pattern">

@@ -13,6 +13,7 @@ import { LoaderService } from '../loader.service';
 import { FilterGeneric } from '../Interfaces/FilterGeneric';
 import * as XLSX from 'xlsx';
 import { ConfiguracionesService } from '../service/configuraciones.service';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -108,6 +109,32 @@ export class MedicoComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result =>{
       this.getMedicos();
     })
+
+  }
+
+  BusinessHours(Codmed: string)
+  {
+
+    Swal.fire({
+      title: "Confirmación",
+      text: "¿Estas seguro de envíar el Horario?",
+      icon: "warning",
+      showCancelButton: true,
+      focusCancel: true,
+      confirmButtonText: "Si",
+      cancelButtonText: "No, cancelar",
+  })
+      .then((result) => {
+          if (result.isConfirmed) {
+            this.medicosService.BusinessHours(Codmed).subscribe(
+              response => 
+              {
+                this.snackBar.open(response.mensaje,'',{
+                  duration:2000
+              });
+              });
+          }
+      });
 
   }
 

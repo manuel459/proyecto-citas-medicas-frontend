@@ -9,4 +9,5 @@ export interface Medico{
     pswd:string,
     dni:number,
     idhor:string,
+    bActiveNotificaciones: boolean
 }

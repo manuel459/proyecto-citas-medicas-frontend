@@ -77,6 +77,10 @@ export class MedicosService {
   filters(medico:FilterGeneric): Observable<Response>{
     return this._http.post<Response>(this.url+'Filters', medico);
   }
+
+  BusinessHours(Codmed: string): Observable<Response>{
+    return this._http.get<Response>(this.url+'BusinessHours?Codmed='+Codmed);
+  }
   
 }
 
