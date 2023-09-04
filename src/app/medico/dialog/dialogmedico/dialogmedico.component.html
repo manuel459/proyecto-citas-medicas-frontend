@@ -90,13 +90,14 @@
                   <h4 class="w-13">Activar envío de Notificación :</h4>
                   <mat-slide-toggle  color="primary" [(ngModel)]="bActiveNotificaciones">{{bActiveNotificaciones?"Activado":"Desactivado"}}</mat-slide-toggle>
                 </div>
+
                   <form class="form" [formGroup]="registerForm">
                     <h4 class="w-13">Datos Personales :</h4>
                     <img width="350px" src="https://thumbs.dreamstime.com/b/avatar-del-terapeuta-icono-web-doctor-103706622.jpg" alt="images" style="float: right;">
                       <div>
                         <mat-form-field class="example-full-width" appearance="fill">
                           <mat-label>Dni</mat-label>
-                          <input class="form-control" required matInput formControlName="dni" >   
+                          <input class="form-control" required matInput formControlName="dni" [readonly]="isEnabled">   
                         </mat-form-field>
                           <br>
                           <span class="text-danger" 
@@ -138,7 +139,7 @@
                       <div class="example-full-width" class="form-group">
                         <mat-form-field class="example-full-width" appearance="fill">
                           <mat-label>Apellidos</mat-label>
-                          <input class="form-control" required matInput formControlName="sApellidos">   
+                          <input class="form-control" required matInput formControlName="sApellidos" >   
                         </mat-form-field>
                         <br>
                         <span class="text-danger"
@@ -169,9 +170,9 @@
                             </span>
                       </div>
                       <div>
-                        <mat-form-field appearance="fill">
+                        <mat-form-field  appearance="fill">
                           <mat-label>FechaNac</mat-label>
-                          <input class="form-control" matInput [matDatepicker]="picker" formControlName="nac">
+                          <input  class="form-control" matInput [matDatepicker]="picker" formControlName="nac">
                           <mat-hint>MM/DD/YYYY</mat-hint>
                           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                           <mat-datepicker #picker></mat-datepicker>
@@ -184,42 +185,7 @@
                       </div>
                 
                       <br>
-                      <h4 class="w-13">Cuenta :</h4>
-                      <div class="example-full-width" class="form-group">
-                          <mat-form-field class="example-full-width" appearance="fill">
-                            <mat-label>Email</mat-label>
-                            <input class="form-control" required matInput formControlName="correo" >   
-                          </mat-form-field>
-                          <br>
-                          <span class="text-danger"
-                              *ngIf="(registerFormControl.correo.touched || submitted) && registerFormControl.correo.errors?.required">
-                              Correo electronico es requerido
-                          </span>
-                          <span class="text-danger"
-                              *ngIf="(registerFormControl.correo.touched || submitted) && registerFormControl.correo.errors?.email">
-                              Email invalido
-                          </span>
-                      </div>
-
-                      <div class="form-group">
-                        <mat-form-field class="example-full-width" appearance="fill">
-                            <mat-label>Password</mat-label>
-                            <input [type]="hide ? 'password' : 'text'" type="password" class="form-control" required matInput formControlName="pswd" >   
-                          </mat-form-field>
-                          <button  mat-icon-button formnovalidate (click)="myFunction()">
-                            <mat-icon>visibility</mat-icon>
-                          </button>
-                          <br>
-                        <span class="text-danger"
-                            *ngIf="(registerFormControl.pswd.touched || submitted) && registerFormControl.pswd.errors?.required">
-                            Se requiere una contraseña
-                        </span>
-                        <span class="text-danger"
-                            *ngIf="(registerFormControl.pswd.touched || submitted) && registerFormControl.pswd.errors?.invalidPassword">
-                            La contraseña debe tener un mínimo de 8 caracteres, al menos 1 letra mayúscula, 1 letra minúscula
-                            , 1 número , 1 caracter especial y no debe contener Emoji ni espacios en blanco
-                        </span>
-                    </div>
+                      
                     
                     <div>
                       <mat-form-field appearance="fill">
@@ -257,6 +223,50 @@
                         <button type="submit" class="btn btn-success">Register</button>
                     </div> -->
 
+                  
+                   
+                   <h4 class="w-13">Cuenta :</h4>
+                   <div class="example-full-width" class="form-group">
+                       <mat-form-field class="example-full-width" appearance="fill">
+                         <mat-label>Email</mat-label>
+                         <input  [readonly]="isEnabled" class="form-control" required matInput formControlName="correo" >   
+                       </mat-form-field>
+                       <br>
+                       <span class="text-danger"
+                           *ngIf="(registerFormControl.correo.touched || submitted) && registerFormControl.correo.errors?.required">
+                           Correo electronico es requerido
+                       </span>
+                       <span class="text-danger"
+                           *ngIf="(registerFormControl.correo.touched || submitted) && registerFormControl.correo.errors?.email">
+                           Email invalido
+                       </span>
+                   </div>
+                   <button mat-button color="primary" *ngIf="medico!=null && !newPasswordVar" (click)="newPassword(true)">
+                    Cambiar de contraseña
+                   </button>
+                   <button mat-button color="primary" *ngIf="medico!=null && newPasswordVar" (click)="newPassword(false)">
+                    No cambiar de contraseña
+                   </button>
+
+                      <div *ngIf="medico==null || newPasswordVar" class="form-group">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Password</mat-label>
+                            <input [type]="hide ? 'password' : 'text'" type="password" class="form-control" required matInput formControlName="pswd" >   
+                          </mat-form-field>
+                          <button  mat-icon-button formnovalidate (click)="myFunction()">
+                            <mat-icon>visibility</mat-icon>
+                          </button>
+                          <br>
+                        <span class="text-danger"
+                            *ngIf="(registerFormControl.pswd.touched || submitted) && registerFormControl.pswd.errors?.required">
+                            Se requiere una contraseña
+                        </span>
+                        <span class="text-danger"
+                            *ngIf="(registerFormControl.pswd.touched || submitted) && registerFormControl.pswd.errors?.invalidPassword">
+                            La contraseña debe tener un mínimo de 8 caracteres, al menos 1 letra mayúscula, 1 letra minúscula
+                            , 1 número , 1 caracter especial y no debe contener Emoji ni espacios en blanco
+                        </span>
+                    </div>
 
                   </form>
                   <div mat-dialog-actions>

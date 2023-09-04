@@ -40,7 +40,16 @@ export class DialogmedicoRevisarComponent implements OnInit {
 
   }
 
-  getHorario(){this.configuracionesService.getConfiguraciones('Horario_idhor', this.idhor).subscribe(response =>{this.idhor = response.data[0].sDescripcion})}
+  getHorario()
+  {
+    this.configuracionesService.getConfiguraciones('Horario_idhor', this.medico.codmed)
+      .subscribe(response =>
+                      {
+                        this.idhor = response.data[0].sDescripcion,
+                        console.log(this.idhor)
+                      }
+                )  
+  }
   getEspecialidad(){this.configuracionesService.getConfiguraciones('Especialidad', '')
     .subscribe(response =>
       {

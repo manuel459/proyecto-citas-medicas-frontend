@@ -31,18 +31,27 @@
             <span class="name">Nueva Cita</span>
            </button>
 
-          <button *ngIf="sesionActive" mat-button class="menu-button" [routerLink] = "['/pagos']">
+          <button mat-button class="menu-button" [routerLink] = "['/pagos']">
             <mat-icon class="icono">credit_card</mat-icon>
             <span class="name">Modulo de Pagos</span>
-          
           </button>
 
+          <mat-expansion-panel *ngIf="sesionActive" class="panel">
+            <mat-expansion-panel-header >
+              <mat-panel-title><mat-icon class="icono">settings</mat-icon>
+                <span class="name">Configuraciones</span></mat-panel-title>
+            </mat-expansion-panel-header>
+            <button mat-button class="menu-button" [routerLink]="['/rolesyPermisos']"> <span class="name">Roles y Permisos</span></button>
+            
+            <button mat-button class="menu-button" [routerLink]="['/Usuarios']"> <span class="name">Usuarios</span></button>
+          </mat-expansion-panel>
+         
           <button mat-button class="menu-button" (click)="logout()" *ngIf="usuario">
             <mat-icon>no_meeting_room</mat-icon>
             <span class="name">Cerrar Sesion</span>
            </button>
-           
     </mat-drawer>
+
     <router-outlet></router-outlet>
 </mat-drawer-container>
 

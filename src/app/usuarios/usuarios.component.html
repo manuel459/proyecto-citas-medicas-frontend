@@ -1,0 +1,134 @@
+<button *ngIf = "BUTTON_CREATE_USUARIOS" style="float:right" mat-button color="primary" (click)="openAdd()" >
+    <mat-icon>add</mat-icon>
+    <span>Nuevo Usuario</span>
+</button>
+<!-- <button style="float:right" mat-button color="primary" (click)="exportExcel(this.dataSource.data, 'reporte_pacientes')">
+    <mat-icon>get_app</mat-icon>
+</button> -->
+   
+    <div class="main">
+        <br>
+        <br>
+       
+        <div class="container">  
+            <br>
+            <br>
+            <br>
+            <div class="container">
+                <!-- <button style="float: right;" mat-icon-button mat-button color="white" >
+                    <mat-icon>backup</mat-icon>
+                </button> -->
+                
+                <div class="search-container"  style="float:right">
+                    <button style="width:max-content;" mat-button >
+                    
+                        <mat-select placeholder="Filtro" [(ngModel)]="status" matNativeControl required>
+                          <mat-option value = 0>DNI</mat-option>
+                          <mat-option value = 1>Nombres</mat-option>
+                          <mat-option value = 2>Código de Usuario</mat-option>
+                          <mat-option value = 3>Email</mat-option>
+                        </mat-select>
+                       
+                    </button>
+                    <button [disabled]="!status || !texto"  (click)="getUsuarios()" mat-button matSuffix mat-icon-button aria-label="Clear">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    
+                    <input style="width: 135px;" placeholder="Buscar Usuario" matInput class="form-control" [(ngModel)]="texto" >    
+                    <button mat-button matSuffix mat-icon-button aria-label="Clear" [disabled]="!texto" (click)="refresh()" style="float: right;">
+                    <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+                  
+            </div>
+            <h1 style="margin: 10px;"> Lista de Usuarios</h1>
+            <br>
+            <br>
+            <br>
+        </div>
+        <div *ngIf="loaderService.isLoading | async" class="loader-container">
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>   
+
+        <div>
+          
+             <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" >
+               
+                <ng-container matColumnDef="nIdUser">
+                        <th mat-header-cell *matHeaderCellDef>nIdUser</th>
+                        <td mat-cell *matCellDef="let element ">{{ element.nIdUser }}</td>
+                    </ng-container>
+    
+                    <ng-container matColumnDef="nIptip">
+                        <th mat-header-cell *matHeaderCellDef>Id Tipo</th>
+                        <td mat-cell *matCellDef="let element ">{{ element.nIptip }}</td>
+                    </ng-container>
+    
+                    <ng-container matColumnDef="sNomtip">
+                        <th mat-header-cell *matHeaderCellDef>sNomtip</th>
+                        <td mat-cell *matCellDef="let element ">{{ element.sNomtip }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="sNombres">
+                        <th mat-header-cell *matHeaderCellDef>sNombres</th>
+                        <td mat-cell *matCellDef="let element ">{{ element.sNombres }}</td>
+                    </ng-container>
+    
+                    <ng-container matColumnDef="sApellidos">
+                        <th mat-header-cell *matHeaderCellDef>sApellidos</th>
+                        <td mat-cell *matCellDef="let element ">{{ element.sApellidos }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="sSexo">
+                        <th mat-header-cell *matHeaderCellDef>Sexo</th>
+                        <td mat-cell *matCellDef="let element ">{{ element.sSexo }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="dNac">
+                        <th mat-header-cell *matHeaderCellDef>dNac</th>
+                        <td mat-cell *matCellDef="let element ">{{ element.dNac | date :'yyyy-MM-dd'}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="sCorreo">
+                        <th mat-header-cell *matHeaderCellDef>Correo</th>
+                        <td mat-cell *matCellDef="let element ">{{ element.sCorreo }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="nDni">
+                        <th mat-header-cell *matHeaderCellDef>Dni</th>
+                        <td mat-cell *matCellDef="let element ">{{ element.nDni }}</td>
+                    </ng-container>
+    
+                    
+    
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                        <td mat-cell *matCellDef="let element">
+                            <div class="example-button-row">
+                                
+                            <button *ngIf = "BUTTON_EDIT_USUARIOS" (click)="openEdit(element)" mat-button color="primary">
+                                <mat-icon>create</mat-icon>
+                            </button>
+                            <button *ngIf = "BUTTON_DELETE_USUARIOS" (click)="deleteUser(element.nIdUser)" mat-button color="warn">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <button  mat-button color="primary">
+                                <mat-icon>person</mat-icon>
+                            </button>
+                        
+                            </div>
+                        </td>
+                    </ng-container>
+                  
+                    <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+                <tr mat-row *matRowDef="let row; columns:columnas"></tr>
+            </table>
+            <img *ngIf="error == 0" class="img" width="300px" src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png">
+            <mat-paginator [pageSizeOptions]="[10, 20]"
+            showFirstLastButtons 
+            aria-label="Select page of periodic elements">
+            </mat-paginator>
+        </div>
+
+        </div>
+

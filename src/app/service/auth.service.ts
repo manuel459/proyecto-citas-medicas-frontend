@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Injectable } from '@angular/core';
 
 import { BehaviorSubject,Observable, catchError ,retry, throwError} from 'rxjs';
-import { Login } from '../models/login';
+import { Login, restorePassword } from '../models/login';
 import { Usuario } from '../models/usuario';
 import { map } from 'rxjs/operators';
 import { Response } from '../models/response';
@@ -20,8 +20,7 @@ const httpOption = {
 })
 export class AuthService {
 
-  url : string = 'https://localhost:44301/api/Login/login'
-
+  url : string = 'https://localhost:44301/api/Login/'
 
 private usuarioSubject: BehaviorSubject<Usuario>;
 public usuario: Observable<Usuario>;
@@ -35,10 +34,11 @@ this.usuarioSubject =
 new BehaviorSubject<Usuario>(JSON.parse(localStorage.getItem('usuario')!));
 //Observable para notificar el estado del usuario
 this.usuario = this.usuarioSubject.asObservable();
+console.log(this.usuario)
 }
 
 login(login: Login):Observable<Response>{
-    return this._http.post<Response>(this.url,login, httpOption).pipe(
+    return this._http.post<Response>(this.url+'login', login, httpOption).pipe(
     map(res =>{
         if(res.exito === 1 ){
         const usuario: Usuario = res.data;
@@ -61,5 +61,9 @@ logout(){
     localStorage.removeItem('usuario');
     this.usuarioSubject.next(null!);
 }
+
+  restorePassword(restore: restorePassword):Observable<Response>{
+    return this._http.post<Response>(this.url+'restorePassword', restore, httpOption)
+  }
 
 }

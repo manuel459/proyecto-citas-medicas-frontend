@@ -1,15 +1,11 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable, catchError ,retry, throwError, tap} from 'rxjs';
-import { ErrorsMedicoComponent } from '../Errors/errors-medico/errors-medico.component';
+import { Observable, tap} from 'rxjs';
 import { Citas } from '../models/citas';
 import { Response } from '../models/response'
 import { ConsultaDni } from '../Interfaces/ConsultaDni';
 import { Horario } from '../models/horarios';
-import { ErrorsCitasComponent } from '../Errors/errors-citas/errors-citas.component';
-import { FilterGeneric } from '../Interfaces/FilterGeneric';
-import { FormArray, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RequestGenericFilter } from '../Interfaces/RequestGenericFilter';
 
@@ -45,29 +41,11 @@ export class CitasService {
     }
   
     add(citas: Citas): Observable<Response> {
-      return this._http.post<Response>(this.url, citas, httpOption).pipe(
-        retry(1),
-         catchError((error: HttpErrorResponse) => {
-         console.log(error.error.errors)
-          this.dialog.open(ErrorsCitasComponent,{
-            data: {message: error.error.errors}         
-          });
-           return throwError(error.error.errors);
-         })
-      );
+      return this._http.post<Response>(this.url, citas, httpOption);
     }
   
     edit(citas: Citas): Observable<Response> {
-      return this._http.put<Response>(this.url, citas, httpOption).pipe(
-        retry(1),
-         catchError((error: HttpErrorResponse) => {
-         
-          this.dialog.open(ErrorsCitasComponent,{
-            data: {message: error.error.errors}         
-          });
-           return throwError(error.error.errors);
-         })
-      );
+      return this._http.put<Response>(this.url, citas, httpOption);
     }
   
     delete(id: string): Observable<Response> {
@@ -79,21 +57,8 @@ export class CitasService {
       return this._http.post<Response>(this.url+'DniPaciente', ConsultaDni,httpOption);
     }
 
-    //Consultar Especialidad
-    getEspecialidad(ConsultaDni: ConsultaDni): Observable<Response>{
-      return this._http.post<Response>(this.url+'Especialidad', ConsultaDni, httpOption);
-    }
-
     getHorario(hora: Horario): Observable<Response>{
       return this._http.post<Response>(this.url+'Horario', hora, httpOption);
-    }
-
-    getHorarioLaboral(Nombre: string): Observable<Response>{
-      return this._http.get<Response>(this.url+'ConsultarDiasLaborable/'+Nombre);
-    }
-
-    getNombreMedico(codmed:string): Observable<Response>{
-      return this._http.post<Response>(this.url+'NombreMedico',{codmed});
     }
 
     getHistoriaMedica(dnip: number): Observable<Response>

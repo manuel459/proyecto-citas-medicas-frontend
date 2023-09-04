@@ -66,10 +66,11 @@ export class CitasComponent implements OnInit {
   currentDate = new Date();
   range = new FormGroup({ start: new FormControl(new Date()),end: new FormControl(new Date())});
   //PERMISOS
-  public GENERAR_DIAGNOSTICO : string | any;
-  public VIEW_DETAIL_CITA : string | any;
-  public VIEW_EDIT_CITA : string | any;
-  public VIEW_DELETE_CITA : string | any;
+  public BUTTON_CREATE_CITA: boolean = false;
+  public GENERAR_DIAGNOSTICO :  boolean = false;
+  public VIEW_DETAIL_CITA :  boolean = false;
+  public VIEW_EDIT_CITA :  boolean = false;
+  public VIEW_DELETE_CITA :  boolean = false;
 
   mostrar: boolean = false;
   mostrarDia: boolean = false;
@@ -95,8 +96,9 @@ export class CitasComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getCitas();
     this.getPermisos();
+    this.getCitas();
+
   }
 
   //VALIDACION DE DESCRIPCION
@@ -147,10 +149,12 @@ export class CitasComponent implements OnInit {
     var correo = JSON.parse(localStorage.getItem("usuario")!);
     this.configuracionesService.getConfiguraciones('Permisos', correo.correoElectronico).subscribe(response => 
       {
-        this.GENERAR_DIAGNOSTICO = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion.includes('GENERAR-DIAGNOSTICO')).length > 0;
-        this.VIEW_DETAIL_CITA = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion.includes('VIEW-DETAIL-CITA')).length > 0;
-        this.VIEW_EDIT_CITA = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion.includes('VIEW-EDIT-CITA')).length > 0;
-        this.VIEW_DELETE_CITA = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion.includes('VIEW-DELETE-CITA')).length > 0;
+        this.BUTTON_CREATE_CITA = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion == 'BUTTON-CREATE-CITA').length > 0;
+        console.log(this.BUTTON_CREATE_CITA);
+        this.GENERAR_DIAGNOSTICO = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion == 'GENERAR-DIAGNOSTICO').length > 0;
+        this.VIEW_DETAIL_CITA = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion == 'VIEW-DETAIL-CITA').length > 0;
+        this.VIEW_EDIT_CITA = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion == 'VIEW-EDIT-CITA').length > 0;
+        this.VIEW_DELETE_CITA = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion == 'VIEW-DELETE-CITA').length > 0;
       })
   }
 
@@ -200,30 +204,7 @@ export class CitasComponent implements OnInit {
    getListGeneric(requestGenericFilter : RequestGenericFilter)
    {
     this.citasService.getCitas(requestGenericFilter).subscribe(response =>{
-      this.lst = response.data;
       if(response.exito === 1){
-       response.data.forEach((element: { hora: any; nEstado_Pago: any}) => {
-         var horaJson = JSON.stringify(element.hora);
-          //convertir el json a objeto
-         this.resultado = JSON.parse(horaJson);
-         var min = this.resultado.minutes < 10 ? "0" + this.resultado.minutes : this.resultado.minutes;
-         var sec = this.resultado.seconds < 10 ? "0" + this.resultado.seconds : this.resultado.seconds;
-         var hour = this.resultado.hours < 10 ? "0" + this.resultado.hours : this.resultado.hours;
-         element.hora = hour + ':' + min + ':' + sec + ' pm';
- 
-         if(hour<12)
-         {
-           element.hora = hour + ':' + min + ':' + sec + ' am' ;
-           return element.hora
-         }
-         else
-         {
-           element.hora = hour + ':' + min + ':' + sec + ' pm';
-           return element.hora
-         }
-
-
-       });
        this.dataSource.data = response.data;
       }
      });
@@ -297,7 +278,7 @@ export class CitasComponent implements OnInit {
   revisar(citas : CitasDetail)
   {
     const dialogRef= this.dialog.open(DialogcitasRevisarComponent,{
-      width: '550px',
+      width: '900px',
       data: citas,  
     });
   }

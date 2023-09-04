@@ -10,6 +10,7 @@ import *  as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { MatHorizontalStepper } from '@angular/material/stepper';
 import * as moment from 'moment';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 @Component({
   selector: 'app-modulo-pagos',
   templateUrl: './modulo-pagos.component.html',
@@ -27,13 +28,14 @@ export class ModuloPagosComponent implements OnInit {
  sNombre_Medico: string | undefined;
  dFecha_Cita: string | undefined;
  dImporte_Total: number = 0;
-
+ 
  //PAGO DE CITA
  public nNumero_Tarjeta: string = "";
  public nMes: number = 0;
  public nAnio: number = 0;
  public nDia: number = 0;
  public nDni: number = 0;
+ public cadena: string ;
 
  editable: boolean = false;
 
@@ -82,8 +84,11 @@ export class ModuloPagosComponent implements OnInit {
 
   isEditable = false;
 
-  constructor(private fb: FormBuilder, private _formBuilder: FormBuilder, public pagosService: ModuloPagosService, public snackBar: MatSnackBar) 
+  pdfSrc: string | '' | any;
+
+  constructor(private fb: FormBuilder, private _formBuilder: FormBuilder, public pagosService: ModuloPagosService, public snackBar: MatSnackBar,private sanitizer: DomSanitizer) 
   {
+    this.cadena = ''
     this.registerForm = this.fb.group({
       idCita: ['',[Validators.required, Validators.pattern(/^[1-9]\d{0,10}$/)]],
     });
@@ -165,8 +170,10 @@ export class ModuloPagosComponent implements OnInit {
                         duration:2000
                     });
                     this.stepper.next();
-                    this.generarPDF()
-                    this.refreshVariable()
+                    this.refreshVariable();
+                    this.pdfSrc = 'data:application/pdf;base64,' + response.data.toString();
+                    this.pdfSrc = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfSrc)
+                    console.log(this.pdfSrc)
                 }
                 else
                 {
@@ -191,44 +198,102 @@ export class ModuloPagosComponent implements OnInit {
     this.dImporte_Total = 0;
   }
 
-  generarPDF() {
-    const mergedVfs = Object.assign({}, pdfMake.vfs, pdfFonts.pdfMake.vfs);
-    const documentDefinition = {
-      content: [
-        { text: 'Resultado de la transacción', style: 'header' },
-
-        { text: '\nDatos Personales', style: 'subheader'},
-        { text: 'Numero de Tarjeta:' + this.registerFormPagos.value.nNumero_Tarjeta},
-        { text: 'DNI:' + this.registerFormPagos.value.nDni},
-
-        { text: '\nDatos de la cita', style: 'subheader'},
-        { text: 'Código de la cita: '+ this.registerForm.value.idCita },
-        { text: 'Nombre del paciente: ' + this.sNombre_Paciente },
-        { text: 'Monto: ' + this.dImporte_Total.toString() },
-
-        { text: '\nResultado', style: 'subheader'},
-        { text: 'Fecha de la Transacción: ' + moment().format('YYYY-MM-DD')},
-        { text: 'Estado: ' + 'Pagado' },
-        { text: 'Mensaje: ' + 'Transaccion exitosa' }
-      ],
-      styles: {
-        header: {
-          fontSize: 18,
-          bold: true,
-          margin: [0, 0, 0, 10] as [number, number, number, number]
-        },
-      }
-    };
-    console.log(documentDefinition)
-
-    pdfMake.createPdf(documentDefinition, undefined , undefined, mergedVfs).getDataUrl((dataUrl) => {
-      const iframe = document.createElement('iframe');
-      iframe.src = dataUrl;
-      iframe.width = '100%';
-      iframe.height = '600px';
-      document.getElementById('preview-container')?.appendChild(iframe);
-    });
-
+  send()
+  {  
+    this.cadena = `
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Boleta de Pago</title>
+        <style>
+            /* Estilos de la boleta de pago (puedes personalizarlos según tus necesidades) */
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 20px;
+            }
+            .container {
+                border: 1px solid #ccc;
+                padding: 20px;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+            .header {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            .employee-info {
+                margin-bottom: 20px;
+            }
+            .table-container {
+                width: 100%;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid #ccc;
+                padding: 8px;
+                text-align: left;
+            }
+            .total {
+                font-weight: bold;
+            }
+            .footer {
+                text-align: center;
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>Boleta de Pago</h1>
+            </div>        
+            <div class="employee-info">
+                <p><strong>Código de Cita:</strong>`+this.registerForm.value.idCita+`</p>
+                <p><strong>Datos personales:</strong>`+this.sNombre_Paciente+`</p>
+                <p><strong>DNI:</strong>`+this.nDnip+`</p>
+                <p><strong>Fecha de Transacción:</strong>`+ moment().format('YYYY-MM-DD')+`</p>
+    
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Concepto</th>
+                            <th>Especialidad</th>
+                            <th>Nombre del Médico</th>
+                            <th>Nombre del Paciente</th>
+                            <th>Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                          <td>`+this.sNombre_Paciente+`</td>
+                          <td>`+this.sEspecialidad+`</td>
+                          <td>`+this.sNombre_Medico+`</td>
+                          <td>`+this.sNombre_Paciente+`</td>
+                          <td>$`+this.dImporte_Total.toString()+`</td>
+                        </tr>
+                        <!-- Agregar más filas según los conceptos de pago -->
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                          <td class="total">Total</td>
+                          <td class="total"></td>
+                          <td class="total"></td>
+                          <td class="total"></td>
+                          <td class="total">$`+this.dImporte_Total.toString()+`</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </body>
+    </html>`;
   }
 
   volverAlPrimerPaso() {

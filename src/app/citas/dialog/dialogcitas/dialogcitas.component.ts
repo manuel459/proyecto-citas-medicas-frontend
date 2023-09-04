@@ -111,18 +111,26 @@ export class DialogcitasComponent implements OnInit {
               dnip: this.registerForm.value.dnip, nombre: this.registerForm.value.nombre, codmed: this.registerForm.value.codmed, feccit: this.registerForm.value.feccit, nEstado: this.registerForm.value.estado, hora: this.registerForm.value.hora, codes: this.registerForm.value.codes, CorreoElectronico: this.CorreoPaciente, nombrePaciente: this.nombrePaciente, id: '0', bActiveNotificaciones: this.bActiveNotificaciones
             }
             this.citasService.add(citas).subscribe(response =>{
-                if (response.exito === 1){
-                    this.dialogRef.close();
-                    this.snackBar.open(response.mensaje,'',{
-                        duration:2000
-                    });
-                }else
-                {
-                  this.snackBar.open(response.mensaje),'',
-                  {
-                    duration:2000
-                  }
-                }
+              if (response.exito===1)
+              {
+                  this.dialogRef.close();
+                  this.snackBar.open(response.mensaje,'',{
+                      duration:2000
+                  });
+              }
+              else
+              {
+                let ErrorMessage = '';
+                response.errors.forEach((element: { propertyName: string, errorMessage:string; }) => {
+                  ErrorMessage += `<p style="color: red;" class="structureMessageError">${element.propertyName}: ${element.errorMessage}<p>`;
+                });
+  
+                  Swal.fire({
+                  icon: 'error',
+                  title: response.mensaje,
+                  html: ErrorMessage,
+                })
+              }
             });
           }
       });
@@ -148,18 +156,26 @@ editCliente(){
           }
           console.log(citas)
           this.citasService.edit(citas).subscribe(response =>{
-              if (response.exito===1){
-                  this.dialogRef.close();
-                  this.snackBar.open('Cita editado con exito','',{
-                      duration:2000
-                  });
-              }
-              else 
-              {
-                  this.snackBar.open('Ocurrio un error al momento de editar la cita','',{
-                      duration:2000
-                  });
-              }
+            if (response.exito===1)
+            {
+                this.dialogRef.close();
+                this.snackBar.open(response.mensaje,'',{
+                    duration:2000
+                });
+            }
+            else
+            {
+              let ErrorMessage = '';
+              response.errors.forEach((element: { propertyName: string, errorMessage:string; }) => {
+                ErrorMessage += `<p style="color: red;" class="structureMessageError">${element.propertyName}: ${element.errorMessage}<p>`;
+              });
+
+                Swal.fire({
+                icon: 'error',
+                title: response.mensaje,
+                html: ErrorMessage,
+              })
+            }
           });
         }
     });
@@ -202,22 +218,6 @@ getDni()
   getDiasLaborables(){this.configuracionesService.getConfiguraciones('DiasLaborables',this.registerForm.value.codmed).subscribe(response => {this.listaFechas = Array.from(response.data.find((item: { sDescripcion: string; }) => (item.sDescripcion )).sDescripcion.split(',').map(Number)), this.fechasCargadas = true})}
 
   getCosto(){this.configuracionesService.getConfiguraciones('Costo', this.registerForm.value.codes).subscribe(response => {this.costo = response.data.find((item: { sDescripcion: string; }) => (item.sDescripcion )).sDescripcion})}
-//FUNCION PARA CONVERTIR A FORMATO DE HORA
-timeFunction(timeObj: { minutes: number | number; seconds: number | number; hours: number | number; }) {
-  var min = timeObj.minutes < 10 ? "0" + timeObj.minutes : timeObj.minutes;
-  var sec = timeObj.seconds < 10 ? "0" + timeObj.seconds : timeObj.seconds;
-  var hour = timeObj.hours < 10 ? "0" + timeObj.hours : timeObj.hours;
-  if(hour<12){
-    return hour + ':' + min + ':' + sec + ' am' ;
-  }else if(hour == 13)
-  {
-    return 'REFRIGERIO';
-  }
-  else{
-    return hour + ':' + min + ':' + sec + ' pm';
-  }
-  
-};
 
 getHorario()
 { 

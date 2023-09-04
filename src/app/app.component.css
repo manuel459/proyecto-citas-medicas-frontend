@@ -30,12 +30,20 @@
     }
     
     .menu-button{
+        padding-left: 25px;
         width: 100%;
         display: flex;
         align-items: center;
         justify-content: flex-start;
-       
-       
+    }
+
+    .panel
+    {
+        align-items: initial;
+        justify-content: flex-start;
+        vertical-align: middle;
+        background-color: #031224;
+        color: white;
     }
     
     .example-spacer {

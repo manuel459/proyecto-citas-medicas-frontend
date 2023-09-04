@@ -9,6 +9,9 @@ import { MedicoComponent } from './medico/medico.component';
 import { ModuloPagosComponent } from './modulo-pagos/modulo-pagos.component';
 import { PacienteComponent } from './paciente/paciente.component';
 import { AuthGuard } from './security/auth.guard';
+import { RolesYPermisosComponent } from './roles-y-permisos/roles-y-permisos.component';
+import { UsuariosComponent } from './usuarios/usuarios.component';
+import { RestorePasswordComponent } from './restore-password/restore-password.component';
 
 const routes: Routes = [
     //crear los path
@@ -17,9 +20,12 @@ const routes: Routes = [
     {path:'medico', component: MedicoComponent ,canActivate:[AuthGuard]},
     {path:'paciente', component: PacienteComponent ,canActivate:[AuthGuard]},
     {path: 'citas', component: CitasComponent ,canActivate:[AuthGuard]},
+    {path: 'rolesyPermisos', component: RolesYPermisosComponent, canActivate:[AuthGuard]},
+    {path: 'Usuarios', component: UsuariosComponent, canActivate: [AuthGuard]},
     {path: 'pagos', component: ModuloPagosComponent },
+    {path: 'RestorePassword', component: RestorePasswordComponent},
     {path:'login',component: LoginComponent},
-    { path: 'forbidden',component: ForbiddenComponent},
+    {path: 'forbidden',component: ForbiddenComponent},
   ];
   
   @NgModule({ 

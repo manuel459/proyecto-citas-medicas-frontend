@@ -3,10 +3,11 @@ import { Injectable } from '@angular/core';
 import {  catchError, Observable, throwError, retry,throwIfEmpty ,tap} from 'rxjs';
 import { Response } from 'src/app/models/response';
 import {Medico} from 'src/app/models/medico';
-import { ErrorsMedicoComponent } from '../Errors/errors-medico/errors-medico.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterGeneric } from '../Interfaces/FilterGeneric';
 import { Router } from '@angular/router';
+import { RequestGenericFilter } from '../Interfaces/RequestGenericFilter';
+import Swal from 'sweetalert2';
 
 const httpOption = {
   headers: new HttpHeaders({
@@ -28,11 +29,12 @@ export class MedicosService {
     private router: Router
   ) { }
 
-
-  getMedicos(): Observable<Response>{
+  //GET
+  getMedicos(request: RequestGenericFilter): Observable<Response>{
     this.usuario = JSON.parse(localStorage.getItem("usuario")!);
       console.log(this.usuario)
-      return this._http.get<Response>(this.url+this.usuario.correoElectronico.toString()).pipe(tap(() => { },
+      return this._http.get<Response>(this.url+this.usuario.correoElectronico.toString()+'?numFilter='+request.numFilter+'&textFilter='+request.textFilter+'&sFilterOne='+request.sFilterOne
+      +'&sFilterTwo='+request.sFilterTwo).pipe(tap(() => { },
       (err: any) => {
           if (err instanceof HttpErrorResponse) {
               if (err.status === 401 || err.status === 403) {
@@ -42,40 +44,16 @@ export class MedicosService {
       }));
   }
 
-
   add(medico:Medico): Observable<Response> {
-    return this._http.post<Response>(this.url, medico, httpOption).pipe(
-      retry(1),
-       catchError((error: HttpErrorResponse) => {
-       console.log(error.error.errors)
-        this.dialog.open(ErrorsMedicoComponent,{
-          data: {message: error.error.errors}         
-        });
-         return throwError(error.error.errors);
-       })
-    );
+    return this._http.post<Response>(this.url, medico, httpOption);
   }
 
   edit(medico:Medico): Observable<Response> {
-    return this._http.put<Response>(this.url, medico, httpOption).pipe(
-      retry(1),
-       catchError((error: HttpErrorResponse) => {
-       
-        this.dialog.open(ErrorsMedicoComponent,{
-          data: {message: error.error.errors}         
-        });
-         return throwError(error.error.errors);
-       })
-    );
+    return this._http.put<Response>(this.url, medico, httpOption);
   }
 
-  delete(id: string): Observable<Response> {
-    return this._http.delete<Response>(`${this.url}${id}`);
-  }
-
-  //Filters
-  filters(medico:FilterGeneric): Observable<Response>{
-    return this._http.post<Response>(this.url+'Filters', medico);
+  delete(id: string, nEstado: number): Observable<Response> {
+    return this._http.delete<Response>(`${this.url}${id}/${nEstado}`);
   }
 
   BusinessHours(Codmed: string): Observable<Response>{

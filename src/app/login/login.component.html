@@ -21,9 +21,13 @@
                     <mat-label>Contraseña</mat-label>
                     <input [type]="hide ? 'password' : 'text'" formControlName="Contraseña" matInput >   
                 </mat-form-field>
+
                     <button type="button" style="margin: 10px;" mat-icon-button (click)="myFunction()">
                         <mat-icon>visibility</mat-icon>
                     </button>
+                    <br>
+
+                    <button type="button" mat-button color="primary" [routerLink] = "['/RestorePassword']" style="margin: 10px;"> Olvidaste tu Contraseña?</button>
                 <br>
                 <button style="margin: 10px;" color="primary" type="submit" [disabled]="!loginForm.valid" mat-raised-button>Iniciar Sesion</button>
             </form>

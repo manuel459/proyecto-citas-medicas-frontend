@@ -1,3 +1,5 @@
+
+<div id="preview-container"></div>
 <mat-stepper linear #stepper>
   <mat-step [stepControl]="firstFormGroup">  <!--[stepControl]="firstFormGroup" -->
     <form [formGroup]="firstFormGroup">
@@ -147,7 +149,9 @@
             <div mat-dialog-actions>
               <button mat-raised-button color="primary" [disabled]="this.registerForm.invalid || this.registerFormPagos.invalid" (click)="insertPago()">Realizar Pago</button>
             </div>
-            
+
+            <!-- <div [innerHTML]="cadena"></div> -->
+
           </mat-tab>
         </mat-tab-group>
     </form>
@@ -157,7 +161,10 @@
     <!-- Contenido del paso 3 -->
     <button mat-button (click)="volverAlPrimerPaso()">Volver al Inicio</button>
       <ng-template matStepLabel>Resultado de la transacción</ng-template>
-      <div id="preview-container"></div>
+      <div id="preview-container"></div> 
+      <div>
+        <iframe [src]="pdfSrc" width="100%" height="600px"></iframe>
+      </div>
   </mat-step>
 </mat-stepper>
 

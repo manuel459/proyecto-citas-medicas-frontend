@@ -15,11 +15,11 @@
                 <img width="300px" src="https://thumbs.dreamstime.com/b/avatar-del-terapeuta-icono-web-doctor-103706622.jpg" alt="images" style="float: right;">
             
                 <!-- <h4 class="text-accent text-sm mb-1">Monitoreo</h4> -->
-                <div class="flex mb-1">
+                <!-- <div class="flex mb-1">
                     <div class="w-13">Nombre:</div>
                     <div class="w-23 font-bold">{{nombre}}</div>
                 </div>
-                <br>
+                <br> -->
                 <div class="flex mb-1">
                     <div class="w-13">Dni:</div>
                     <div class="w-2/3 font-bold">{{dni}}</div>
@@ -47,15 +47,15 @@
                     <div class="w-13">Especialidad:</div>
                     <div class="w-2/3 font-bold">{{codes}}</div>
                 </div>
+                <br>
+                <div class="flex mb-1">
+                    <div class="w-13">Correo:</div>
+                    <div class="w-2/3 font-bold">{{correo}}</div>
+                </div>
                 
             </div>
-        
-       
-            <br>
-            <div class="flex mb-1">
-                <div class="w-13">Correo:</div>
-                <div class="w-2/3 font-bold">{{correo}}</div>
-            </div>
+    
+
             <!-- <h4 class="text-accent text-sm mb-1">Detalles</h4> -->
             <!-- <div class="flex mb-1">
                 <div class="w-13">Contraseña:</div>
@@ -65,8 +65,8 @@
             <br>
             <div class="flex mb-1">
                 <div class="w-13">Horario:</div>
-                <div class="w-2/3 font-bold">{{idhor }}
-                </div>
+                <div [innerHTML]="idhor"></div>
+                <!-- <div class="w-2/3 font-bold">{{idhor }} </div> -->
             </div>
         
         

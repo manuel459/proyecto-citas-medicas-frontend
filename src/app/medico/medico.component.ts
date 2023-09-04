@@ -6,7 +6,6 @@ import { MatDialog, MatDialogRef} from '@angular/material/dialog';
 import { DialogmedicoComponent } from './dialog/dialogmedico/dialogmedico.component';
 import { Medico } from '../models/medico';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { DeletemedicoComponent } from '../dialogdelete/deletemedico/deletemedico.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DialogmedicoRevisarComponent } from './dialog/dialogmedico-revisar/dialogmedico-revisar.component';
 import { LoaderService } from '../loader.service';
@@ -14,6 +13,7 @@ import { FilterGeneric } from '../Interfaces/FilterGeneric';
 import * as XLSX from 'xlsx';
 import { ConfiguracionesService } from '../service/configuraciones.service';
 import Swal from 'sweetalert2';
+import { RequestGenericFilter } from '../Interfaces/RequestGenericFilter';
 
 
 @Component({
@@ -29,13 +29,16 @@ export class MedicoComponent implements OnInit {
   dataSource  = new MatTableDataSource<Response>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   public load: Boolean =false;
-  status: string;
+  status: number;
   texto: string;
   error: number;
   startDate: Date;
   endDate: Date;
   currentDate = new Date();
-  public BUTTON_NEW : boolean = false;
+  //Permisos
+  public BUTTON_CREATE_MEDICO: boolean = false;
+  public BUTTON_EDIT_MEDICO : boolean = false;
+  public BUTTON_DELETE_MEDICO : boolean = false;
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
@@ -48,7 +51,7 @@ export class MedicoComponent implements OnInit {
     public spinner:MatProgressSpinnerModule,
     public loaderService: LoaderService,
     public conf: ConfiguracionesService
-  ) { this.status = '',this.texto = '', this.error = 0,this.startDate = this.currentDate,this.endDate = this.currentDate}
+  ) { this.status = 0,this.texto = '', this.error = 0,this.startDate = this.currentDate,this.endDate = this.currentDate}
 
   ngOnInit(): void {
     this.getPermiso();
@@ -65,18 +68,39 @@ export class MedicoComponent implements OnInit {
   }
 
   refresh(){
-    this.texto = "";
-    this.applyFilter(); 
+      const requestGenericFilter: RequestGenericFilter = {
+        numFilter: 0, textFilter: '', sFilterOne: '', sFilterTwo: '',
+        dFechaInicio: '',
+        dFechaFin: ''
+      }
+      setTimeout(() => 
+      {
+        this.medicosService.getMedicos(requestGenericFilter).subscribe(response =>
+        {
+          this.lst = response.data;
+          if(response.exito === 1)
+          {
+            this.error = response.exito;
+            this.dataSource.data = response.data;
+            this.texto = ""
+          } 
+        });
+      },1000);
   }
 
   //METODO PARA LISTAR
   getMedicos(){
+    const requestGenericFilter: RequestGenericFilter = {
+      numFilter: this.status, textFilter: this.texto, sFilterOne: '', sFilterTwo: '',
+      dFechaInicio: '',
+      dFechaFin: ''
+    }
+
     setTimeout(() => {
-      this.medicosService.getMedicos().subscribe(response =>{
+      this.medicosService.getMedicos(requestGenericFilter).subscribe(response =>{
         this.lst = response.data;
         if(response.exito ===1){
          this.dataSource.data = response.data;  
-         this.refresh();
         }
        });
     }, 1000);
@@ -123,7 +147,7 @@ export class MedicoComponent implements OnInit {
       focusCancel: true,
       confirmButtonText: "Si",
       cancelButtonText: "No, cancelar",
-  })
+    })
       .then((result) => {
           if (result.isConfirmed) {
             this.medicosService.BusinessHours(Codmed).subscribe(
@@ -139,34 +163,48 @@ export class MedicoComponent implements OnInit {
   }
 
   //Metodo Delete
-  delete(medico : Medico){
-    const dialogRef= this.dialog.open(DeletemedicoComponent,{
-      width: "300px",
-    
-    });
-//Refrescar el table cuando ejecute la accion del guardar
-    dialogRef.afterClosed().subscribe(result => {
-      if(result){
-       
-        this.medicosService.delete(medico.codmed).subscribe(response =>{
-          if(response.exito === 1){
-            
-           
-            this.snackBar.open('Medico eliminado con exito' , '' ,{
-              duration: 2000,
-             
+  delete(codmed : string, nEstado: number){
+    Swal.fire({
+      title: "Confirmación",
+      text: "¿Estas seguro de "+ ((nEstado == 1)?"Activar":"Desactivar")+ " el usuario?",
+      icon: "warning",
+      showCancelButton: true,
+      focusCancel: true,
+      confirmButtonText: "Si",
+      cancelButtonText: "No, cancelar",
+    })
+      .then
+      ( (result) => 
+        {
+          if (result.isConfirmed) 
+          {
+            this.medicosService.delete(codmed, nEstado).subscribe(response =>
+            {
+              if(response.exito === 1)
+              {
+                this.snackBar.open(response.mensaje , '' ,
+                {
+                  duration: 2000,
+                });
+                this.getMedicos();
+              }else
+              {
+                Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: response.mensaje
+              })
+              }
             });
-            this.getMedicos();
           }
-        });
-      }
-    });
+        }
+      );
   }
 
   revisar(medico : Medico){
     const dialogRef= this.dialog.open(DialogmedicoRevisarComponent,{
       
-      width: '540px',
+      width: '590px',
       data: medico,
       
     });
@@ -175,23 +213,6 @@ export class MedicoComponent implements OnInit {
       this.getMedicos();
     })
 
-  }
-
-  filters(){
-    
-    const medico: FilterGeneric ={
-      texto : this.texto,
-      status: this.status,
-      startdate: this.startDate,
-      enddate : this.endDate
-    }
-    this.medicosService.filters(medico).subscribe(response => {
-      if (response.exito === 0){
-        this.error = response.exito; 
-       }
-        this.error = response.exito;
-        this.dataSource.data = response.data; 
-    });
   }
 
   exportExcel(data: any[], fileName: string): void {
@@ -216,7 +237,9 @@ export class MedicoComponent implements OnInit {
    var correo = JSON.parse(localStorage.getItem("usuario")!);
    this.conf.getConfiguraciones('Permisos', correo.correoElectronico).subscribe( response => 
      {
-       this.BUTTON_NEW = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion.includes('BUTTON-NEW')).length > 0;
+      this.BUTTON_CREATE_MEDICO = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion == 'BUTTON-CREATE-MEDICO').length > 0;
+      this.BUTTON_EDIT_MEDICO = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion == 'BUTTON-EDIT-MEDICO').length > 0;
+      this.BUTTON_DELETE_MEDICO = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion == 'BUTTON-DELETE-MEDICO').length > 0;
      })
   }
 

@@ -23,14 +23,9 @@ import { ConfiguracionesService } from '../service/configuraciones.service';
   styleUrls: ['./paciente.component.css']
 })
 export class PacienteComponent implements OnInit {
-
-  //Hub
-  private _hubConnection : signalR.HubConnection | undefined;
-  zeldaHub = "https://localhost:44301/PacienteHub";
-
   public lst:any[] | undefined; 
   public columnas: string[] =['Dnip','Idtip','Nomp','Apellidos','Numero','Edad','Email','actions'];
-  readonly width: string ='500px';
+  readonly width: string ='600px';
   searchKey!: string;
   dataSource  = new MatTableDataSource<Response>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
@@ -41,7 +36,9 @@ export class PacienteComponent implements OnInit {
   startDate: Date;
   endDate: Date;
   currentDate = new Date();
-  public BUTTON_NEW : boolean = false;
+  public BUTTON_EDIT_PACIENTE : boolean = false;
+  public BUTTON_DELETE_PACIENTE: boolean = false;
+  public BUTTON_CREATE_PACIENTE: boolean = false;
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
@@ -59,7 +56,6 @@ export class PacienteComponent implements OnInit {
 
   ngOnInit(): void {
     this.getPermiso()
-      this.ConnectionHub();
       this.getPacientes();
   }
 
@@ -83,21 +79,21 @@ export class PacienteComponent implements OnInit {
 
    refresh()
    {
-    const requestGenericFilter: RequestGenericFilter = {
-      numFilter: 0, textFilter: '', sFilterOne: '', sFilterTwo: '',
-      dFechaInicio: '',
-      dFechaFin: ''
-    }
-    setTimeout(() => {
-    this.pacienteService.getPacientes(requestGenericFilter).subscribe(response =>{
-     this.lst = response.data;
-     if(response.exito === 1){
-      this.error = response.exito;
-      this.dataSource.data = response.data;
-      this.texto = ""
-     } 
-    });
-   },1000);
+      const requestGenericFilter: RequestGenericFilter = {
+        numFilter: 0, textFilter: '', sFilterOne: '', sFilterTwo: '',
+        dFechaInicio: '',
+        dFechaFin: ''
+      }
+      setTimeout(() => {
+      this.pacienteService.getPacientes(requestGenericFilter).subscribe(response =>{
+      this.lst = response.data;
+      if(response.exito === 1){
+        this.error = response.exito;
+        this.dataSource.data = response.data;
+        this.texto = ""
+      } 
+      });
+    },1000);
    }
 
 
@@ -162,20 +158,6 @@ export class PacienteComponent implements OnInit {
     });
   }
 
-  fileExcel(){
-    this.pacienteService.fileExcel(this.dataSource.data).subscribe(response =>{
-      
-      this.lst = response.data;
-      if(response.exito === 1){
-        Swal.fire(
-          'Excel exportado con exito!',
-          '',
-          'success'
-        )
-      }
-     });
-  }
-
   exportExcel(data: any[], fileName: string): void {
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
     const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
@@ -191,38 +173,14 @@ export class PacienteComponent implements OnInit {
     link.download = fileName + '.xlsx';
     link.click();
   }
-
-
-  ConnectionHub()
-  {
-
-
-    this._hubConnection  = new signalR.HubConnectionBuilder().withUrl("https://localhost:44301/PacienteHub", {
-    skipNegotiation: true,
-    transport: signalR.HttpTransportType.WebSockets
-    }).build();
-
-    
-    this._hubConnection.on("Inserto paciente", (x)=> 
-    {
-      this.getPacientes();
-      //this.messageService.add({severy: 'success', sumary: 'Insertado', detail: 'Order submited'})
-    })  
-
-    this._hubConnection
-    .start()
-    .then(() => console.log("Hub exitoso"))
-    .catch(() => console.log("Hub Good "))
-
-  }
-
-
   getPermiso()
   {
    var correo = JSON.parse(localStorage.getItem("usuario")!);
    this.conf.getConfiguraciones('Permisos', correo.correoElectronico).subscribe( response => 
      {
-       this.BUTTON_NEW = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion.includes('BUTTON-NEW')).length > 0;
+       this.BUTTON_CREATE_PACIENTE = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion == 'BUTTON-CREATE-PACIENTE').length > 0;
+       this.BUTTON_EDIT_PACIENTE = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion == 'BUTTON-EDIT-PACIENTE').length > 0;
+       this.BUTTON_DELETE_PACIENTE = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion == 'BUTTON-DELETE-PACIENTE').length > 0;
      })
   }
 

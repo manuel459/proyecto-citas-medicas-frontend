@@ -1,5 +1,5 @@
 <div>
-    <button style="float:right" mat-button color="primary" (click)="openAdd()" >
+    <button *ngIf="BUTTON_CREATE_CITA" style="float:right" mat-button color="primary" (click)="openAdd()" >
         <mat-icon>add</mat-icon>
         <span>Nuevo Cita</span>
     </button>
@@ -22,10 +22,11 @@
                     <div class="search-container"  style="float:right">
                         <button style="width:max-content;" mat-button >
                             <mat-select class="mat-select-trigger" [(ngModel)]="status" matNativeControl required>
-                                <mat-select-trigger> <mat-icon style="left: 10%;">{{status == 0 ? 'group_add' : status == 1 ? 'face' : 'camera_enhance'}}</mat-icon></mat-select-trigger>
-                              <mat-option value = 0 selected> <mat-icon class="mat-icon mat-icon-no-color">group_add</mat-icon>Nombre del Medico</mat-option>
-                              <mat-option value = 1><mat-icon class="mat-icon-font">face</mat-icon>Nombre del Paciente</mat-option>
-                              <mat-option value = 2><mat-icon class="mat-icon-font">camera_enhance</mat-icon>Nombre de la Especialidad</mat-option>
+                                <mat-select-trigger> <mat-icon style="left: 10%;">{{status == 0 ? 'control_point' : status == 1 ? 'group_add' : status == 2? 'face': 'camera_enhance'}}</mat-icon></mat-select-trigger>
+                              <mat-option value = 0 selected> <mat-icon class="mat-icon mat-icon-no-color">control_point</mat-icon>Código de Cita</mat-option>
+                              <mat-option value = 1 selected> <mat-icon class="mat-icon mat-icon-no-color">group_add</mat-icon>Nombre del Medico</mat-option>
+                              <mat-option value = 2><mat-icon class="mat-icon-font">face</mat-icon>Nombre del Paciente</mat-option>
+                              <mat-option value = 3><mat-icon class="mat-icon-font">camera_enhance</mat-icon>Nombre de la Especialidad</mat-option>
                             </mat-select>
              
                         </button>
@@ -147,7 +148,6 @@
                                     <mat-icon>chat</mat-icon>
                                     <!-- <ic-icon [icon]="bellSlashIcon"></ic-icon> -->
                                 </button>
-                                <span class="descripcion-box" *ngIf="this.listaChat?.includes(element.id)">Enviar Diagnostico</span>
                                 </div>
                             </td>
                         </ng-container>

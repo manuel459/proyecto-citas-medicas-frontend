@@ -1,0 +1,177 @@
+<h2 class="w-13" mat-dialog-tittle>{{usuarios!=null ? 'Editar Usuario' : 'Nuevo Usuario'}}</h2>
+<h4 class="w-13">Datos Corporativos :</h4>
+<img width="350px" src="https://i.pinimg.com/736x/5f/40/6a/5f406ab25e8942cbe0da6485afd26b71.jpg" alt="images" style="float: right;">
+<!-- <button mat-raised-button color="primary" (click)="medico!=null ? editCliente() :addCliente()">Guardar</button> -->
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <form class="form" [formGroup]="registerForm">
+
+                          <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Rol</mat-label>
+                            <mat-select class="form-control" formControlName="nIptip" matNativeControl required>
+                              <mat-option *ngFor="let rol of lTipoUsuarios" [value]="rol.sId">
+                                {{rol.sDescripcion}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        <div>
+                            <mat-form-field class="example-full-width" appearance="fill">
+                                <mat-label>CorreoElectronico</mat-label>
+                                <input class="form-control" required  matInput formControlName ="sCorreo" >
+                            </mat-form-field>
+                        <br>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.sCorreo.touched && registerFormControl.sCorreo.errors?.required">
+                            Se requiere el Correo Electronico
+                            </span>
+                            <span class="text-danger" 
+                            *ngIf="(registerFormControl.sCorreo.touched || submitted) && registerFormControl.sCorreo.errors?.email">
+                            Email invalido
+                            </span>
+                        </div> 
+
+                        <button mat-button color="primary" *ngIf="usuarios!=null && !newPasswordVar" (click)="newPassword(true)">
+                            Cambiar de contraseña
+                        </button>
+                        <button mat-button color="primary" *ngIf="usuarios!=null && newPasswordVar" (click)="newPassword(false)">
+                        No cambiar de contraseña
+                        </button>
+
+                        <div *ngIf="usuarios==null || newPasswordVar" class="form-group">
+                            <mat-form-field class="example-full-width" appearance="fill">
+                                <mat-label>Password</mat-label>
+                                <input [type]="hide ? 'password' : 'text'" type="password" class="form-control" required matInput formControlName="sPswd" >   
+                              </mat-form-field>
+                              <button  mat-icon-button formnovalidate (click)="myFunction()">
+                                <mat-icon>visibility</mat-icon>
+                              </button>
+                              <br>
+                            <span class="text-danger"
+                                *ngIf="(registerFormControl.sPswd.touched || submitted) && registerFormControl.sPswd.errors?.required">
+                                Se requiere una contraseña
+                            </span>
+                            <span class="text-danger"
+                                *ngIf="(registerFormControl.sPswd.touched || submitted) && registerFormControl.sPswd.errors?.invalidPassword">
+                                La contraseña debe tener un mínimo de 8 caracteres, al menos 1 letra mayúscula, 1 letra minúscula
+                                , 1 número , 1 caracter especial y no debe contener Emoji ni espacios en blanco
+                            </span>
+                        </div>
+                        <br>
+                        <h4 class="w-13">Datos Personales :</h4>
+                        <div>
+                            <mat-form-field class="example-full-width" appearance="fill">
+                                <mat-label>DNI</mat-label>
+                                <input class="form-control" required  matInput formControlName ="nDni" >
+                            </mat-form-field>
+                        <br>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.nDni.touched && registerFormControl.nDni.errors?.required">
+                            Se requiere el DNI
+                            </span>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.nDni.touched && registerFormControl.nDni.errors?.minLength">
+                            Como minimo 8 caracteres
+                            </span>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.nDni.touched && registerFormControl.nDni.errors?.maxLength">
+                            Como maximo 8 caracteres
+                            </span>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.nDni.touched && registerFormControl.nDni.errors?.pattern">
+                            Ingresa un DNI válido, solo valores numericos
+                            </span>
+                        </div>
+                    
+                       <div>
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Nombre</mat-label>
+                            <input class="form-control" required matInput formControlName="sNombres">   
+                          </mat-form-field>
+                        <br>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.sNombres.touched && registerFormControl.sNombres.errors?.required">
+                            Se requiere el Nombre
+                            </span>
+                            <span class="text-danger" 
+                            *ngIf="registerFormControl.sNombres.touched && registerFormControl.sNombres.errors?.minLength">
+                            Como mínimo 8 caracteres
+                            </span>
+                            <span class="text-danger" 
+                            *ngIf="(registerFormControl.sNombres.touched || submitted) && registerFormControl.sNombres.errors?.pattern">
+                            Ingresa solo letras
+                            </span>
+                        </div>
+
+                        <div>
+                            <mat-form-field class="example-full-width" appearance="fill">
+                                <mat-label>Apellidos</mat-label>
+                                <input class="form-control" required matInput formControlName="sApellidos">   
+                              </mat-form-field>
+                            <br>
+                                <span class="text-danger" 
+                                *ngIf="registerFormControl.sApellidos.touched && registerFormControl.sApellidos.errors?.required">
+                                Se requiere el Apellido
+                                </span>
+                                <span class="text-danger" 
+                                *ngIf="registerFormControl.sApellidos.touched && registerFormControl.sApellidos.errors?.minLength">
+                                Como minimo 8 caracteres
+                                </span>
+                                <span class="text-danger" 
+                                *ngIf="(registerFormControl.sApellidos.touched || submitted) && registerFormControl.sApellidos.errors?.pattern">
+                                Ingresa solo letras
+                                </span>
+                            </div>
+                
+                            <div>
+                                <section class="example-section">
+                                  <label class="example-margin">Sexo:</label>
+                                  <mat-radio-group formControlName="sSexo">
+                                    <mat-radio-button color="primary" class="example-margin" value="M">Masculino</mat-radio-button>
+                                    <mat-radio-button color="primary" class="example-margin" value="F">Femenino</mat-radio-button>
+                                  </mat-radio-group>
+                                </section>
+                                <br>
+                                <span class="text-danger"
+                                    *ngIf="(registerFormControl.sSexo.touched || submitted) && registerFormControl.sSexo.errors?.required">
+                                    Selecciona un sexo
+                                    </span>
+                              </div>
+                              <div>
+                                <mat-form-field  appearance="fill">
+                                  <mat-label>FechaNac</mat-label>
+                                  <input  class="form-control" matInput [matDatepicker]="picker" formControlName="dNac">
+                                  <mat-hint>MM/DD/YYYY</mat-hint>
+                                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                  <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field>
+                                <br>
+                                <span class="text-danger"
+                                *ngIf="(registerFormControl.dNac.touched || submitted) && registerFormControl.dNac.errors?.required">
+                                  Fecha es requerida
+                                </span>
+                              </div>
+                            
+                        </form>
+
+                        <div mat-dialog-actions>
+                            <button mat-raised-button (click)="close()">Cancelar</button>
+                           
+                            <button mat-raised-button color="primary" [disabled]="this.registerForm.invalid" (click)="usuarios!=null ? editUsuario() :addUsuario()">Guardar</button>
+                          </div>
+                          
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+

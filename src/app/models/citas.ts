@@ -29,4 +29,5 @@ export interface CitasDetail
     sNombre_Especialidad: string;
     sNombre_Medico: string;
     sNombre_Paciente: string;
+    urlBase:string;
 }

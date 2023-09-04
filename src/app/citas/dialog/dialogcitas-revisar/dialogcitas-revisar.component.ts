@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Citas, CitasDetail } from 'src/app/models/citas';
 import { CitasService } from 'src/app/service/citas.service';
 import Swal from 'sweetalert2';
@@ -11,11 +12,15 @@ import Swal from 'sweetalert2';
 })
 export class DialogcitasRevisarComponent implements OnInit {
 
-  constructor(public citasService:CitasService,@Inject(MAT_DIALOG_DATA) public citas :CitasDetail) 
+  pdfSrc: string | any;
+
+  constructor(public citasService:CitasService,@Inject(MAT_DIALOG_DATA) public citas :CitasDetail,private sanitizer: DomSanitizer) 
   {
   }
 
   ngOnInit(): void {
+    this.pdfSrc = 'data:application/pdf;base64,' + this.citas.urlBase.toString();
+    this.pdfSrc = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfSrc)
   }
 
 }

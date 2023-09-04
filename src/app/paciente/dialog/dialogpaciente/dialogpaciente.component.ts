@@ -106,20 +106,28 @@ onSubmit() {
               nomp: this.registerForm.value.nomp,apellidos: this.registerForm.value.apellidos, dnip: this.registerForm.value.dnip, numero: this.registerForm.value.numero, idtip: '', edad: this.registerForm.value.edad, correoElectronico: this.registerForm.value.correoElectronico , id: 0
             }
             this.pacienteService.add(paciente).subscribe(response =>{
-                if (response.exito===1){
-                    this.dialogRef.close();
-                    this.snackBar.open('Paciente insertado con exito','',{
-                        duration:2000
-                    });
-                }
-                else
+              if (response.exito===1)
+              {
+                this.dialogRef.close();
+                this.snackBar.open(response.mensaje,'',{
+                    duration:2000
+                });
+              }
+              else
+              {
+                let ErrorMessage = '';
+                if (response.errors != null || response.errors != undefined)
                 {
-                  Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: response.mensaje
-                  })
+                  response.errors.forEach((element: { propertyName: string, errorMessage:string; }) => {
+                    ErrorMessage += `<p style="color: red;" class="structureMessageError">${element.propertyName}: ${element.errorMessage}<p>`;
+                  });
                 }
+                  Swal.fire({
+                  icon: 'error',
+                  title: response.mensaje,
+                  html: ErrorMessage,
+                })
+              }
             });
           }
       });
@@ -143,12 +151,29 @@ editCliente(){
             nomp: this.registerForm.value.nomp,apellidos: this.registerForm.value.apellidos, dnip: this.registerForm.value.dnip, numero: this.registerForm.value.numero, idtip: '', edad: this.registerForm.value.edad, correoElectronico: this.registerForm.value.correoElectronico , id: this.registerForm.value.id
           }
           this.pacienteService.edit(paciente).subscribe(response =>{
-              if (response.exito===1){
-                  this.dialogRef.close();
-                  this.snackBar.open('Paciente editado con exito','',{
-                      duration:2000
-                  });
+            if (response.exito===1)
+            {
+              this.dialogRef.close();
+              this.snackBar.open(response.mensaje,'',{
+                  duration:2000
+              });
+            }
+            else
+            {
+              let ErrorMessage = '';
+              if (response.errors != null || response.errors != undefined)
+              {
+                response.errors.forEach((element: { propertyName: string, errorMessage:string; }) => {
+                  ErrorMessage += `<p style="color: red;" class="structureMessageError">${element.propertyName}: ${element.errorMessage}<p>`;
+                });
               }
+
+                Swal.fire({
+                icon: 'error',
+                title: response.mensaje,
+                html: ErrorMessage,
+              })
+            }
           });
         }
     });

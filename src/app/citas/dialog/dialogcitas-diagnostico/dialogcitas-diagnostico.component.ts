@@ -41,7 +41,7 @@ export class DialogcitasDiagnosticoComponent implements OnInit {
         if(response.exito === 1)
         {
           this.dialogRef.close();
-          Swal.fire('Paciente atendido!',
+          Swal.fire(response.mensaje,
           '',
           'success');
         }else
@@ -50,7 +50,7 @@ export class DialogcitasDiagnosticoComponent implements OnInit {
             {
               icon: 'error',
               title: 'Oops...',
-              text: 'Ocurrio un error!'
+              text: response.mensaje
             })
         }
       })

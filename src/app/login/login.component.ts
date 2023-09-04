@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AuthService } from '../service/auth.service';
+import { ConfiguracionesService } from '../service/configuraciones.service';
 
 @Component({
   selector: 'app-login',
@@ -19,10 +20,13 @@ export class LoginComponent implements OnInit {
     Contraseña: ['',Validators.required]
 });
 
+  public sNombreRol: string = '';
+
   constructor(public apiauth: AuthService,
     private router: Router,
     private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private conf: ConfiguracionesService) { }
 
   ngOnInit() {
   }
@@ -30,9 +34,16 @@ export class LoginComponent implements OnInit {
   login(){
     this.apiauth.login(this.loginForm.value).subscribe(response =>{
        if(response.exito === 1){
-           this.router.navigate(['/']);
-           this.snackBar.open('Bienvenido(a) '+response.data.nombre,'',{
+        this.conf.getConfiguraciones('Roles', response.data.idtip).subscribe(result => 
+          {
+            if(result.data[0] != undefined || result.data[0] != null)
+            {
+              this.sNombreRol = result.data[0].sDescripcion
+            }
+            this.router.navigate(['/']);
+            this.snackBar.open('Bienvenido(a) '+this.sNombreRol+' '+response.data.nombre,'',{
             duration:2000})
+          });
        }
     });
     }
@@ -41,5 +52,6 @@ export class LoginComponent implements OnInit {
     myFunction() {
       this.hide = !this.hide;
     }
+
 
 }

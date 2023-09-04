@@ -117,8 +117,8 @@
     <mat-form-field class="example-form" appearance="fill">
       <mat-label>Hora</mat-label>
       <mat-select class="form-control" required matInput formControlName="hora"> 
-        <mat-option [disabled]="elemento.status === false || timeFunction(elemento.contentCitas) === 'REFRIGERIO'" [ngStyle]="{'background-color':elemento.status === true? 'white' : '#ED2939' }" *ngFor="let elemento of arrayHoras" [value]="timeFunction(elemento.contentCitas)" >
-          {{timeFunction(elemento.contentCitas)}}
+        <mat-option [disabled]="elemento.status === false || elemento.contentCitas === 'REFRIGERIO'" [ngStyle]="{'background-color':elemento.status === true? 'white' : '#ED2939' }" *ngFor="let elemento of arrayHoras" [value]="elemento.contentCitas" >
+          {{elemento.contentCitas}}
         </mat-option>
       </mat-select>
     </mat-form-field>
