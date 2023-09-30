@@ -76,14 +76,14 @@
 
               <mat-card class="example-card-2">
                 <div modal-content >
-                 <img mat-card-image style="float: right;" src="https://americancarpetandfloorcare.com/wp-content/uploads/2019/05/visa-mastercard-amex.png" >
+                 <img width="300px" style="float: right;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-64mGZbJet7WAlzXWzhyt2iSc5ny4VUmOC7anOPGRvcavT_4xhuAf_q_-x8RHdG0_JZs&usqp=CAU" >
                  <p class="p">Tarjeta de Crédito o Débito</p>
 
                  <form class="form" [formGroup]="registerFormPagos">
                   <div>
                     <mat-form-field class="example-i-width">
                       <mat-label>Número de Tarjeta</mat-label>
-                      <input type="text" class="form-control" matInput formControlName="nNumero_Tarjeta" placeholder="Numero de Tarjeta" required>
+                      <input (input)="formatearTarjeta($event)" type="text" class="form-control" matInput formControlName="nNumero_Tarjeta" placeholder="Numero de Tarjeta" required>
                    </mat-form-field> 
                    <br>
                    <span class="text-danger" 
@@ -92,11 +92,11 @@
                     </span>
                     <span class="text-danger" 
                     *ngIf="registerFormControlPagos.nNumero_Tarjeta.touched && registerFormControlPagos.nNumero_Tarjeta.errors?.minlength">
-                    Se requiere como mínimo 16 campos
+                    Por favor ingrese un número de Tarjeta valido
                     </span>
                     <span class="text-danger" 
                     *ngIf="registerFormControlPagos.nNumero_Tarjeta.touched && registerFormControlPagos.nNumero_Tarjeta.errors?.maxlength">
-                    Se requiere como máximo 16 campos
+                    Por favor ingrese un número de Tarjeta valido
                     </span>
                     <span class="text-danger" 
                     *ngIf="registerFormControlPagos.nNumero_Tarjeta.touched && registerFormControlPagos.nNumero_Tarjeta.errors?.pattern">
@@ -104,7 +104,7 @@
                     </span>
                   </div>
 
-                    <mat-form-field class="example-small-width" style="margin: 10px;" >
+                    <mat-form-field class="example-full-width" >
                       <mat-label>Mes</mat-label>
                         <mat-select class="form-control" formControlName="nMes">
                           <mat-option *ngFor="let mes of Meses" [value]="mes.value">
@@ -112,21 +112,39 @@
                           </mat-option>
                         </mat-select>
                     </mat-form-field>
-         
-                   <mat-form-field class="example-small-width" style="margin: 10px;">
-                    <mat-label>Año</mat-label>
-                      <mat-select class="form-control" formControlName="nAnio">
-                        <mat-option *ngFor="let anio of Anios" [value]="anio.value">
-                          {{anio.viewValue}}
-                        </mat-option>
-                      </mat-select>
-                  </mat-form-field>
-                  
+                    <br>
+                    <span class="text-danger" 
+                    *ngIf="registerFormControlPagos.nMes.touched && registerFormControlPagos.nMes.errors?.required">
+                    Por favor selecciona el mes
+                    </span>
 
-                  <mat-form-field class="example-small-width">
+                    
+                    <br>
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Año</mat-label>
+                        <mat-select class="form-control" formControlName="nAnio">
+                          <mat-option *ngFor="let anio of Anios" [value]="anio.value">
+                            {{anio.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <br>
+                    <span class="text-danger" 
+                    *ngIf="registerFormControlPagos.nAnio.touched && registerFormControlPagos.nAnio.errors?.required">
+                    Por favor selecciona el Año
+                    </span>
+
+                   
+                    <br>
+                  <mat-form-field class="example-full-width">
                     <mat-label>cvv</mat-label>
                     <input required matInput class="form-control" formControlName="cvv" >   
-                </mat-form-field> 
+                </mat-form-field>
+                <br> 
+                <span class="text-danger" 
+                  *ngIf="registerFormControlPagos.cvv.touched && registerFormControlPagos.cvv.errors?.required">
+                  Por favor ingresa el número de cvv
+                  </span>
                 <br>
 
                    <mat-form-field style="margin: 10px;">
@@ -140,7 +158,34 @@
                    <mat-form-field class="example-i-width">
                     <mat-label>Número de Dni</mat-label>
                     <input required matInput class="form-control" formControlName="nDni" >   
-                </mat-form-field> 
+                </mat-form-field>
+                <br>
+                <span class="text-danger" 
+                  *ngIf="registerFormControlPagos.nDni.touched && registerFormControlPagos.nDni.errors?.required">
+                  Por favor ingresa el número de DNI
+                  </span>
+                  <span class="text-danger" 
+                    *ngIf="registerFormControlPagos.nDni.touched && registerFormControlPagos.nDni.errors?.pattern">
+                    Solo valores númericos
+                    </span>
+
+                    <br>
+                    <button mat-button color="primary" *ngIf="!sendEmail" (click)="sendEmailFactura(true)">
+                      Desea recibir correo?
+                     </button>
+                     <button mat-button color="primary" *ngIf="sendEmail" (click)="sendEmailFactura(false)">
+                      No desea recibir correo?
+                     </button>
+                    <br>
+                    <mat-form-field *ngIf="sendEmail" class="example-i-width">
+                      <mat-label>Email</mat-label>
+                      <input required matInput class="form-control" formControlName="sEmail" >   
+                  </mat-form-field>
+                  <br>
+                  <span class="text-danger" 
+                    *ngIf="registerFormControlPagos.sEmail.touched && registerFormControlPagos.sEmail.errors?.email">
+                    Por favor ingrese un Email Valido
+                    </span>
                  </form>
                 
                  </div> 
@@ -149,7 +194,9 @@
             <div mat-dialog-actions>
               <button mat-raised-button color="primary" [disabled]="this.registerForm.invalid || this.registerFormPagos.invalid" (click)="insertPago()">Realizar Pago</button>
             </div>
-
+            <br>
+            <br>
+            <br>
             <!-- <div [innerHTML]="cadena"></div> -->
 
           </mat-tab>

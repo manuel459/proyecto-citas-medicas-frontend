@@ -101,6 +101,9 @@
                             <button *ngIf = "BUTTON_DELETE_PACIENTE" (click)="delete(element)" mat-button color="warn">
                                 <mat-icon>delete</mat-icon>
                             </button>
+                            <button [disabled]="element.nTotal_Historias == 0" (click)= "historiaMedica(element.dnip)" mat-button color="primary">
+                                <mat-icon>history</mat-icon>
+                            </button>
                             <button  (click)="revisar(element)" mat-button color="primary">
                                 <mat-icon>person</mat-icon>
                             </button>
@@ -112,7 +115,7 @@
                     <tr mat-header-row *matHeaderRowDef="columnas"></tr>
                 <tr mat-row *matRowDef="let row; columns:columnas"></tr>
             </table>
-            <img *ngIf="error == 0" class="img" width="300px" src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png">
+            <img *ngIf="this.dataSource.filteredData.length == 0" class="img" width="300px" src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png">
             <mat-paginator [pageSizeOptions]="[10, 20]"
             showFirstLastButtons 
             aria-label="Select page of periodic elements">

@@ -14,7 +14,8 @@ import * as XLSX from 'xlsx';
 import { ConfiguracionesService } from '../service/configuraciones.service';
 import Swal from 'sweetalert2';
 import { RequestGenericFilter } from '../Interfaces/RequestGenericFilter';
-
+import { ReporteMedico } from '../Interfaces/RegistroMedico';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-medico',
@@ -215,8 +216,12 @@ export class MedicoComponent implements OnInit {
 
   }
 
+
   exportExcel(data: any[], fileName: string): void {
-    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const columnasDeseadas: string[] = ["codmed",	"codes"	,"idtip"	,"nombre"	,"sApellidos",	"sexo",	"nac","correo",	"dni"	,"idhor" ]
+    const nuevaLista = data.map((item) => _.pick(item, columnasDeseadas))
+
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(nuevaLista);
     const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     this.saveExcelFile(excelBuffer, fileName);

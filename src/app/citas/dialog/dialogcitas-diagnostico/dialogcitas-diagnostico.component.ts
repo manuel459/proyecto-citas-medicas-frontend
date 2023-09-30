@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { List } from 'lodash';
 import { DiagnosticoAdd } from 'src/app/Interfaces/DiagnosticoAdd';
 import { Citas } from 'src/app/models/citas';
 import { ConfiguracionesService } from 'src/app/service/configuraciones.service';
@@ -14,12 +15,13 @@ import Swal from 'sweetalert2';
 })
 export class DialogcitasDiagnosticoComponent implements OnInit {
   registerForm: FormGroup | any;
-  
+
   constructor(public configuracionesService:ConfiguracionesService,public dialogRef: MatDialogRef<DialogcitasDiagnosticoComponent>,private fb: FormBuilder,public diagnosticoService:DiagnosticoService,@Inject(MAT_DIALOG_DATA) public citas :Citas) 
   {
     this.registerForm = this.fb.group({
       diagnostico: ['', Validators.required],
-      medicamentos: ['', Validators.required]
+      medicamentos: ['', Validators.required],
+      file: [[]]
     }
     );
   }
@@ -35,8 +37,9 @@ export class DialogcitasDiagnosticoComponent implements OnInit {
     const diagnosticoAdd:DiagnosticoAdd = 
     {idCita: this.citas.id , DniPaciente:this.citas.dnip, Codes: this.citas.codes, Codmed:this.citas.codmed, fecct: this.citas.feccit, diagnostico:this.registerForm.value.diagnostico,
     medicamentos:this.registerForm.value.medicamentos}
+
     console.log(diagnosticoAdd)
-    this.diagnosticoService.saveHistory(diagnosticoAdd).subscribe(response =>
+    this.diagnosticoService.saveHistory(diagnosticoAdd, this.registerForm.get('file').value).subscribe(response =>
       {
         if(response.exito === 1)
         {
@@ -60,4 +63,13 @@ export class DialogcitasDiagnosticoComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  onFileSelect(event:any)
+  {
+    console.log(event)
+    if (event.target.files.length > 0) {
+      const file = event.target.files;
+      this.registerForm.get('file').setValue(file);
+      console.log(this.registerForm.get('file').value)
+    }
+  }
 }

@@ -22,8 +22,23 @@ export class DiagnosticoService {
   ) { }
   url: string = 'https://localhost:44301/api/Diagnostico/';
 
-  saveHistory(diagnostico:DiagnosticoAdd): Observable<Response> {
-    return this._http.post<Response>(this.url+("SaveHistoryMedic"), diagnostico, httpOption);
+  saveHistory(diagnostico:DiagnosticoAdd, files: File[]): Observable<Response> {
+
+    const formData = new FormData();
+    formData.append('idCita', diagnostico.idCita); 
+    formData.append('DniPaciente', diagnostico.DniPaciente.toString()); 
+    formData.append('Codes', diagnostico.Codes); 
+    formData.append('Codmed', diagnostico.Codmed); 
+    formData.append('fecct', diagnostico.fecct); 
+    formData.append('diagnostico', diagnostico.diagnostico); 
+    formData.append('medicamentos', diagnostico.medicamentos); 
+
+    console.log(files)
+    Array.from(files).forEach(file => {
+      formData.append('files', file, file.name); 
+    });
+
+    return this._http.post<Response>(this.url+("SaveHistoryMedic"), formData, httpOption);
   }
 
 }

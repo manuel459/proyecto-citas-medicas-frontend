@@ -20,13 +20,13 @@
                         <mat-icon>backup</mat-icon>
                     </button>
                     <div class="search-container"  style="float:right">
-                        <button style="width:max-content;" mat-button >
+                        <button style="width:max-content;" mat-button color="primary" >
                             <mat-select class="mat-select-trigger" [(ngModel)]="status" matNativeControl required>
-                                <mat-select-trigger> <mat-icon style="left: 10%;">{{status == 0 ? 'control_point' : status == 1 ? 'group_add' : status == 2? 'face': 'camera_enhance'}}</mat-icon></mat-select-trigger>
-                              <mat-option value = 0 selected> <mat-icon class="mat-icon mat-icon-no-color">control_point</mat-icon>Código de Cita</mat-option>
-                              <mat-option value = 1 selected> <mat-icon class="mat-icon mat-icon-no-color">group_add</mat-icon>Nombre del Medico</mat-option>
-                              <mat-option value = 2><mat-icon class="mat-icon-font">face</mat-icon>Nombre del Paciente</mat-option>
-                              <mat-option value = 3><mat-icon class="mat-icon-font">camera_enhance</mat-icon>Nombre de la Especialidad</mat-option>
+                                <mat-select-trigger> <mat-icon color="primary" style="left: 10%;">{{status == 0 ? 'control_point' : status == 1 ? 'group_add' : status == 2? 'face': 'camera_enhance'}}</mat-icon></mat-select-trigger>
+                              <mat-option value = 0 selected> <mat-icon color="primary" class="mat-icon mat-icon-no-color">control_point</mat-icon>Código de Cita</mat-option>
+                              <mat-option value = 1 selected> <mat-icon color="primary" class="mat-icon mat-icon-no-color">group_add</mat-icon>Nombre del Medico</mat-option>
+                              <mat-option value = 2><mat-icon color="primary" class="mat-icon-font">face</mat-icon>Nombre del Paciente</mat-option>
+                              <mat-option value = 3><mat-icon color="primary" class="mat-icon-font">camera_enhance</mat-icon>Nombre de la Especialidad</mat-option>
                             </mat-select>
              
                         </button>
@@ -115,7 +115,7 @@
     
                         <ng_container matColumnDef="Costo">
                             <th mat-header-cell *matHeaderCellDef>Costo de cita</th>
-                            <td mat-cell *matCellDef="let element">{{ element.costo }}</td>
+                            <td mat-cell *matCellDef="let element">S/{{ element.costo }}</td>
                         </ng_container>
         
                         <ng-container matColumnDef="actions">
@@ -145,7 +145,7 @@
                               
                                 <span class="descripcion-box" *ngIf="this.lista?.includes(element.id)">Diagnostico</span>
                                 <button (mouseover)="mostrarChat(element.id)" (mouseout)="ocultarChat(element.id)"  *ngIf="element.nId_Historico!=null" mat-button color="primary" (click)="sendWhatsappMessage(element.sNombre_Paciente, element.sNombre_Medico,element.nNumero_Paciente, element.diagnostico, element.receta)">
-                                    <mat-icon>chat</mat-icon>
+                                    <img style="text-align: center;" width="35px" src="https://t4.ftcdn.net/jpg/05/43/40/85/360_F_543408542_xIYArPR28ntF1DjwpU6XQanP23OIMhow.jpg">
                                     <!-- <ic-icon [icon]="bellSlashIcon"></ic-icon> -->
                                 </button>
                                 </div>

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ErrorsPacienteComponent } from './errors-paciente.component';
+import { AppFilePreviewComponent } from './app-file-preview.component';
 
-describe('ErrorsPacienteComponent', () => {
-  let component: ErrorsPacienteComponent;
-  let fixture: ComponentFixture<ErrorsPacienteComponent>;
+describe('AppFilePreviewComponent', () => {
+  let component: AppFilePreviewComponent;
+  let fixture: ComponentFixture<AppFilePreviewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ErrorsPacienteComponent ]
+      declarations: [ AppFilePreviewComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ErrorsPacienteComponent);
+    fixture = TestBed.createComponent(AppFilePreviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

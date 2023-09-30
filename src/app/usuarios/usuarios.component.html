@@ -123,7 +123,7 @@
                     <tr mat-header-row *matHeaderRowDef="columnas"></tr>
                 <tr mat-row *matRowDef="let row; columns:columnas"></tr>
             </table>
-            <img *ngIf="error == 0" class="img" width="300px" src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png">
+            <img *ngIf="this.dataSource.filteredData.length == 0" class="img" width="300px" src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png">
             <mat-paginator [pageSizeOptions]="[10, 20]"
             showFirstLastButtons 
             aria-label="Select page of periodic elements">

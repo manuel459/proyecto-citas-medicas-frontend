@@ -32,7 +32,6 @@ import { PacienteComponent } from './paciente/paciente.component';
 import { DialogpacienteComponent } from './paciente/dialog/dialogpaciente/dialogpaciente.component';
 import { DeletepacienteComponent } from './dialogdelete/deletepaciente/deletepaciente.component';
 import { DialogpacienteRevisarComponent } from './paciente/dialog/dialogpaciente-revisar/dialogpaciente-revisar.component';
-import { ErrorsPacienteComponent } from './Errors/errors-paciente/errors-paciente.component';
 import { CitasComponent } from './citas/citas.component';
 import { DialogcitasComponent } from './citas/dialog/dialogcitas/dialogcitas.component';
 import { DeletecitasComponent } from './dialogdelete/deletecitas/deletecitas.component';
@@ -60,6 +59,7 @@ import { RolesYPermisosComponent } from './roles-y-permisos/roles-y-permisos.com
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { DialogUsuariosComponent } from './usuarios/dialog/dialog-usuarios/dialog-usuarios.component';
 import { RestorePasswordComponent } from './restore-password/restore-password.component';
+import { AppFilePreviewComponent } from './app-file-preview/app-file-preview.component';
 @NgModule({
     declarations: [
         AppComponent,
@@ -71,7 +71,6 @@ import { RestorePasswordComponent } from './restore-password/restore-password.co
         DialogpacienteComponent,
         DeletepacienteComponent,
         DialogpacienteRevisarComponent,
-        ErrorsPacienteComponent,
         CitasComponent,
         DialogcitasComponent,
         DeletecitasComponent,
@@ -86,7 +85,8 @@ import { RestorePasswordComponent } from './restore-password/restore-password.co
         RolesYPermisosComponent,
         UsuariosComponent,
         DialogUsuariosComponent,
-        RestorePasswordComponent
+        RestorePasswordComponent,
+        AppFilePreviewComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

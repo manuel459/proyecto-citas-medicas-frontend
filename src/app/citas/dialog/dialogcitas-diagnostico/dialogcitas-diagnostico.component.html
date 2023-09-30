@@ -1,14 +1,14 @@
 <h2 class="w-13" mat-dialog-tittle>{{ 'Diagnóstico'}}</h2>
 
 <div modal-content >
-  <img width="200px" src="https://static.vecteezy.com/system/resources/previews/002/990/983/non_2x/personal-doctor-appointment-2d-isolated-illustration-vector.jpg" alt="images" style="float: right;">
+  <img width="300px" src="https://static.vecteezy.com/system/resources/previews/002/990/983/non_2x/personal-doctor-appointment-2d-isolated-illustration-vector.jpg" alt="images" style="float: right;">
   <form class="form" [formGroup]="registerForm">
     <div class="flex mb-1">
-        <h4 class="w-13">Receta Medica :</h4>
+        <h4 class="w-13">Receta Médica :</h4>
     </div>
 
         <div>
-            <mat-form-field class="example-full-width"  class="example-full-width" appearance="fill">
+            <mat-form-field style="width: 400px;" appearance="fill">
                 <mat-label>Diagnóstico</mat-label>
                 <input style="width: 100%;" formControlName ="diagnostico" required matInput  >   
             </mat-form-field>
@@ -20,7 +20,7 @@
         </div>
 
         <div>
-            <mat-form-field class="example-full-width">
+            <mat-form-field style="width: 400px;">
                 <mat-label>Receta Médica</mat-label>
                 <textarea formControlName ="medicamentos" matInput rows="8" placeholder="medicamentos">
                 </textarea>
@@ -30,6 +30,15 @@
                     *ngIf="registerFormControl.medicamentos.touched && registerFormControl.medicamentos.errors?.required">
                     Se requiere la receta
                     </span> 
+        </div>
+        <div>
+          <div class="flex mb-1">
+            <h4 class="w-13">Cargar Diagnóstico (Opcional) :</h4>
+        </div>
+            <div class="input_container">
+              <input id="fileInput" type="file" multiple (change)="onFileSelect($event)">
+              <div class="preview-image" id="previewContainer"></div>
+            </div>
         </div>
   </form>
 </div>

@@ -27,6 +27,7 @@ import { DialogHistoriaMedicaComponent } from './dialog-historia-medica/dialog-h
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import { IconService } from '@visurel/iconify-angular';
 import { IconsService } from '../service/icons.service';
+import * as _ from 'lodash';
 
 export interface Task {
   name: string;
@@ -264,7 +265,7 @@ export class CitasComponent implements OnInit {
   {
     console.log(citas)
     const dialogRef= this.dialog.open(DialogcitasDiagnosticoComponent,{
-      width: '500px',
+      width: '800px',
       data: citas,  
     });
      //Refrescar el table cuando ejecute la accion del guardar
@@ -288,7 +289,7 @@ export class CitasComponent implements OnInit {
     this.citasService.getHistoriaMedica(row).subscribe(response => 
       {
         const dialogRef= this.dialog.open(DialogHistoriaMedicaComponent,{
-          width: '1000px',
+          width: '1300px',
           data : response.data  
         });
         console.log(response.data)
@@ -297,7 +298,11 @@ export class CitasComponent implements OnInit {
   }
 
   exportExcel(data: any[], fileName: string): void {
-    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+
+    const columnasDeseadas: string[] = ["id",	"dnip"	,"sNombre_Paciente"	,"sNombre_Medico"	,"sNombre_Especialidad",	"feccit",	"hora","sEstado",	"sEstado_Pago"	,"costo" ]
+    const nuevaLista = data.map((item) => _.pick(item, columnasDeseadas))
+
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(nuevaLista);
     const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     this.saveExcelFile(excelBuffer, fileName);
@@ -315,7 +320,7 @@ export class CitasComponent implements OnInit {
   exportToPdf(): void {
     const doc =  Object.assign(new jsPDF());
     const datas =  this.dataSource.data.map((row: any) => {
-      return [row.id, row.dnip, row.sNombre_Paciente, row.sNombre_Medico, row.sNombre_Especialidad, (moment(row.feccit).format('YYYY-MM-DD')+' '+row.hora), row.sEstado, row.sEstado_Pago, row.costo];
+      return [row.id, row.dnip, row.sNombre_Paciente, row.sNombre_Medico, row.sNombre_Especialidad, (moment(row.feccit).format('YYYY-MM-DD')+' '+row.hora), row.sEstado, row.sEstado_Pago, 'S/'+row.costo];
     });
 
     try {

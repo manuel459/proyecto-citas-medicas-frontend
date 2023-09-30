@@ -5,64 +5,91 @@
             Historia Médica de {{lista[0].nomp}}
         </h2>
     </div>
-    
 </div>
-<mat-dialog-content>
-    <div class="carousel-container">
-      <button mat-icon-button class="carousel-prev" [disabled]="!(i > 0)" (click)="preview()">
-        <mat-icon>navigate_before</mat-icon>
-    </button>
-      <div class="carousel-slides-container">
-          <div >
-            <div class="flex mb-1">
-                <div class="w-13"><mat-icon>enhanced_encryption</mat-icon> Código de Cita:</div>
-                <div class="w-23 font-bold">{{lista[i].idCita}}</div>
-            </div>
-            <br>
-            <div class="flex mb-1">
-                <div class="w-13"><mat-icon>face</mat-icon> DNI del Paciente:</div>
-                <div class="w-2/3 font-bold"> {{lista[i].dnip}}</div>
-            </div>
-            <br>
 
-            <div class="flex mb-1">
-                <div class="w-13"><mat-icon> local_hospital</mat-icon>Especialidad:</div>
-                <div class="w-2/3 font-bold">{{lista[i].sNombre_Especialidad}}</div>
-            </div>
-            <br>
-            <div class="flex mb-1">
-                <div class="w-13"><mat-icon class="icono">group_add</mat-icon> Nombre del Médico:</div>
-                <div class="w-2/3 font-bold">{{lista[i].sNombre_Medico}}</div>
-            </div>
-    
-            <br>
-            <div class="flex items-center mb-1">
-                
-                <div class="w-13"><mat-icon class="mr-1">date_range</mat-icon> Fecha de Cita:</div>
-                <div class="w-2/3 font-bold">{{lista[i].fecct | date:'yyyy-MM-dd'}}</div>
-            </div>
-            <br>
-            <div class="flex mb-1">
-                <div class="w-13">
-                    <mat-icon>camera_enhance</mat-icon>
-                    Diagnóstico
+<div class="dialog-content">
+
+    <mat-dialog-content>
+
+        <div class="carousel-container">
+
+          <button mat-icon-button class="carousel-prev" [disabled]="!(i > 0)" (click)="preview()">
+            <mat-icon>navigate_before</mat-icon>
+        </button>
+
+          <div class="carousel-slides-container">
+              <div >
+                <button mat-button style="float: right;" (click)="createTempURL(lista[i])">
+                    Enviar Diagnóstico
+                    <img width="40px" src="https://t4.ftcdn.net/jpg/05/43/40/85/360_F_543408542_xIYArPR28ntF1DjwpU6XQanP23OIMhow.jpg">
+                </button>
+                <div class="flex mb-1">
+                    <div class="w-13"><mat-icon>enhanced_encryption</mat-icon> Código de Cita:</div>
+                    <div class="w-23 font-bold">{{lista[i].idCita}}</div>
                 </div>
-                <div class="w-2/3 font-bold">{{lista[i].diagnostico}}</div>
-            </div>
-            <br>
-            <div class="flex mb-1">
-                <div class="w-13"> <mat-icon>assignment</mat-icon> Receta:</div>
-                <div class="w-2/3 font-bold">{{lista[i].receta}}</div>
-            </div>
-          </div>
-      </div>
-      <img width="500px" lengh="500px" src="https://img.freepik.com/vector-gratis/ilustracion-plana-concepto-servicio-hospital_1150-50287.jpg?w=1380&t=st=1683951767~exp=1683952367~hmac=f140c64d1ad006fd5db3d5908209bb2ae475d24d4bdd3bbdfacef21da178c9bc" alt="images" style="float: right;">
-      <button mat-icon-button class="carousel-next" [disabled]="!(lista.length > i + 1)" mat-icon-button (click)="next()">
-        <mat-icon>navigate_next</mat-icon>
-    </button>
+                <br>
+                <div class="flex mb-1">
+                    <div class="w-13"><mat-icon>face</mat-icon> DNI del Paciente:</div>
+                    <div class="w-2/3 font-bold"> {{lista[i].dnip}}</div>
+                </div>
+                <br>
+    
+                <div class="flex mb-1">
+                    <div class="w-13"><mat-icon> local_hospital</mat-icon>Especialidad:</div>
+                    <div class="w-2/3 font-bold">{{lista[i].sNombre_Especialidad}}</div>
+                </div>
+                <br>
+                <div class="flex mb-1">
+                    <div class="w-13"><mat-icon class="icono">group_add</mat-icon> Nombre del Médico:</div>
+                    <div class="w-2/3 font-bold">{{lista[i].sNombre_Medico}}</div>
+                </div>
+        
+                <br>
+                <div class="flex items-center mb-1">
+                    
+                    <div class="w-13"><mat-icon class="mr-1">date_range</mat-icon> Fecha de Cita:</div>
+                    <div class="w-2/3 font-bold">{{lista[i].fecct | date:'yyyy-MM-dd'}}</div>
+                </div>
+                <br>
+                <div class="flex mb-1">
+                    <div class="w-13">
+                        <mat-icon>camera_enhance</mat-icon>
+                        Diagnóstico
+                    </div>
+                    <div class="w-2/3 font-bold">{{lista[i].diagnostico}}</div>
+                </div>
+                <br>
+                <div class="flex mb-1">
+                    <div class="w-13"> <mat-icon>assignment</mat-icon> Receta:</div>
+                    <div class="w-2/3 font-bold">{{lista[i].receta}}</div>
+                </div>
+                <br>
+                <div *ngIf="lista[i].lUrlBase.length > 0">
+                    <div class="w-13">
+                        <mat-icon>archive</mat-icon>
+                        Archivos adjuntos
+                    </div>
+                    <div class="elementos-container">
+                        <div *ngFor="let element of lista[i].lUrlBase" class="elemento">
+                            <app-app-file-preview class="imagenes-horizontal" [fileData]="element"></app-app-file-preview>
+                        </div>
+                    </div>
+    
+                </div>
+    
+              </div>
 
-    </div>
-  </mat-dialog-content>
+          </div>
+
+          <img width="510px" lengh="900px" src="https://img.freepik.com/vector-premium/medico-linea-ilustracion-vector-plano-registro-medico-banner_128772-802.jpg" alt="images" style="float: right;">
+          <button mat-icon-button class="carousel-next" [disabled]="!(lista.length > i + 1)" mat-icon-button (click)="next()">
+            <mat-icon>navigate_next</mat-icon>
+        </button>
+    
+        </div>
+      </mat-dialog-content>
+</div>
+
 <!-- 
 <div mat-dialog-title style="width: 500px;">
 

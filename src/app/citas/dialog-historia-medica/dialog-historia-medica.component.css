@@ -1,5 +1,5 @@
 .w-13{
-
+  display: flex;
     color: rgb(47, 74, 194);
 }
 .w-23{
@@ -37,3 +37,12 @@
   font-weight: bold;
   height: 200px;
 }
+
+.elementos-container {
+  display: flex; /* Utilizamos display:flex para alinear los elementos horizontalmente */
+}
+
+.elemento {
+  margin-right: 10px; /* Espacio entre elementos */
+}
+

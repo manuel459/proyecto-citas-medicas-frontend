@@ -5,5 +5,6 @@ export interface insertPago
     nMes: number,
     nAnio: number,
     nDni: number
-    dImporte_Total: number
+    dImporte_Total: number,
+    sEmail: string
 }

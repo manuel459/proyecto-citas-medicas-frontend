@@ -28,6 +28,7 @@ export class ModuloPagosComponent implements OnInit {
  sNombre_Medico: string | undefined;
  dFecha_Cita: string | undefined;
  dImporte_Total: number = 0;
+ sendEmail: boolean = false
  
  //PAGO DE CITA
  public nNumero_Tarjeta: string = "";
@@ -35,7 +36,7 @@ export class ModuloPagosComponent implements OnInit {
  public nAnio: number = 0;
  public nDia: number = 0;
  public nDni: number = 0;
- public cadena: string ;
+ public cadena: string = '';
 
  editable: boolean = false;
 
@@ -88,21 +89,21 @@ export class ModuloPagosComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private _formBuilder: FormBuilder, public pagosService: ModuloPagosService, public snackBar: MatSnackBar,private sanitizer: DomSanitizer) 
   {
-    this.cadena = ''
+  }
+
+  ngOnInit(): void {
     this.registerForm = this.fb.group({
       idCita: ['',[Validators.required, Validators.pattern(/^[1-9]\d{0,10}$/)]],
     });
 
     this.registerFormPagos = this.fb.group({
-      nNumero_Tarjeta: ['',[Validators.required, Validators.maxLength(16), Validators.minLength(16),Validators.pattern(/^[1-9]\d{0,20}$/)]],
+      nNumero_Tarjeta: ['',[Validators.required, Validators.maxLength(20), Validators.minLength(20),Validators.pattern(/^[0-9-]*$/)]],
       nMes: ['',[Validators.required]],
       nAnio: ['',[Validators.required]],
       cvv: ['',[Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-      nDni: ['',[Validators.required, Validators.maxLength(8), Validators.minLength(8),Validators.pattern(/^[1-9]\d{0,10}$/)]]
+      nDni: ['',[Validators.required, Validators.maxLength(8), Validators.minLength(8),Validators.pattern(/^[1-9]\d{0,10}$/)]],
+      sEmail: ['']
     })
-  }
-
-  ngOnInit(): void {
   }
 
   get registerFormControlPagos() {
@@ -161,7 +162,8 @@ export class ModuloPagosComponent implements OnInit {
       .then((result) => {
           if (result.isConfirmed) {
             const pago: insertPago ={
-              sCod_Cita: this.registerForm.value.idCita, nNumero_Tarjeta: this.registerFormPagos.value.nNumero_Tarjeta, nMes: this.registerFormPagos.value.nMes, nAnio: this.registerFormPagos.value.nAnio, nDni: this.registerFormPagos.value.nDni, dImporte_Total: this.dImporte_Total
+              sCod_Cita: this.registerForm.value.idCita, nNumero_Tarjeta: this.registerFormPagos.value.nNumero_Tarjeta.replace(/-/g, ''), nMes: this.registerFormPagos.value.nMes, nAnio: this.registerFormPagos.value.nAnio, nDni: this.registerFormPagos.value.nDni, dImporte_Total: this.dImporte_Total,
+              sEmail: this.registerFormPagos.value.sEmail
             }
             console.log(pago)
             this.pagosService.insertPago(pago).subscribe(response =>{
@@ -301,6 +303,45 @@ export class ModuloPagosComponent implements OnInit {
       // Seleccionar el primer paso
       this.stepper.selectedIndex = 0;
   }
+
+  formatearTarjeta(event: Event) {
+    const input = event.target as HTMLInputElement;
+    let valor = input.value.replace(/\D/g, ''); // Elimina caracteres no numéricos
+
+    // Agrega guiones cada 4 dígitos
+    valor = valor.replace(/(\d{4})(?=\d)/g, '$1-');
+    input.value = valor;
+
+    const maxLength = 19;
+
+    if (input.value.length > maxLength) {
+      input.value = input.value.slice(0, maxLength); // Limita la entrada
+      console.log("llego")
+    }
+  
+    this.registerFormPagos.value.nNumero_Tarjeta = valor;
+  }
+
+  sendEmailFactura(p_sendEmail: boolean)
+{
+  this.sendEmail = p_sendEmail;
+  const emailControl = this.registerFormPagos.get('sEmail');
+    
+    if (emailControl) {
+      if (p_sendEmail) {
+        // Activa la validación de email
+        emailControl.setValidators([Validators.required, Validators.email]);
+      }
+      else
+      {
+        emailControl.setValue('');
+        emailControl.clearValidators();
+      }
+      
+      // Actualiza el estado del control
+      emailControl.updateValueAndValidity();
+    }
+}
 
 }
 

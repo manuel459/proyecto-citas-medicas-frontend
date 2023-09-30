@@ -1,0 +1,61 @@
+.imagen-container {
+    position: relative;
+    display: inline-block;
+    margin: 10px;
+  }
+  
+  .imagen-wrapper {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    transition: transform 0.3s;
+  }
+  
+  .imagen-wrapper:hover {
+    transform: scale(1.05); /* Efecto de escala al pasar el mouse */
+  }
+  
+  .descargar-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo translúcido */
+    border-radius: 10px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .imagen-wrapper:hover .descargar-button {
+    opacity: 1; /* Mostrar el botón al pasar el mouse */
+  }
+
+  .container {
+    width: 150px; /* Ancho deseado */
+    height: 150px; /* Altura deseada */
+    border: 0px solid #000; /* Borde opcional */
+    border-radius: 10px;
+    display: flex;
+    background-color: #7084e3;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .file
+  {
+    width: 100px;
+    color: #3a4992;
+  }
+
+  .recortar-imagen {
+    width: 80px; /* Ancho deseado para la imagen */
+    height: 80px; /* Altura deseada para la imagen */
+    clip-path: inset(10 10 10 10); /* Recorte cuadrado */
+  }
+  
