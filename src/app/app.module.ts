@@ -60,6 +60,7 @@ import { UsuariosComponent } from './usuarios/usuarios.component';
 import { DialogUsuariosComponent } from './usuarios/dialog/dialog-usuarios/dialog-usuarios.component';
 import { RestorePasswordComponent } from './restore-password/restore-password.component';
 import { AppFilePreviewComponent } from './app-file-preview/app-file-preview.component';
+import { DialogUsuariosRevisarComponent } from './usuarios/dialog-usuarios-revisar/dialog-usuarios-revisar.component';
 @NgModule({
     declarations: [
         AppComponent,
@@ -86,7 +87,8 @@ import { AppFilePreviewComponent } from './app-file-preview/app-file-preview.com
         UsuariosComponent,
         DialogUsuariosComponent,
         RestorePasswordComponent,
-        AppFilePreviewComponent
+        AppFilePreviewComponent,
+        DialogUsuariosRevisarComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

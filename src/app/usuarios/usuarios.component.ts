@@ -11,6 +11,7 @@ import { UsuariosService } from '../service/usuarios.service';
 import { DialogUsuariosComponent } from './dialog/dialog-usuarios/dialog-usuarios.component';
 import { Usuarios } from '../models/Usuarios';
 import { DeleteusuarioComponent } from '../dialogdelete/deleteUsuario/deleteusuario.component';
+import { DialogUsuariosRevisarComponent } from './dialog-usuarios-revisar/dialog-usuarios-revisar.component';
 
 
 @Component({
@@ -121,6 +122,15 @@ export class UsuariosComponent implements OnInit {
 
     })
   }
+
+  revisar(usuario : Object)
+ {
+    this.dialog.open(DialogUsuariosRevisarComponent,
+      {
+        width: this.width,
+        data: usuario
+      })
+ }
  
   //Metodo Delete
   deleteUser(nIdUser : number){

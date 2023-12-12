@@ -17,14 +17,13 @@ export class DialogHistoriaMedicaComponent implements OnInit {
   public i: number = 0;
 
   ngOnInit(): void {
-    console.log(this.lista)
-    console.log(this.lista.length)
-    console.log(this.i)
+    console.log(this.lista[this.i].lUrlBase)
   }
 
   next()
   {
     this.i = this.i + 1;
+    console.log(this.lista[this.i].lUrlBase)
   }
   preview()
   {
