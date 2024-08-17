@@ -100,6 +100,7 @@ export class DialogHistoriaMedicaComponent implements OnInit {
   }
 
    RECETA(oHistoriaMedica: object | any) {
+    console.log(oHistoriaMedica, 'objeto')
     return new Promise((resolve, reject) => {
       const medicamentos: any[] = [oHistoriaMedica.receta]
   

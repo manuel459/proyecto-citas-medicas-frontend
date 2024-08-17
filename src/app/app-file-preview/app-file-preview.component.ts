@@ -15,6 +15,36 @@ export class AppFilePreviewComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  download(data: any){
+    fetch(data.sUrl)
+    .then((res) => res.blob())
+    .then(blob => {
+      var link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+
+      let extension = '';
+
+      link.download = data.sFile_Name;
+      link.click();
+    })
+  }
+
+  downloadFile(fileData: any) {
+    this.http.get(fileData.sUrl, { responseType: 'blob' }).subscribe(blob => {
+        // Create a link element
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = fileData.sFile_Name; // Set the download filenam
+  
+        // Append link to the body, click it, and then remove it
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }, error => {
+        console.error('Error downloading the image: ', error);
+    });
+  }
+
   formatDowdload(fileData: any): any {
     let base ;
     switch (fileData.sType_File) {
