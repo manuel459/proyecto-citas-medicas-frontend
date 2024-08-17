@@ -3,7 +3,7 @@
   <div class="imagen-container">
       <div class="imagen-wrapper">
         <!-- <a class="descargar-button" [href]="formatDowdload(fileData.sUrl)" download='{{fileData.sFile_Name}}'> {{fileData.sType_File}}</a> -->
-        <a class="descargar-button" (click)="descargarArchivo()"> {{fileData.sType_File}}</a>
+        <a class="descargar-button" (click)="descargarAdjunto(fileData.sUrl)"> {{fileData.sType_File}}</a>
         <div *ngIf="fileData.sType_File == 'application/pdf'" class="container"><img width="80px" src="https://www.lifecareasistencial.es/wp-content/uploads/2021/04/icono-PDF.png"></div>
         <img style="border-radius: 10px;" *ngIf="fileData.sType_File == 'image/jpeg'" [src]="formatDowdload(fileData.sUrl)" width="150" height="150">
       </div>
