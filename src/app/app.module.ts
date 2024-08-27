@@ -61,6 +61,7 @@ import { DialogUsuariosComponent } from './usuarios/dialog/dialog-usuarios/dialo
 import { RestorePasswordComponent } from './restore-password/restore-password.component';
 import { AppFilePreviewComponent } from './app-file-preview/app-file-preview.component';
 import { DialogUsuariosRevisarComponent } from './usuarios/dialog-usuarios-revisar/dialog-usuarios-revisar.component';
+import {MatBadgeModule} from '@angular/material/badge';
 @NgModule({
     declarations: [
         AppComponent,
@@ -131,7 +132,8 @@ import { DialogUsuariosRevisarComponent } from './usuarios/dialog-usuarios-revis
         MatMenuModule,
         LayoutModule,
         NgxExtendedPdfViewerModule,
-        MatExpansionModule
+        MatExpansionModule,
+        MatBadgeModule
     ]
 })
 export class AppModule { }

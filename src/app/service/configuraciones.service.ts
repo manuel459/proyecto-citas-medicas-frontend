@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { Response } from '../models/response';
+import { environment } from 'src/environments/environment.dev';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConfiguracionesService {
 
-  url: string = 'https://localhost:44301/api/Configuraciones'
+  url: string = `${environment.env}Configuraciones`;
   usuario: object | any;
 
   constructor(

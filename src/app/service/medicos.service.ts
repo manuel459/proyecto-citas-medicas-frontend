@@ -8,6 +8,7 @@ import { FilterGeneric } from '../Interfaces/FilterGeneric';
 import { Router } from '@angular/router';
 import { RequestGenericFilter } from '../Interfaces/RequestGenericFilter';
 import Swal from 'sweetalert2';
+import { environment } from 'src/environments/environment.dev';
 
 const httpOption = {
   headers: new HttpHeaders({
@@ -20,7 +21,7 @@ const httpOption = {
 })
 export class MedicosService {
 
-  url: string = 'https://localhost:44301/api/Medicos/'
+  url: string = `${environment.env}Medicos/`;
   usuario: object | any;
 
   constructor(

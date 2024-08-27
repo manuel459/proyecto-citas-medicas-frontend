@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 import { Response } from '../models/response';
 import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from 'src/environments/environment.dev';
 
 const httpOption = {
   headers: new HttpHeaders({
@@ -20,7 +21,7 @@ const httpOption = {
 })
 export class AuthService {
 
-  url : string = 'https://localhost:44301/api/Login/'
+  url : string = `${environment.env}Login/`;
 
 private usuarioSubject: BehaviorSubject<Usuario>;
 public usuario: Observable<Usuario>;

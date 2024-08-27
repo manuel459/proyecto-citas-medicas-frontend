@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { Diagnostico } from '../models/diagnostico';
 import { Response } from '../models/response';
 import { DiagnosticoAdd } from '../Interfaces/DiagnosticoAdd';
+import { environment } from 'src/environments/environment.dev';
 
 const httpOption = {
   headers: new HttpHeaders({
@@ -20,7 +21,7 @@ export class DiagnosticoService {
     private _http : HttpClient ,
     public dialog: MatDialog,
   ) { }
-  url: string = 'https://localhost:44301/api/Diagnostico/';
+  url: string =  `${environment.env}Diagnostico/`;
 
   saveHistory(diagnostico:DiagnosticoAdd, files: File[]): Observable<Response> {
 

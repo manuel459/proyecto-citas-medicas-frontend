@@ -86,3 +86,78 @@
         gap: 10px;
       }
       
+
+      
+
+/* notification.component.css */
+.notification-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .notification-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    position: relative;
+  }
+  
+  .badge {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px 10px;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 12px;
+  }
+  
+  .notification-list {
+    margin-top: 10px;
+    overflow-y: auto; /* Habilita el scroll vertical */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    max-width: 400px;
+    max-height: 500px;
+    background-color: #f9f9f9;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+  }
+  
+  .notification-item {
+    border-bottom: 1px solid #ddd;
+    padding: 5px 0;
+    cursor: pointer; /* Muestra el cursor como un selector */
+  }
+  
+  .notification-item:last-child {
+    border-bottom: none;
+  }
+  
+  .notification-id {
+    font-weight: bold;
+  }
+  
+  .notification-message {
+    margin: 5px 0;
+  }
+  
+  .no-notifications {
+    color: #666;
+  }
+
+  .scrolled-list {
+    list-style-type: none; /* Elimina los bullets de la lista */
+    padding: 0;
+    margin: 0;
+  }
+  

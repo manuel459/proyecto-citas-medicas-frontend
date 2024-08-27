@@ -18,6 +18,8 @@ import { RequestGenericFilter } from '../Interfaces/RequestGenericFilter';
 import { ConfiguracionesService } from '../service/configuraciones.service';
 import { CitasService } from '../service/citas.service';
 import { DialogHistoriaMedicaComponent } from '../citas/dialog-historia-medica/dialog-historia-medica.component';
+import { NotificationService } from '../service/notification.service';
+import { GetNotificationResponseDto } from '../Interfaces/getNotificationResponseDto';
 
 @Component({
   selector: 'app-paciente',
@@ -41,6 +43,7 @@ export class PacienteComponent implements OnInit {
   public BUTTON_EDIT_PACIENTE : boolean = false;
   public BUTTON_DELETE_PACIENTE: boolean = false;
   public BUTTON_CREATE_PACIENTE: boolean = false;
+a: ((a: any,b: any) => number)|undefined;
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
@@ -53,13 +56,15 @@ export class PacienteComponent implements OnInit {
     public spinner:MatProgressSpinnerModule,
     public loaderService: LoaderService,
     public conf: ConfiguracionesService,
-    public citasService : CitasService
+    public citasService : CitasService,
+    public notificationService: NotificationService
 
-  ) { this.status = 0, this.texto = "",this.error = 1,this.startDate = this.currentDate,this.endDate = this.currentDate}
+  ) {this.status = 0, this.texto = "",this.error = 1,this.startDate = this.currentDate,this.endDate = this.currentDate}
 
-  ngOnInit(): void {
+
+  async ngOnInit(): Promise<void> {
     this.getPermiso()
-      this.getPacientes();
+    this.getPacientes();
   }
 
   //METODO PARA LISTAR
@@ -199,7 +204,5 @@ export class PacienteComponent implements OnInit {
        this.BUTTON_DELETE_PACIENTE = response.data.filter((permiso: { sDescripcion: string | string[]; }) => permiso.sDescripcion == 'BUTTON-DELETE-PACIENTE').length > 0;
      })
   }
-
-  
 
 }

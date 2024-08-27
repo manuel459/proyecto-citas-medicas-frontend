@@ -6,6 +6,7 @@ import { Response } from 'src/app/models/response';
 import { Paciente } from '../models/paciente';
 import { RequestGenericFilter } from '../Interfaces/RequestGenericFilter';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment.dev';
 const httpOption = {
   headers: new HttpHeaders({
     'Contend-Type' : 'application/json'
@@ -16,7 +17,7 @@ const httpOption = {
 })
 export class PacienteService {
 
-  url: string = 'https://localhost:44301/api/Paciente/'
+  url: string = `${environment.env}Paciente/`;
   messageService: any;
   usuario: object | any;
 

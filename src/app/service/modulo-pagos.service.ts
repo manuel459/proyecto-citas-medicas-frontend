@@ -5,6 +5,7 @@ import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { Response } from '../models/response';
 import { insertPago } from '../Interfaces/InsertPago';
 import { MatDialog } from '@angular/material/dialog';
+import { environment } from 'src/environments/environment.dev';
 
 
 const httpOption = {
@@ -22,7 +23,7 @@ export class ModuloPagosService {
     private _http : HttpClient,
     public dialog: MatDialog,
   ) { }
-  url: string = 'https://localhost:44301/api/Pagos/';
+  url: string =  `${environment.env}Pagos/`;
 
   getCita(pagoCita: ConsultarPagoCita): Observable<Response> {
     return this._http.get<Response>(this.url+pagoCita.idCita);

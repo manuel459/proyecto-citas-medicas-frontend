@@ -8,6 +8,7 @@ import { ConsultaDni } from '../Interfaces/ConsultaDni';
 import { Horario } from '../models/horarios';
 import { Router } from '@angular/router';
 import { RequestGenericFilter } from '../Interfaces/RequestGenericFilter';
+import { environment } from 'src/environments/environment.dev';
 
 const httpOption = {
   headers: new HttpHeaders({
@@ -21,7 +22,7 @@ const httpOption = {
 })
 export class CitasService {
   usuario: object | any;
-  url :string = 'https://localhost:44301/api/CitasMedicas/' 
+  url :string = `${environment.env}CitasMedicas/`;
   constructor(
     private _http : HttpClient ,
     public dialog: MatDialog,
